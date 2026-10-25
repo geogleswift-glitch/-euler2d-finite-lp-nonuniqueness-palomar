@@ -86,8 +86,8 @@ theorem exists_physicalLabelCommonField_bounds {w : R2 → ℝ} {M : ℝ}
     exact hb.trans (by nlinarith [sq_nonneg (Real.sqrt A - Real.sqrt M), Real.sq_sqrt hM0, Real.sq_sqrt hA])
   obtain ⟨Mc, hMc, hcorrM⟩ := S.exists_uniform_bound_correctionLabelField
   obtain ⟨L, hcorrL⟩ := S.exists_lipschitzWith_correctionLabelField
-  let MB : ℝ≥0 := ⟨M + A + Mc, by positivity⟩
-  let CB : ℝ≥0 := ⟨8 * (M + A) + L, by positivity⟩
+  let MB : ℝ≥0 := NNReal.mk (M + A + Mc) (by positivity)
+  let CB : ℝ≥0 := NNReal.mk (8 * (M + A) + L) (by positivity)
   have hvc := S.continuous_physicalLabelCommonField hw hM
   refine ⟨MB, CB, hvc, ?_, ?_, ?_⟩
   · intro t x

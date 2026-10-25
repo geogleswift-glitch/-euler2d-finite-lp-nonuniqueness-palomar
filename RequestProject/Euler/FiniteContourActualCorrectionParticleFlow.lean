@@ -58,8 +58,8 @@ theorem exists_finiteContour_actualCorrection_particleFlow_area
     dsimp only [B]
     unfold finiteContourPatchSupBound finiteContourPatchMassBound contourPatchMassBound
     positivity
-  let MB : ℝ≥0 := ⟨B + M, add_nonneg hB hM⟩
-  let CB : ℝ≥0 := ⟨8 * B + L, by positivity⟩
+  let MB : ℝ≥0 := NNReal.mk (B + M) (add_nonneg hB hM)
+  let CB : ℝ≥0 := NNReal.mk (8 * B + L) (by positivity)
   let v : ℝ → R2 → R2 := fun t x => vp t x + S.correctionLabelField t (x + torusCenter)
   have hj : Continuous (fun p : ℝ × R2 => (p.1, p.2 + torusCenter)) :=
     continuous_fst.prodMk (continuous_snd.add continuous_const)

@@ -68,7 +68,7 @@ theorem norm_contourParameterShiftC1_sub_le_of_deriv_bounds {γ : ℝ≥0} (hγ1
     rw [hd]
     simpa only [add_sub_add_left_eq_sub] using
       norm_sub_le_of_contDiff_deriv_bound (hs1.of_le (by simp)) B.coe_nonneg hB (θ + b) (θ + a)
-  let D : ℝ≥0 := ⟨(C : ℝ) * |b - a|, by positivity⟩
+  let D : ℝ≥0 := NNReal.mk ((C : ℝ) * |b - a|) (by positivity)
   have hl : LipschitzWith D (fun x => ContourC1Space.derivative γ W x) := by
     apply lipschitzWith_contour_of_deriv_bound
     · have h : ContDiff ℝ ∞ (fun θ : ℝ => deriv f (θ + b) - deriv f (θ + a)) :=

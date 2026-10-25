@@ -72,7 +72,7 @@ theorem actualComplexGreenCorrection_global_bounds :
     intro z w
     simpa only [complexTorusPoint, dist_add_right] using
       complexPhysicalPlane.lipschitz.dist_le_mul z w
-  simpa only [mul_one] using hLip.comp hpoint
+  simpa only [actualComplexGreenCorrection, mul_one] using hLip.comp hpoint
 
 namespace ComplexKernelConvolution
 
@@ -118,7 +118,7 @@ theorem hasFDerivAt_convolution (x : ℂ) :
   · exact Eventually.of_forall fun y x _ => by
       have hd := ((hh.differentiable one_ne_zero _).hasFDerivAt.comp x
         ((hasFDerivAt_id x).sub_const y)).mul_const (ζ y)
-      simpa only [ContinuousLinearMap.comp_id] using hd
+      simpa only [Function.comp_def, id_eq, ContinuousLinearMap.comp_id] using hd
 
 end ComplexKernelConvolution
 

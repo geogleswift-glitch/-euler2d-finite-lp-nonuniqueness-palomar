@@ -69,8 +69,8 @@ theorem exists_finitePhase_commonField_velocity
     dsimp only [B]
     unfold finiteContourPatchSupBound finiteContourPatchMassBound contourPatchMassBound
     positivity
-  let MB : ℝ≥0 := ⟨B + ME, add_nonneg hB ME.2⟩
-  let CB : ℝ≥0 := ⟨8 * B + CE, by positivity⟩
+  let MB : ℝ≥0 := NNReal.mk (B + ME) (add_nonneg hB ME.2)
+  let CB : ℝ≥0 := NNReal.mk (8 * B + CE) (by positivity)
   let v : ℝ → ℂ → ℂ := fun t z => vp t z + E t z
   have hv : Continuous (Function.uncurry v) := hvp.add hEc
   have hvM (t : ℝ) (z : ℂ) : ‖v t z‖ ≤ MB := by

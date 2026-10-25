@@ -60,7 +60,7 @@ theorem tendstoUniformly_planarBiotSavart_of_L1
       (planarKernelVelocity kernelK w₀) l := by
   have hb : Tendsto (fun a => 2 * Real.sqrt (∫ y, ‖w a y - w₀ y‖) * Real.sqrt (2 * M))
       l (𝓝 (0 : ℝ)) := by
-    simpa only [Real.sqrt_zero, mul_zero, zero_mul] using
+    simpa only [Function.comp_def, Real.sqrt_zero, mul_zero, zero_mul] using
       (((Real.continuous_sqrt.tendsto 0).comp hL).const_mul 2).mul_const (Real.sqrt (2 * M))
   rw [Metric.tendstoUniformly_iff]
   intro ε hε
@@ -78,7 +78,7 @@ theorem tendsto_planarBiotSavart_apply_of_L1
       (𝓝 (planarKernelVelocity kernelK w₀ x₀)) := by
   have hb : Tendsto (fun a => 2 * Real.sqrt (∫ y, ‖w a y - w₀ y‖) * Real.sqrt (2 * M))
       l (𝓝 (0 : ℝ)) := by
-    simpa only [Real.sqrt_zero, mul_zero, zero_mul] using
+    simpa only [Function.comp_def, Real.sqrt_zero, mul_zero, zero_mul] using
       (((Real.continuous_sqrt.tendsto 0).comp hL).const_mul 2).mul_const (Real.sqrt (2 * M))
   have herr : Tendsto (fun a => planarKernelVelocity kernelK (w a) (x a) -
       planarKernelVelocity kernelK w₀ (x a)) l (𝓝 (0 : R2)) :=

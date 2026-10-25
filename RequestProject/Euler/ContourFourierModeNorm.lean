@@ -45,8 +45,8 @@ theorem norm_littleContourFourierMode_le {γ : ℝ≥0}
       (1 + ‖(n : ℂ)‖ + ‖(n : ℂ)‖ ^ 2 * Real.pi ^ (1 - (γ : ℝ))) * ‖a‖ := by
   let Z : ContourC1Space γ := (littleContourFourierMode hγ hγ1 n a).val
   let A : ℝ≥0 := ‖a‖₊
-  let B : ℝ≥0 := ⟨‖a‖ * ‖(n : ℂ)‖, by positivity⟩
-  let C : ℝ≥0 := ⟨‖a‖ * ‖(n : ℂ)‖ ^ 2, by positivity⟩
+  let B : ℝ≥0 := NNReal.mk (‖a‖ * ‖(n : ℂ)‖) (by positivity)
+  let C : ℝ≥0 := NNReal.mk (‖a‖ * ‖(n : ℂ)‖ ^ 2) (by positivity)
   have he (θ : ℝ) : ContourC1Space.derivative γ Z (θ : ContourCircle) =
       a * ((n : ℂ) * I * contourCircleCharacter n θ) := by
     rw [← ContourC1Space.deriv_lift]

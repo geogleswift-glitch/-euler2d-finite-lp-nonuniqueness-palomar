@@ -87,8 +87,8 @@ theorem exists_circularPhase_particleFlow_area :
       finiteContourPatchMassBound circularContourStrengths circularContourRadii := by
     unfold finiteContourPatchSupBound finiteContourPatchMassBound contourPatchMassBound
     positivity
-  let M : ℝ≥0 := ⟨_, hB⟩
-  let C : ℝ≥0 := ⟨8 * (M : ℝ), by positivity⟩
+  let M : ℝ≥0 := NNReal.mk _ hB
+  let C : ℝ≥0 := NNReal.mk (8 * (M : ℝ)) (by positivity)
   apply exists_complex_measurePreserving_logHomeomorphFlow (M := M) (C := C)
     (continuous_circularPhaseVelocityOnInterval hγ hγ1 hT Z hZ hZm)
     (norm_circularPhaseVelocityOnInterval_le hγ hγ1 hT Z hZ hZm)

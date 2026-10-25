@@ -125,7 +125,7 @@ theorem exists_actual_deepest_captured_family_of_samples {Rflow r₀ : ℝ}
   obtain ⟨br, hbr, hnonzero, hbK, hbasegap, hgap⟩ :=
     P.exists_nonzeroTransfer_weightedNorm_gap (K := (Kself : ℝ)) (Cup := Cu) (Cdown := Cl)
       (C₀ := 2) (NNReal.coe_pos.mpr hKself) hCu hCl (by norm_num)
-  let b : ℝ≥0 := ⟨br, hbr.1.le⟩
+  let b : ℝ≥0 := NNReal.mk br hbr.1.le
   have hb : 0 < b := hbr.1
   have hbquarter : b < 1 / 4 := hbr.2
   have hb1 : b < 1 := hbquarter.trans (by norm_num)

@@ -73,7 +73,7 @@ theorem exists_uniform_circular_actualTorus_forced_interval {γ : ℝ≥0}
   refine ⟨E, ?_⟩
   intro R A hR hA hwindow htarget hscale hKA hBη
   obtain ⟨hQLip, hQc, hQlift, hQbound⟩ := hE hR hA hp hwindow htarget hscale
-  let J : ℝ≥0 := ⟨(Kphys : ℝ) / A, div_nonneg Kphys.coe_nonneg hA.le⟩
+  let J : ℝ≥0 := NNReal.mk ((Kphys : ℝ) / A) (div_nonneg Kphys.coe_nonneg hA.le)
   have hJ : (J : ℝ) ≤ 1 := (div_le_one hA).mpr hKA
   let q : ℝ → (Fin 2 → LittleContourSpace γ) → Fin 2 → LittleContourSpace γ :=
     fun t Z i => rescaledBanachForcing E A R t (Z i)

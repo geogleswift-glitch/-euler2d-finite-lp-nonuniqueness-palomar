@@ -179,7 +179,7 @@ lemma torusBiotSavartKernel_shift_weak_divergence {ψ : R2 → ℝ}
       (((EuclideanSpace.proj i : R2 →L[ℝ] ℝ).continuous.measurable.comp
         measurable_torusBiotSavartKernel).mul
           (contDiff_pd_infty hφ.1 i).continuous.measurable).aestronglyMeasurable
-    simpa only [F, Fin.sum_univ_two] using (hm 0).add (hm 1)
+    simpa only [F, Fin.sum_univ_two, Pi.add_def] using (hm 0).add (hm 1)
   have hchange := (torusAreaPreserving_add_right (torusCenter - y)).integral_comp hFm hF
   calc
     _ = ∫ x in torusBox, F (x + (torusCenter - y)) := by
@@ -216,13 +216,13 @@ lemma integrable_torusKernel_pair_prod {w : R2 → ℝ}
     apply hv.norm.mono'
       ((EuclideanSpace.proj j : R2 →L[ℝ] ℝ).continuous.comp_aestronglyMeasurable hv.aestronglyMeasurable)
     exact Eventually.of_forall fun p => by
-      simpa only [Real.norm_eq_abs] using abs_coord_le
+      simpa only [PiLp.proj_apply, Real.norm_eq_abs] using abs_coord_le
         (w p.2 • torusBiotSavartKernel (p.1 - p.2 + torusCenter)) j
   obtain ⟨C, hC⟩ := bound_on_box hf
   have hb : ∀ᵐ x ∂μT, ‖f x‖ ≤ C := by
     filter_upwards [ae_restrict_mem measurableSet_torusBox] with x hx
     simpa only [Real.norm_eq_abs] using hC x hx
-  simpa only [PiLp.smul_apply, smul_eq_mul] using
+  simpa only [PiLp.smul_apply, smul_eq_mul, Function.comp_def] using
     hc.mul_bdd (hf.measurable.comp measurable_fst).aestronglyMeasurable
       (Measure.quasiMeasurePreserving_fst.ae hb)
 

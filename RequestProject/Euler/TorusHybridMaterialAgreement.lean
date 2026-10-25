@@ -19,7 +19,7 @@ variable {f : Lp ℝ 2 μT} {T : ℝ} (S : BoundedEulerParticleSystem f T)
 theorem exists_lipschitzWith_correctionLabelField :
     ∃ L : ℝ≥0, ∀ t : ℝ, LipschitzWith L (S.correctionLabelField t) := by
   obtain ⟨C, _, _, hC⟩ := exists_torusGreenCorrection_perpGradient_bounds
-  let m : ℝ≥0 := ⟨∫ b in torusBox, ‖f b‖, integral_nonneg (fun _ => norm_nonneg _)⟩
+  let m : ℝ≥0 := NNReal.mk (∫ b in torusBox, ‖f b‖) (integral_nonneg (fun _ => norm_nonneg _))
   have hw : Integrable (fun b => ‖f b‖) μT := ((Lp.memLp f).integrable (by norm_num : (1 : ENNReal) ≤ 2)).norm
   refine ⟨C * m, fun t => ?_⟩
   apply LipschitzWith.of_dist_le_mul

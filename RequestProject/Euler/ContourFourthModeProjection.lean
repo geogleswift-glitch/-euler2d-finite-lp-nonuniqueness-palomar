@@ -86,7 +86,9 @@ theorem norm_littleContourFourierCoefficientCLM_le (γ : ℝ≥0) (k : ℤ) :
     ‖littleContourFourierCoefficientCLM γ k‖ ≤ 1 := by
   apply (littleContourFourierCoefficientCLM γ k).opNorm_le_bound (by norm_num)
   intro H
-  simpa only [one_mul] using norm_littleContourFourierCoefficient_le k H
+  change ‖littleContourFourierCoefficient γ k H‖ ≤ 1 * ‖H‖
+  rw [one_mul]
+  exact norm_littleContourFourierCoefficient_le k H
 
 theorem littleContourFourierCoefficient_fourierMode {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : γ ≤ 1) (k n : ℤ) (a : ℂ) :

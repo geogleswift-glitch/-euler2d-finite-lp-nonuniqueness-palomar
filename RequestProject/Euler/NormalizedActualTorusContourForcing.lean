@@ -54,7 +54,7 @@ theorem exists_normalized_actualTorusCorrection_LittleField
   obtain ⟨C, hC, hbudget⟩ := S.exists_physicalComplexSource_contourLittle_initialL1_budget ha ha16
   let q : ℝ → LittleContourSpace γ → LittleContourSpace γ :=
     fun t Z => (A * R)⁻¹ • E (t / A) (R • Z)
-  let K : ℝ≥0 := ⟨(K₀ : ℝ) / A, div_nonneg K₀.coe_nonneg hA.le⟩
+  let K : ℝ≥0 := NNReal.mk ((K₀ : ℝ) / A) (div_nonneg K₀.coe_nonneg hA.le)
   have hnorm (Z : LittleContourSpace γ) : ‖R • Z‖ = R * ‖Z‖ := by
     rw [norm_smul, Real.norm_eq_abs, abs_of_pos hR]
   have hZphys (Z : LittleContourSpace γ) (hZ : Z ∈ ball 0 L) : R • Z ∈ ball 0 (a / 4) := by

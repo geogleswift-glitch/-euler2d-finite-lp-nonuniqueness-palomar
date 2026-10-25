@@ -116,7 +116,7 @@ theorem exists_uniform_actualAncestor_response_bound :
   let c₀ : J → ℝ → Fin 2 → LittleContourSpace γ := fun j t =>
     littleCircularMaterialContours hγ hγ1 (ampScale A₀ b j * t)
   let a : J → ℝ≥0 := fun j => ⟨ampScale A₀ b j, (div_pos hA (pow_pos hb j)).le⟩
-  let bspeed : ℝ≥0 := ⟨b * ampScale A₀ b k, by unfold ampScale; positivity⟩
+  let bspeed : ℝ≥0 := NNReal.mk (b * ampScale A₀ b k) (by unfold ampScale; positivity)
   let Base := finiteRetardedSourceBaseline (γ : ℝ) Ctorus b R ρ L Cb D e d
   let Feedback := finiteRetardedAncestorFeedback (γ : ℝ) b ρ c B L
   have ha (j : J) : a j ≤ bspeed := by

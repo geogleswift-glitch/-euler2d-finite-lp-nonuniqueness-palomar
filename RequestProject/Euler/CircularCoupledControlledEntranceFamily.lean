@@ -181,7 +181,7 @@ theorem exists_actual_deepest_envelope_family_with_coupled_entrance {Rflow r₀ 
     · have hmul := mul_le_mul_of_nonneg_left hKle hbr.1.le
       dsimp only [weightedNormPropagationExponent] at hm ⊢
       linarith only [hm.2, hmul]
-  let b : ℝ≥0 := ⟨br, hbr.1.le⟩
+  let b : ℝ≥0 := NNReal.mk br hbr.1.le
   have hb : 0 < b := hbr.1
   have hbquarter : b < 1 / 4 := hbr.2
   have hb1 : b < 1 := hbquarter.trans (by norm_num)

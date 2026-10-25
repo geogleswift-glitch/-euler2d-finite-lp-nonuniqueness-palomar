@@ -107,8 +107,8 @@ theorem exists_smoothApproximation_finiteContourPlanarVelocity
   have hB : 0 ≤ finiteContourPatchSupBound g + finiteContourPatchMassBound g r := by
     unfold finiteContourPatchSupBound finiteContourPatchMassBound contourPatchMassBound
     positivity
-  let M : ℝ≥0 := ⟨_, hB⟩
-  let C : ℝ≥0 := ⟨8 * (M : ℝ), by positivity⟩
+  let M : ℝ≥0 := NNReal.mk _ hB
+  let C : ℝ≥0 := NNReal.mk (8 * (M : ℝ)) (by positivity)
   obtain ⟨K, hK⟩ := exists_smoothBoundedLogVelocityApproximation
     (M := M) (C := C) (continuous_finiteContourPlanarVelocity hT g Z Z₀ r hr href hsmall hZ)
     (norm_finiteContourPlanarVelocity_le hT g Z Z₀ r hr href hsmall)

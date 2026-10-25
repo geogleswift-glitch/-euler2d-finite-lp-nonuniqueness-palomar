@@ -67,8 +67,8 @@ theorem exists_finitePhase_actualCorrection_velocity
     dsimp only [B]
     unfold finiteContourPatchSupBound finiteContourPatchMassBound contourPatchMassBound
     positivity
-  let MB : ℝ≥0 := ⟨B + M, add_nonneg hB hM⟩
-  let CB : ℝ≥0 := ⟨8 * B + L, by positivity⟩
+  let MB : ℝ≥0 := NNReal.mk (B + M) (add_nonneg hB hM)
+  let CB : ℝ≥0 := NNReal.mk (8 * B + L) (by positivity)
   let E : ℝ → ℂ → ℂ := fun t z => complexPhysicalPlane.symm
     (S.correctionLabelField t (complexTorusPoint z))
   have hct : Continuous (fun z : ℂ => complexTorusPoint z) :=
