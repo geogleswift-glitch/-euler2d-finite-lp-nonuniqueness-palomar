@@ -99,7 +99,8 @@ theorem norm_torusApproxKernelVelocity_sub_le {ε : ℝ} (hε : 0 < ε)
       apply norm_integral_le_of_norm_le hI
       filter_upwards [hb, Lp.coeFn_sub W Z] with y hy he
       rw [← sub_smul, norm_smul, he]
-      simpa only [mul_comm] using mul_le_mul_of_nonneg_left hy (norm_nonneg (W y - Z y))
+      simpa only [Pi.sub_def, mul_comm] using
+        mul_le_mul_of_nonneg_left hy (norm_nonneg (W y - Z y))
     _ = torusKernelApproxBound ε * ∫ y in torusBox, ‖(W - Z) y‖ := integral_const_mul _ _
     _ ≤ torusKernelApproxBound ε * (scalarL2L1Constant * ‖W - Z‖) :=
       mul_le_mul_of_nonneg_left (integral_norm_scalarL2_le _) (torusKernelApproxBound_nonneg ε)
@@ -117,7 +118,7 @@ theorem norm_torusKernelVelocity_sub_approx_le {ε M : ℝ} (hε : 0 < ε) (hM0 
   have hI := (integrable_periodic_kernel_sub_left hEI hp x).norm.const_mul M
   change ‖(∫ y in torusBox, W y • torusBiotSavartKernel (x - y + torusCenter)) -
     ∫ y in torusBox, W y • torusKernelL2Approx ε (x - y + torusCenter)‖ ≤ _
-  rw [← integral_sub (integrable_torusKernelVelocity_integrand (Lp.memLp W).1 hM x)
+  rw [← integral_sub (integrable_torusKernelVelocity_integrand (Lp.aestronglyMeasurable W) hM x)
     (integrable_torusApproxKernelVelocity_integrand hε W x)]
   calc
     _ ≤ ∫ y in torusBox, M * ‖E (x - y + torusCenter)‖ := by
@@ -178,7 +179,7 @@ theorem continuous_torusKernelVelocity_of_continuous_L2
   have htime : ∀ᶠ t in 𝓝 p.1, ∀ x,
       dist (torusKernelVelocity (W p.1) x) (torusKernelVelocity (W t) x) < δ / 2 :=
     Metric.tendstoUniformly_iff.mp ht (δ / 2) (by linarith)
-  have hs := (continuous_torusKernelVelocity (Lp.memLp (W p.1)).1 (hM p.1)).tendsto p.2
+  have hs := (continuous_torusKernelVelocity (Lp.aestronglyMeasurable (W p.1)) (hM p.1)).tendsto p.2
   have hspace : ∀ᶠ x in 𝓝 p.2,
       dist (torusKernelVelocity (W p.1) x) (torusKernelVelocity (W p.1) p.2) < δ / 2 :=
     Metric.tendsto_nhds.mp hs (δ / 2) (by linarith)

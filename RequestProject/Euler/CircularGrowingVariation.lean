@@ -90,7 +90,9 @@ theorem circularGrowingNormal_hasDerivAt (t : ℝ) :
       lamStar • (exp ((t : ℂ) * lamStar) • vPlus)
     rw [Matrix.mulVec_smul, iB4_vPlus, smul_smul, smul_smul, mul_comm]
   rw [he]
-  simpa only [circularGrowingNormal, smul_smul] using
+  change HasDerivAt (fun s : ℝ => exp ((s : ℂ) * lamStar) • vPlus)
+    (lamStar • (exp ((t : ℂ) * lamStar) • vPlus)) t
+  simpa only [smul_smul] using
     (hasDerivAt_circularGrowingScalar t).smul_const vPlus
 
 theorem circularGrowingTangential_hasDerivAt (t : ℝ) :
@@ -102,7 +104,9 @@ theorem circularGrowingTangential_hasDerivAt (t : ℝ) :
       circularAngularTangentialAmplitude_smul, circularGrowingTangent_equation,
       smul_smul, smul_smul, mul_comm]
   rw [he]
-  simpa only [circularGrowingTangential, smul_smul] using
+  change HasDerivAt (fun s : ℝ => exp ((s : ℂ) * lamStar) • circularGrowingTangent)
+    (lamStar • (exp ((t : ℂ) * lamStar) • circularGrowingTangent)) t
+  simpa only [smul_smul] using
     (hasDerivAt_circularGrowingScalar t).smul_const circularGrowingTangent
 
 def circularGrowingVariation {γ : ℝ≥0} (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1)
@@ -174,7 +178,9 @@ theorem circularGrowingVariation_period {γ : ℝ≥0}
   have he (v : Fin 2 → ℂ) : (-(lamMult : ℂ)) • v = (-lamMult : ℝ) • v := by
     funext i
     simp only [Pi.smul_apply, Complex.real_smul, Complex.ofReal_neg, smul_eq_mul]
-  rw [he, he, circularNormalModeLittle_real_smul]
+  rw [he, he]
+  exact circularNormalModeLittle_real_smul hγ (by exact_mod_cast hγ1.le) 2
+    (-lamMult : ℝ) vPlus circularGrowingTangent
 
 theorem circularGrowingVariation_ne_zero {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1) : circularGrowingVariation hγ hγ1 0 ≠ 0 := by
@@ -182,7 +188,6 @@ theorem circularGrowingVariation_ne_zero {γ : ℝ≥0}
   have he := congrArg (fun H : Fin 2 → LittleContourSpace γ =>
     (LittleContourSpace.lift γ (H 0) 0).re) hzero
   rw [circularGrowingVariation_zero] at he
-  dsimp only at he
   rw [lift_circularNormalModeLittle] at he
   norm_num [vPlus, contourCircleCharacter_at_zero, refCircle, circularContourRadii,
     Complex.mul_re, Complex.mul_im] at he

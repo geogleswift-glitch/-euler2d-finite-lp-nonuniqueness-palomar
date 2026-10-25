@@ -53,7 +53,6 @@ theorem hybrid_local_material_particle_uniqueness_active
       rw [hYH]
       filter_upwards [hactive] with b hb hwb
       exact hd ⟨b, hb hwb⟩
-    dsimp only
     rw [heqX t ht a a.property, heqY t ht a a.property]
     have hh := norm_hybrid_material_add_common_field_sub_le_affine hw hB hwzero
       (hX t ht) (YH ⟨t, ht⟩) (hY ⟨t, ht⟩) hD (X t a) (Y t a) (hd a)

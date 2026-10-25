@@ -136,14 +136,22 @@ theorem norm_contourAngularModeProjectionCLM_le {γ : ℝ≥0}
       (b := 2 * Real.pi) (C := ‖H‖)
       (f := fun b => Real.cos ((m : ℝ) * b) • contourRotationLittleCLM γ b H)
       (fun b _ => by
-        rw [norm_smul, norm_contourRotationLittleCLM, Real.norm_eq_abs]
+        have hr : ‖contourRotationLittleCLM γ b H‖ = ‖H‖ :=
+          norm_contourRotationLittleCLM b H
+        rw [norm_smul, hr, Real.norm_eq_abs]
         exact (mul_le_mul_of_nonneg_right (Real.abs_cos_le_one _) (norm_nonneg H)).trans_eq (one_mul _))
-    simpa only [sub_zero, abs_of_pos (by positivity : (0 : ℝ) < 2 * Real.pi)] using h
+    calc
+      _ ≤ ‖H‖ * |2 * Real.pi - (0 : ℝ)| := h
+      _ = _ := by rw [sub_zero, abs_of_pos (by positivity : (0 : ℝ) < 2 * Real.pi)]
   change ‖(Real.pi⁻¹ : ℝ) • _‖ ≤ _
   rw [norm_smul, Real.norm_eq_abs, abs_of_pos (inv_pos.mpr Real.pi_pos)]
   calc
     _ ≤ Real.pi⁻¹ * (‖H‖ * (2 * Real.pi)) := mul_le_mul_of_nonneg_left hi (by positivity)
-    _ = _ := by field_simp <;> ring
+    _ = _ := by
+      change Real.pi⁻¹ * (‖H‖ * (2 * Real.pi)) = 2 * ‖H‖
+      calc
+        _ = (Real.pi⁻¹ * Real.pi) * (2 * ‖H‖) := by ring
+        _ = _ := by rw [inv_mul_cancel₀ Real.pi_ne_zero, one_mul]
 
 end Euler2D
 

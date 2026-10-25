@@ -77,7 +77,6 @@ theorem periodicLocal_material_particle_uniqueness_active
     have hdist : ∀ᵐ b ∂μT, w b ≠ 0 → ‖X t b - Y t b‖ ≤ D := by
       filter_upwards [hactive] with b hb hwb
       exact hd ⟨b, hb hwb⟩
-    dsimp only
     rw [heqX t ht a a.property, heqY t ht a a.property]
     exact norm_periodicLocalMaterial_add_common_field_sub_le_affine hw hB0 hB hC hderiv
       (hX t ht) (hY t ht) hD (X t a) (Y t a) (hd a) hdist hε hε1 (hE t ht)

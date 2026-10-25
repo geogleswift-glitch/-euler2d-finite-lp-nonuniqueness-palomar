@@ -76,7 +76,8 @@ lemma rawKernelMollifier_integral (ε : ℝ) (hε : 0 < ε) :
 lemma rawKernelMollifier_eq_zero {ε : ℝ} (hε : 0 < ε) {x : R2}
     (hx : ε ≤ ‖x - torusCenter‖) : rawKernelMollifier ε hε x = 0 := by
   unfold rawKernelMollifier ContDiffBump.normed
-  rw [(kernelMollifierBump ε hε).zero_of_le_dist (by simpa only [dist_eq_norm] using hx), zero_div]
+  rw [(kernelMollifierBump ε hε).zero_of_le_dist
+    (by simpa only [dist_eq_norm, kernelMollifierBump] using hx), zero_div]
 
 lemma rawKernelMollifier_zero_of_one_le {ε : ℝ} (hε : 0 < ε) (hε1 : ε ≤ 1)
     (x : R2) (hx : 1 ≤ ‖x - torusCenter‖) : rawKernelMollifier ε hε x = 0 :=

@@ -161,7 +161,7 @@ theorem norm_planarMaterial_sub_source_le_L1
   rw [planarMaterialBiotSavart_eq_spatial w Y hY, planarMaterialBiotSavart_eq_spatial f Y hY]
   have he : (∫ b, ‖w (Y.symm b) - f (Y.symm b)‖) = ∫ b, ‖w b - f b‖ :=
     hiY.integral_comp Y.symm.measurableEmbedding (fun b => ‖w b - f b‖)
-  simpa only [Function.comp_apply, he] using norm_planarBiotSavart_sub_le_L1
+  simpa only [Function.comp_def, he] using norm_planarBiotSavart_sub_le_L1
     (hiY.integrable_comp_of_integrable hw) (hiY.integrable_comp_of_integrable hf)
     (fun b => hB (Y.symm b)) (fun b => hfB (Y.symm b)) x
 
