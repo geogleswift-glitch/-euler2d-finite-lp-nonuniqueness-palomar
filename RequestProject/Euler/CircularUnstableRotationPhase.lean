@@ -69,7 +69,7 @@ theorem norm_circularConstrainedUnstableEmbedding_one_pos {γ : ℝ≥0}
   apply norm_pos_iff.mpr
   intro h
   have he := circularConstrainedUnstableCoordinate_embedding hγ hγ1 (1 : ℂ)
-  rw [h, map_zero] at he
+  rw [h, ContinuousLinearMap.map_zero (circularConstrainedUnstableCoordinateCLM γ)] at he
   exact zero_ne_one he
 
 theorem exists_circularConstrainedUnstable_rotation_of_norm_eq {γ : ℝ≥0}
