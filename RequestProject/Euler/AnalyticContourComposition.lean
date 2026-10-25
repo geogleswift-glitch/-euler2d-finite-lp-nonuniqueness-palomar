@@ -96,6 +96,8 @@ theorem norm_analyticContourDerivativeHolder_le {γ : ℝ≥0} (hγ1 : (γ : ℝ
     exact (h₁ x).trans (le_add_of_nonneg_right (by positivity))
   · intro x y
     have hl := (lipschitzWith_analyticDerivative_comp_contour hF Z hZ hB₂ h₂).dist_le_mul x y
+    change dist (deriv F (ContourC1Space.toBCF γ Z x))
+      (deriv F (ContourC1Space.toBCF γ Z y)) ≤ (B₂ * ‖Z‖) * dist x y at hl
     change ‖deriv F (ContourC1Space.toBCF γ Z x) - deriv F (ContourC1Space.toBCF γ Z y)‖ ≤ _
     have hh : ‖deriv F (ContourC1Space.toBCF γ Z x) - deriv F (ContourC1Space.toBCF γ Z y)‖ ≤
         (B₂ * ‖Z‖) * dist x y := by simpa only [dist_eq_norm] using hl

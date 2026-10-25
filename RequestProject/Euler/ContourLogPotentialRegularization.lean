@@ -45,9 +45,11 @@ theorem hasFDerivAt_regularizedLogPotential (x : ℂ) {δ : ℝ} (hδ : δ ≠ 0
   have hd := (((hasFDerivAt_id y).sub_const x).norm_sq.const_add (δ ^ 2)).log hpos.ne'
   have hh := hd.const_mul (1 / 2 : ℝ)
   convert hh using 1
-  ext w
-  simp [regularizedLogPotentialDerivative, innerSL_apply_apply]
-  ring
+  · funext w
+    simp only [regularizedLogPotential, id_eq]
+  · ext w
+    simp [regularizedLogPotentialDerivative, innerSL_apply_apply, id_eq]
+    ring
 
 theorem contDiff_regularizedLogPotential (x : ℂ) {δ : ℝ} (hδ : δ ≠ 0) :
     ContDiff ℝ ∞ (regularizedLogPotential x δ) := by

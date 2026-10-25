@@ -82,6 +82,7 @@ theorem contourJoint_holderWith_of_norm_bound {C : ℝ} (hC : 0 ≤ C)
     {f : ContourJointParameter → ℂ}
     (hf : ∀ p q, ‖f p - f q‖ ≤ C * dist p q ^ (γ : ℝ)) :
     HolderWith (⟨C, hC⟩ : ℝ≥0) γ f := by
+  change HolderWith (NNReal.mk C hC) γ f
   intro p q
   rw [edist_nndist, edist_nndist, ← ENNReal.coe_rpow_of_nonneg _ γ.coe_nonneg,
     ← ENNReal.coe_mul, ENNReal.coe_le_coe]
@@ -119,6 +120,7 @@ theorem intervalIntegrable_contourJointShift (f : ContourHolderSpace γ) (p : Co
 
 theorem norm_contourJointAverageFunction_le (f : ContourHolderSpace γ) (p : ContourJointParameter) :
     ‖contourJointAverageFunction f p‖ ≤ ‖f‖ := by
+  unfold contourJointAverageFunction
   simpa only [sub_zero, abs_one, mul_one] using
     (intervalIntegral.norm_integral_le_of_norm_le_const (a := 0) (b := 1)
       (fun u _ => HolderFunctionSpace.norm_eval_le f (contourJointShiftPoint u p)))

@@ -96,7 +96,6 @@ theorem mem_fourfoldLittleContourSubmodule {γ : ℝ≥0} (Z : LittleContourSpac
   constructor
   · intro h θ
     have hv := congrArg (fun W : LittleContourSpace γ => LittleContourSpace.lift γ W (θ + Real.pi / 2)) h
-    dsimp only at hv
     rw [lift_contourRotationLittleCLM] at hv
     simp only [rotShift, add_sub_cancel_right, he] at hv
     exact hv.symm

@@ -79,6 +79,7 @@ theorem norm_contourC1CrossLogIntegral_le {γ : ℝ≥0}
       ‖contourCrossLogIntegrand (ContourC1Space.lift γ Z) (ContourC1Space.lift γ W)
         (deriv (ContourC1Space.lift γ W)) θ φ‖ ≤ M * (|Real.log σ| + |Real.log (2 * M + 1)|) := by
     have hl := hsep (θ : ContourCircle) (φ : ContourCircle)
+    change σ ≤ ‖ContourC1Space.lift γ Z θ - ContourC1Space.lift γ W φ‖ at hl
     have hu : ‖ContourC1Space.lift γ Z θ - ContourC1Space.lift γ W φ‖ ≤ 2 * M + 1 := by
       have hn := norm_sub_le (ContourC1Space.lift γ Z θ) (ContourC1Space.lift γ W φ)
       have hZ := (ContourC1Space.norm_eval_le Z (θ : ContourCircle)).trans hZM

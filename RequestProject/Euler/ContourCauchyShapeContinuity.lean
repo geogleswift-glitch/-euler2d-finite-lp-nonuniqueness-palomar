@@ -95,6 +95,7 @@ theorem contourCauchyIncrementOperator_independent_lower {γ : ℝ≥0}
     {c d : ℝ} (hc : 0 < c) (hd : 0 < d)
     (hZc : ContourC1Space.HasChordArcLower Z c) (hZd : ContourC1Space.HasChordArcLower Z d) :
     contourCauchyIncrementOperator Z hγ hγ1 hc hZc = contourCauchyIncrementOperator Z hγ hγ1 hd hZd := by
+  unfold ContourC1Space.HasChordArcLower at hZc hZd
   apply ContinuousLinearMap.ext
   intro f
   apply HolderFunctionSpace.ext

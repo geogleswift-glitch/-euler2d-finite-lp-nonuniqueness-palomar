@@ -34,8 +34,10 @@ theorem exists_boundedODE_continuous_curve {E : Type*} [NormedAddCommGroup E]
     · intro x hx
       exact (hfc.comp (continuous_id.prodMk continuous_const)).continuousOn
     · have hh : max (T + 1 - (0 : ℝ)) (0 - -1) ≤ T + 2 := max_le (by linarith) (by linarith)
-      simpa only [NNReal.coe_mul, NNReal.coe_mk, NNReal.coe_zero, sub_zero] using
-        mul_le_mul_of_nonneg_left hh M.2
+      change (M : ℝ) * max (T + 1 - (0 : ℝ)) (0 - -1) ≤ (M : ℝ) * (T + 2) - 0
+      calc
+        _ ≤ (M : ℝ) * (T + 2) := mul_le_mul_of_nonneg_left hh M.2
+        _ = _ := (sub_zero _).symm
   obtain ⟨α, hα0, hαd⟩ := hp.exists_eq_forall_mem_Icc_hasDerivWithinAt₀
   let β : ℝ → E := fun t => α (particleTimeClamp hT t)
   have hβ (t : ℝ) (ht : t ∈ Icc (-1 : ℝ) (T + 1)) : β t = α t := by
@@ -94,7 +96,9 @@ theorem exists_variational_curve {B : ℝ → R2 →L[ℝ] R2} {K : ℝ≥0}
     calc
       ‖(B t).comp (G C - G D)‖ ≤ ‖B t‖ * ‖G C - G D‖ := ContinuousLinearMap.opNorm_comp_le _ _
       _ ≤ (K : ℝ) * ((L : ℝ) * dist C D) :=
-        mul_le_mul (hB t) (by simpa only [dist_eq_norm] using hGL.dist_le_mul C D)
+        mul_le_mul (hB t) (by
+          rw [← dist_eq_norm]
+          exact hGL.dist_le_mul C D)
           (norm_nonneg _) K.2
       _ = _ := by simp only [NNReal.coe_mul]; ring
   have hfM : ∀ t C, ‖f t C‖ ≤ (K * NNReal.mk (R + 1) (by linarith) : ℝ≥0) := by

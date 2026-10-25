@@ -40,7 +40,7 @@ theorem tendstoUniformly_contourC1CauchyIncrement {γ : ℝ≥0} {ι : Type*}
       (fun n x => contourCauchyIncrementBCF hγ (p n) x)
       (fun x => contourCauchyIncrementBCF hγ p₀ x) l :=
     BoundedContinuousFunction.tendsto_iff_tendstoUniformly.mp hb
-  simpa only [contourCauchyIncrementBCF_coe, p, p₀] using
+  simpa only [Function.comp_def, contourCauchyIncrementBCF_coe, p, p₀] using
     hu.comp (fun θ : ℝ => (θ : ContourCircle))
 
 end Euler2D

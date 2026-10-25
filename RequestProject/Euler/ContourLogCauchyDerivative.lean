@@ -50,6 +50,9 @@ theorem contourLogCauchyTruncated_eq {z dz f : ℝ → ℂ} {θ r ε : ℝ}
   have hconj : IntegrableOn
       (fun τ => conj ((dz (θ + τ) / (z θ - z (θ + τ))) * f (θ + τ)))
       (symmetricContourTruncation r ε) := by
+    change Integrable
+      (fun τ : ℝ => conj ((dz (θ + τ) / (z θ - z (θ + τ))) * f (θ + τ)))
+      (volume.restrict (symmetricContourTruncation r ε))
     simpa only [Complex.conjLIE_apply] using (Complex.conjLIE.integrable_comp_iff).mpr hW
   have heq : (fun τ => (dz θ / (z θ - z (θ + τ))).re • dz (θ + τ)) =
       fun τ => (1 / 2 : ℂ) * (dz θ * (dz (θ + τ) / (z θ - z (θ + τ))) +
@@ -72,6 +75,9 @@ theorem integrableOn_contourLogCauchyTruncatedIntegrand {z dz f : ℝ → ℂ} {
   have hconj : IntegrableOn
       (fun τ => conj ((dz (θ + τ) / (z θ - z (θ + τ))) * f (θ + τ)))
       (symmetricContourTruncation r ε) := by
+    change Integrable
+      (fun τ : ℝ => conj ((dz (θ + τ) / (z θ - z (θ + τ))) * f (θ + τ)))
+      (volume.restrict (symmetricContourTruncation r ε))
     simpa only [Complex.conjLIE_apply] using (Complex.conjLIE.integrable_comp_iff).mpr hW
   have hi := ((hK.const_mul (dz θ)).add (hconj.const_mul (conj (dz θ)))).const_mul (1 / 2 : ℂ)
   have heq : (fun τ => (1 / 2 : ℂ) * (dz θ * (dz (θ + τ) / (z θ - z (θ + τ))) +
