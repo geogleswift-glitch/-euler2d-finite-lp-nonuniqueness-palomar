@@ -58,7 +58,7 @@ theorem exists_circularNonlinear_growing_equation {γ : ℝ≥0}
     rw [show littleCircularMaterialContours hγ hγ1 (a * t) + H t = y t from hsum] at hh
     exact hh
   have hclock : HasDerivAt (fun u : ℝ => a * u) a t := by
-    simpa only [mul_one] using (hasDerivAt_id t).const_mul a
+    simpa only [id_eq, mul_one] using (hasDerivAt_id t).const_mul a
   have hc := (littleCircularMaterialContours_hasDerivAt hγ hγ1 (a * t)).scomp t hclock
   have hdH := hy.sub hc
   change HasDerivAt H ((a • F (y t) + p) - a • F z) t at hdH

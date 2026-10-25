@@ -67,7 +67,8 @@ theorem hasFDerivAt_circularConstrainedInnerPatchFourthMoment_zero {γ : ℝ≥0
     (ContinuousLinearMap.proj (0 : Fin 2)).comp (circularConstrainedTangentSubmodule γ).subtypeL
   have hd : HasFDerivAt (circularAreaChartFourthMoment hγ hγ1 0)
       (fderiv ℝ (circularAreaChartFourthMoment hγ hγ1 0) 0) (L 0) := by
-    simpa only [map_zero] using (differentiableAt_circularAreaChartFourthMoment_zero hγ hγ1 0).hasFDerivAt
+    simpa only [ContinuousLinearMap.map_zero L] using
+      (differentiableAt_circularAreaChartFourthMoment_zero hγ hγ1 0).hasFDerivAt
   exact hd.comp 0 L.hasFDerivAt
 
 theorem fderiv_circularAreaChartFourthMoment_normalMode {γ : ℝ≥0}
@@ -77,8 +78,7 @@ theorem fderiv_circularAreaChartFourthMoment_normalMode {γ : ℝ≥0}
       (Real.pi : ℂ) * (circularContourRadii i : ℂ) ^ 6 * η i := by
   let g := circularNormalModeLittle hγ hγ1 2 η τ i
   have hs : HasDerivAt (fun s : ℝ => s • g) g 0 := by
-    simpa only [ContinuousLinearMap.toSpanSingleton_apply, one_smul] using
-      (ContinuousLinearMap.toSpanSingleton ℝ g).hasDerivAt (x := (0 : ℝ))
+    simpa only [id_eq, one_smul] using (hasDerivAt_id (0 : ℝ)).smul_const g
   have hd : HasFDerivAt (circularAreaChartFourthMoment hγ hγ1 i)
       (fderiv ℝ (circularAreaChartFourthMoment hγ hγ1 i) 0) ((fun s : ℝ => s • g) 0) := by
     simpa only [zero_smul] using (differentiableAt_circularAreaChartFourthMoment_zero hγ hγ1 i).hasFDerivAt
@@ -92,11 +92,19 @@ theorem fderiv_circularConstrainedInnerPatchFourthMoment_unstableEmbedding {γ :
     fderiv ℝ (circularConstrainedInnerPatchFourthMoment hγ hγ1.le) 0
       (circularConstrainedUnstableEmbeddingCLM hγ hγ1.le c) =
       (Real.pi : ℂ) * (cellA : ℂ) ^ 6 * c := by
-  rw [(hasFDerivAt_circularConstrainedInnerPatchFourthMoment_zero hγ hγ1.le).fderiv]
-  change fderiv ℝ (circularAreaChartFourthMoment hγ hγ1.le 0) 0
-    ((circularConstrainedUnstableEmbeddingCLM hγ hγ1.le c).val 0) = _
-  rw [circularConstrainedUnstableEmbeddingCLM_val, circularUnstableEmbeddingCLM_apply,
-    fderiv_circularAreaChartFourthMoment_normalMode hγ hγ1.le]
+  letI : IsBoundedSMul ℝ (CircularConstrainedTangentSpace γ) :=
+    @NormedSpace.toIsBoundedSMul ℝ (CircularConstrainedTangentSpace γ) _ _
+      (innerDetectorTangent_space γ)
+  letI : ContinuousSMul ℝ (CircularConstrainedTangentSpace γ) :=
+    IsBoundedSMul.continuousSMul
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+  change fderiv ℝ (circularConstrainedInnerPatchFourthMoment hγ hγle) 0
+    (circularConstrainedUnstableEmbeddingCLM hγ hγle c) = (Real.pi : ℂ) * (cellA : ℂ) ^ 6 * c
+  rw [(hasFDerivAt_circularConstrainedInnerPatchFourthMoment_zero hγ hγle).fderiv]
+  change fderiv ℝ (circularAreaChartFourthMoment hγ hγle 0) 0
+    ((circularConstrainedUnstableEmbeddingCLM hγ hγle c).val 0) = _
+  rw [circularConstrainedUnstableEmbeddingCLM_val hγ hγle c, circularUnstableEmbeddingCLM_apply hγ hγle c,
+    fderiv_circularAreaChartFourthMoment_normalMode hγ hγle]
   norm_num [circularContourRadii, vPlus, Pi.smul_apply, smul_eq_mul]
 
 theorem exists_circularConstrainedInnerPatchFourthMoment_uniform_cone {γ : ℝ≥0}
@@ -142,7 +150,15 @@ theorem exists_circularConstrainedInnerPatchFourthMoment_uniform_cone {γ : ℝ�
   intro hclose
   have hbound := hcone v (Q v) hv
     (hLower (Q v) (circularConstrainedUnstableProjectionCLM_idempotent hγ hγ1.le v)) hclose
-  simpa only [circularConstrainedInnerPatchFourthMoment_zero, sub_zero] using hbound
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+  have hzero : circularConstrainedInnerPatchFourthMoment hγ hγle
+      (0 : CircularConstrainedTangentSpace γ) = 0 :=
+    circularConstrainedInnerPatchFourthMoment_zero hγ hγle
+  change (m / 2) * ‖Q v‖ ≤ ‖circularConstrainedInnerPatchFourthMoment hγ hγle v -
+    circularConstrainedInnerPatchFourthMoment hγ hγle 0‖ at hbound
+  rw [hzero, sub_zero] at hbound
+  change (m / 2) * ‖Q v‖ ≤ ‖circularConstrainedInnerPatchFourthMoment hγ hγle v‖
+  exact hbound
 
 end Euler2D
 

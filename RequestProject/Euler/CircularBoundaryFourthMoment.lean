@@ -108,8 +108,11 @@ theorem fderiv_circularBoundaryFourthMoment_fourthMode {γ : ℝ≥0}
   let H := circularNormalModeLittle hγ hγ1.le 2 η τ
   let Z : ℝ → Fin 2 → LittleContourSpace γ := fun s => littleCircularReference hγ hγ1 + s • H
   have hZ : HasDerivAt Z H 0 := by
-    simpa only [one_smul] using ((hasDerivAt_id (0 : ℝ)).smul_const H).const_add
-      (littleCircularReference hγ hγ1)
+    apply hasDerivAt_pi.mpr
+    intro i
+    change HasDerivAt (fun s : ℝ => littleCircularReference hγ hγ1 i + s • H i) (H i) 0
+    simpa only [id_eq, one_smul] using ((hasDerivAt_id (0 : ℝ)).smul_const (H i)).const_add
+      (littleCircularReference hγ hγ1 i)
   have hd (i : Fin 2) : HasDerivAt (fun s => contourFourthMoment γ (Z s i).val)
       (Real.pi * (circularContourRadii i : ℂ) ^ 6 * η i) 0 := by
     apply hasDerivAt_contourFourthMoment_fourthMode hγ hγ1.le η τ i
@@ -125,7 +128,7 @@ theorem fderiv_circularBoundaryFourthMoment_fourthMode {γ : ℝ≥0}
     exact ((contDiff_circularBoundaryFourthMoment γ).differentiable (by norm_num)).differentiableAt.hasFDerivAt
   have hc := houter.comp_hasDerivAt 0 hZ
   apply hc.unique
-  simpa only [Function.comp_def, circularBoundaryFourthMoment, Fin.sum_univ_two, Pi.add_apply] using hsum
+  simpa only [Function.comp_def, circularBoundaryFourthMoment, Fin.sum_univ_two, Pi.add_def] using hsum
 
 end Euler2D
 

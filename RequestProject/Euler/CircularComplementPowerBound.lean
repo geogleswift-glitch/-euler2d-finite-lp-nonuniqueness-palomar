@@ -81,12 +81,15 @@ theorem exists_norm_circularPeriod_derivative_even_power_complement_le {γ : ℝ
       ‖(D ^ (2 * k)) (circularAngularModeProjectionCLM hγ hγ1.le ((N + 2 : ℕ) : ℤ) H)‖ ≤
         circularFourierModeWeight γ N * B * (2 : ℝ) ^ k * ‖H‖ := by
     rw [continuousLinearMap_commuting_power_apply D _
-      (circularPeriod_derivative_angularProjection_commute hγ hγ1 hρ hX hd ((N + 2 : ℕ) : ℤ)),
-      circularAngularModeProjectionCLM_eq_embedding]
+      (circularPeriod_derivative_angularProjection_commute hγ hγ1 hρ hX hd ((N + 2 : ℕ) : ℤ))]
+    have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+    change ‖circularAngularModeProjectionCLM hγ hγle ((N + 2 : ℕ) : ℤ) ((D ^ (2 * k)) H)‖ ≤
+      circularFourierModeWeight γ N * B * (2 : ℝ) ^ k * ‖H‖
+    rw [circularAngularModeProjectionCLM_eq_embedding hγ hγle N ((D ^ (2 * k)) H)]
     calc
       _ ≤ circularFourierModeWeight γ N *
           ‖circularModeAmplitudeCoefficientCLM γ N ((D ^ (2 * k)) H)‖ :=
-        norm_circularModeAmplitudeEmbedding_le hγ hγ1.le N _
+        norm_circularModeAmplitudeEmbedding_le hγ hγle N _
       _ ≤ circularFourierModeWeight γ N *
           ((4 + 8 * (((2 * k : ℕ) : ℝ) * period)) * (2 / cellA) * ‖H‖) :=
         mul_le_mul_of_nonneg_left
