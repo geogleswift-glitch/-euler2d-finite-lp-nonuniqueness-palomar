@@ -150,7 +150,8 @@ theorem momentN_positiveComplexVorticity {t : ℝ} (ht : 0 ≤ t) :
     momentN (P.positiveComplexVorticity t) 4 = P.moment t := by
   rw [P.moment_positive t ht]
   have he := planarFourthMoment_complex_density (P.positiveComplexVorticity t)
-  simpa only [positiveComplexVorticity, LinearIsometryEquiv.apply_symm_apply, momentN] using he.symm
+  simpa only [positiveComplexVorticity, LinearIsometryEquiv.apply_symm_apply, momentN,
+    starRingEnd_apply] using he.symm
 
 theorem exists_nonzero_transfer_ratio :
     ∃ b ∈ Ioo (0 : ℝ) (1 / 4), bilateral P.moment ((b : ℂ) * (sigma + 5 / 4 * I)) ≠ 0 := by
