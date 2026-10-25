@@ -85,7 +85,7 @@ theorem tendsto_clusterContourLittle_of_L1 {γ : ℝ≥0} (hγ1 : (γ : ℝ) ≤
     fun_prop
   have hb : Tendsto (fun i => cauchyContourNormBudget 5 (γ : ℝ)
       (a ^ 4 * ∫ y, |u i y - v y|) d ‖Z‖) l (𝓝 0) := by
-    simpa only [mul_zero, cauchyContourNormBudget, cauchySpatialDerivativeBudget,
+    simpa only [Function.comp_def, mul_zero, cauchyContourNormBudget, cauchySpatialDerivativeBudget,
       zero_div, mul_zero, add_zero, zero_mul, max_self] using hc.continuousAt.tendsto.comp hL1
   apply tendsto_iff_norm_sub_tendsto_zero.mpr
   exact squeeze_zero (fun i => norm_nonneg _) (fun i =>

@@ -46,7 +46,9 @@ theorem dist_shiftedRetardedTransfer_sharp_le_of_forced_equation
     have htime : a + u ∈ Icc a d := ⟨by linarith only [hu.1], by linarith only [hu.2, hτ.2]⟩
     obtain ⟨E, hE, hd⟩ := hW (a + u) htime
     have hs : HasDerivAt (fun v : ℝ => a + v) 1 u := by
-      simpa only [zero_add] using (hasDerivAt_const u a).add (hasDerivAt_id u)
+      have hadd := (hasDerivAt_const u a).add (hasDerivAt_id u)
+      simp only [Pi.add_def, id_eq, zero_add] at hadd
+      exact hadd
     have hWd := hd.scomp u hs
     have hRd := (P.hasDerivAt_shiftedRetardedTransfer hb ρ θp θc s (a + u)).scomp u hs
     simp only [one_smul, Function.comp_def] at hWd hRd

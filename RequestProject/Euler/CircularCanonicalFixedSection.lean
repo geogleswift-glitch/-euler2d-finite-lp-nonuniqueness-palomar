@@ -73,7 +73,7 @@ theorem exists_same_graph_fixed_canonical_section {R r : ℝ} (hR : 0 < R) (hr :
   have hclock : Tendsto (fun n : ℕ => -(n : ℝ) * (period + period)) atTop atBot := by
     have hh : Tendsto (fun n : ℕ => (n : ℝ) * (period + period)) atTop atTop :=
       (tendsto_mul_const_atTop_of_pos (add_pos hp hp)).mpr tendsto_natCast_atTop_atTop
-    simpa only [neg_mul] using tendsto_neg_atTop_atBot.comp hh
+    simpa only [Function.comp_def, neg_mul] using tendsto_neg_atTop_atBot.comp hh
   have hseed := P.ancient_flattened_samples_eventually_seed hg hsamples (by norm_num : (0 : ℝ) < 1)
   obtain ⟨n, hnseed, hnclock⟩ :=
     (hseed.and (hclock.eventually (eventually_le_atBot (min T (-1))))).exists

@@ -25,7 +25,7 @@ theorem sum_datumTermLp_ae {A₀ b R ρ q : ℝ} [Fact (1 ≤ ENNReal.ofReal q)]
       Lp ℝ (ENNReal.ofReal q) (volume : Measure R2)) : R2 → ℝ) =ᵐ[volume]
         fun x => ∑ j ∈ Finset.range N, datumTerm A₀ b R ρ j x := by
   induction N with
-  | zero => simpa only [Finset.range_zero, Finset.sum_empty] using
+  | zero => simpa only [Finset.range_zero, Finset.sum_empty, Pi.zero_def] using
       (Lp.coeFn_zero ℝ (ENNReal.ofReal q) (volume : Measure R2))
   | succ N ih =>
       rw [Finset.sum_range_succ]

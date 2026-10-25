@@ -104,13 +104,16 @@ theorem exists_actualTorusKernelCorrection_contourC1
     ha ha16 hK.le hR hL hsmall hw hsupp hmass hsym (hbound w hw hsupp hsym hmass)
       ((ContourC1Space.norm_eval_le Z x).trans hZ) m
   have h₀ : ∀ x, ‖conj (actualTorusCorrectionVelocity w (ContourC1Space.toBCF γ Z x))‖ ≤ C := by
-    simpa only [Nat.factorial_zero, Nat.cast_one, pow_zero, one_mul, div_one, iteratedDeriv_zero] using hb 0
+    simpa only [C, ContourC1Space.eval_apply, Nat.factorial_zero, Nat.cast_one, pow_zero,
+      one_mul, div_one, iteratedDeriv_zero] using hb 0
   have h₁ : ∀ x, ‖deriv (fun z => conj (actualTorusCorrectionVelocity w z))
       (ContourC1Space.toBCF γ Z x)‖ ≤ C / R := by
-    simpa only [Nat.factorial_one, Nat.cast_one, pow_one, one_mul, iteratedDeriv_one] using hb 1
+    simpa only [C, ContourC1Space.eval_apply, Nat.factorial_one, Nat.cast_one, pow_one,
+      one_mul, iteratedDeriv_one] using hb 1
   have h₂ : ∀ x, ‖deriv (deriv (fun z => conj (actualTorusCorrectionVelocity w z)))
       (ContourC1Space.toBCF γ Z x)‖ ≤ 2 * C / R ^ 2 := by
-    simpa only [Nat.factorial_two, Nat.cast_ofNat, iteratedDeriv_succ, iteratedDeriv_zero] using hb 2
+    simpa only [C, ContourC1Space.eval_apply, Nat.factorial_two, Nat.cast_ofNat,
+      iteratedDeriv_succ, iteratedDeriv_zero] using hb 2
   let W := analyticContourComposition hγ1 hF Z hZu (show 0 ≤ 2 * C / R ^ 2 by positivity) h₂
   refine ⟨contourC1Conjugate W, ?_, ?_⟩
   · intro θ
