@@ -71,21 +71,28 @@ theorem exists_circularConstrained_backward_departure {γ : ℝ≥0}
       (‖circularPatchGrowingResponse‖ / 2) * t ≤
         ‖circularConstrainedPatchFourthMoment hγ hγ1.le (x 0)‖ ∧
       circularConstrainedPatchFourthMoment hγ hγ1.le (x 0) ≠ 0 ∧ Tendsto x atTop (𝓝 0) := by
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
   have horbit : HasFlatBackwardOrbits
       (banachDoubleReturn (circularConstrainedReturnMap hγ hγ1 (fun W => X W period)))
-      (circularConstrainedUnstableProjectionCLM hγ hγ1.le) 3 := by
+      (circularConstrainedUnstableProjectionCLM hγ hγle) 3 := by
     intro ε hε radius hradius
     exact exists_circularConstrained_backward_orbit hγ hγ1 hR hX hd hfix harea hε hradius
-  have hφ := (hasFDerivAt_circularConstrainedPatchFourthMoment_zero hγ hγ1.le).differentiableAt.hasFDerivAt
-  have hg : fderiv ℝ (circularConstrainedPatchFourthMoment hγ hγ1.le) 0
-      (circularConstrainedUnstableEmbeddingCLM hγ hγ1.le 1) ≠ 0 := by
-    rw [fderiv_circularConstrainedPatchFourthMoment_growing hγ hγ1]
+  have hφ := (hasFDerivAt_circularConstrainedPatchFourthMoment_zero hγ hγle).differentiableAt.hasFDerivAt
+  have hresponse : fderiv ℝ (circularConstrainedPatchFourthMoment hγ hγle) 0
+      (circularConstrainedUnstableEmbeddingCLM hγ hγle 1) = circularPatchGrowingResponse :=
+    fderiv_circularConstrainedPatchFourthMoment_growing hγ hγ1
+  have hg : fderiv ℝ (circularConstrainedPatchFourthMoment hγ hγle) 0
+      (circularConstrainedUnstableEmbeddingCLM hγ hγle 1) ≠ 0 := by
+    rw [hresponse]
     exact circularPatchGrowingResponse_ne_zero
   have h := exists_backwardOrbit_with_observable_departure horbit hφ
-    (circularConstrainedUnstableEmbeddingCLM hγ hγ1.le 1)
-    (circularConstrainedUnstableProjection_embedding hγ hγ1.le 1) hg hrmax
-  simpa only [fderiv_circularConstrainedPatchFourthMoment_growing hγ hγ1,
-    circularConstrainedPatchFourthMoment_zero, sub_zero] using h
+    (circularConstrainedUnstableEmbeddingCLM hγ hγle 1)
+    (circularConstrainedUnstableProjection_embedding hγ hγle 1) hg hrmax
+  have hzero : circularConstrainedPatchFourthMoment hγ hγle
+      (0 : CircularConstrainedTangentSpace γ) = 0 :=
+    circularConstrainedPatchFourthMoment_zero hγ hγle
+  simp only [hresponse, hzero, sub_zero] at h
+  exact h
 
 end Euler2D
 
