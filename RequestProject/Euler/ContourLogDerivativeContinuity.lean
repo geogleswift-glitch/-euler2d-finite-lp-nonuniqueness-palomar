@@ -20,6 +20,7 @@ theorem contourLogDerivativeHolder_independent_lower {γ : ℝ≥0} (Z : Contour
     (hγ : 0 < (γ : ℝ)) (hγ1 : (γ : ℝ) < 1) {c d : ℝ} (hc : 0 < c) (hd : 0 < d)
     (hZc : ContourC1Space.HasChordArcLower Z c) (hZd : ContourC1Space.HasChordArcLower Z d) :
     contourLogDerivativeHolder Z hγ hγ1 hc hZc = contourLogDerivativeHolder Z hγ hγ1 hd hZd := by
+  unfold ContourC1Space.HasChordArcLower at hZc hZd
   apply HolderFunctionSpace.ext
   intro x
   obtain ⟨θ, rfl⟩ := QuotientAddGroup.mk_surjective x

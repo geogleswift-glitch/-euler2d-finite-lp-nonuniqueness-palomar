@@ -54,8 +54,8 @@ theorem norm_contourC1PatchVelocity_sub_regularized_le {γ : ℝ≥0}
   have hsubset : D ⊆ Metric.closedBall (0 : ℂ) (r + ‖Z - Z₀‖) :=
     (contourC1EnclosedDomain_subset_ball Z Z₀ hr href hsmall).trans Metric.ball_subset_closedBall
   have hi (δ : ℝ) : IntegrableOn (regularizedLogGradient x δ) D :=
-    integrableOn_regularizedLogGradient_of_subset_closedBall
-      (add_nonneg hr.le (norm_nonneg _)) hsubset x δ
+    integrableOn_regularizedLogGradient_of_subset_closedBall (R := r + ‖Z - Z₀‖)
+      (add_nonneg hr.le (norm_nonneg (Z - Z₀))) hsubset x δ
   have ho : velocityC (contourC1PatchVorticity Z Z₀ hr href hsmall) x =
       (-I / (2 * Real.pi) : ℂ) * ∫ y in D, regularizedLogGradient x 0 y := by
     simpa only [contourC1PatchVorticity, regularizedLogGradient, zero_pow (by decide : (2 : ℕ) ≠ 0),

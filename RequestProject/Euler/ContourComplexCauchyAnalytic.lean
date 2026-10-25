@@ -113,6 +113,7 @@ theorem contourComplexCauchyIncrementShape_restrictScalars (hγ : 0 < (γ : ℝ)
     (hZ : ContourC1Space.HasChordArcLower Z c) :
     (contourComplexCauchyIncrementShape hγ hγ1 Z).restrictScalars ℝ =
       contourCauchyIncrementOperator Z hγ hγ1 hc hZ := by
+  unfold ContourC1Space.HasChordArcLower at hZ
   ext f x
   obtain ⟨θ, rfl⟩ := QuotientAddGroup.mk_surjective x
   rw [contourCauchyIncrementOperator_apply]

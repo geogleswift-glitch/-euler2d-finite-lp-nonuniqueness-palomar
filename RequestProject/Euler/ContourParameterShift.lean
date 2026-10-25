@@ -42,8 +42,8 @@ def contourParameterShiftC1 (b : ℝ) (Z : ContourC1Space γ) : ContourC1Space �
       intro θ
       have hd := (ContourC1Space.hasDerivAt_lift Z (θ + b)).scomp θ
         ((hasDerivAt_id θ).add_const b)
-      simpa only [one_smul, ContourC1Space.lift, contourParameterShiftBCF,
-        BoundedContinuousFunction.mkOfCompact_apply, contourHolderShift_apply,
+      simpa only [Function.comp_def, id_eq, one_smul, ContourC1Space.lift, contourParameterShiftBCF,
+        BoundedContinuousFunction.mkOfCompact_apply, ContinuousMap.coe_mk, contourHolderShift_apply,
         AddCircle.coe_add] using hd)
 
 @[simp] theorem lift_contourParameterShiftC1 (b : ℝ) (Z : ContourC1Space γ) (θ : ℝ) :
@@ -181,8 +181,9 @@ theorem norm_contourParameterShiftFamilyCLM {ι : Type*} [Fintype ι]
       ‖contourParameterShiftFamilyCLM γ c W‖ ≤ ‖W‖ := by
     apply (pi_norm_le_iff_of_nonneg (norm_nonneg W)).mpr
     intro i
-    rw [contourParameterShiftFamilyCLM_apply, norm_contourParameterShiftLittleCLM]
-    exact norm_le_pi_norm W i
+    rw [contourParameterShiftFamilyCLM_apply]
+    exact (norm_contourParameterShiftLittleCLM (γ := γ) (c i) (W i)).le.trans
+      (norm_le_pi_norm W i)
   apply le_antisymm (hle b Z)
   have h := hle (-b) (contourParameterShiftFamilyCLM γ b Z)
   simpa only [contourParameterShiftFamilyCLM_add, neg_add_cancel,

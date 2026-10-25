@@ -101,7 +101,11 @@ lemma norm_labelVelocity_sub_le (η ξ : ParticleDisplacement) (x y : R2) :
         _ ≤ ‖w b‖ * ((L : ℝ) * (dist x y + dist η ξ)) :=
           mul_le_mul_of_nonneg_left (by simpa only [dist_eq_norm] using hb) (norm_nonneg _)
         _ = _ := mul_comm _ _
-    _ = _ := by simp only [integral_const_mul, particleLabelMass, NNReal.coe_mk]; ring
+    _ = _ := by
+      rw [integral_const_mul]
+      change ((L : ℝ) * (dist x y + dist η ξ)) * (∫ b, ‖w b‖ ∂μT) =
+        (L : ℝ) * (∫ b, ‖w b‖ ∂μT) * (dist x y + dist η ξ)
+      ring
 
 lemma lipschitz_labelVelocity (η : ParticleDisplacement) :
     LipschitzWith (L * particleLabelMass w) (regularizedLabelVelocity K w η) := by

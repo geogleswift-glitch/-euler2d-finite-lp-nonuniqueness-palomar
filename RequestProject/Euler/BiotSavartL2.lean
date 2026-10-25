@@ -65,7 +65,11 @@ def multiplier (m : (Fin 2 → ℤ) → ℂ) (hm : ∀ k, ‖m k‖ ≤ 1) :
     CoeffL2 →L[ℂ] CoeffL2 :=
   LinearMap.mkContinuous
     { toFun := multiplierSeq m hm
-      map_add' := by intro a b; ext k; simp [multiplierSeq, Pi.add_apply, mul_add]
+      map_add' := by
+        intro a b
+        ext k
+        change m k * (a k + b k) = m k * a k + m k * b k
+        exact mul_add _ _ _
       map_smul' := by intro c a; ext k; simp [multiplierSeq, mul_left_comm] }
     1 (by
       intro a

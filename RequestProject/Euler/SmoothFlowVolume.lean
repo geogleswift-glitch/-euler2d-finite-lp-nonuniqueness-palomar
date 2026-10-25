@@ -47,15 +47,18 @@ theorem hasDerivAt_linearDet2_variational {A : ℝ → R2 →L[ℝ] R2}
       (B (A t (EuclideanSpace.single j 1)) i) t := by
     have hentry := (EuclideanSpace.proj i : R2 →L[ℝ] ℝ).hasFDerivAt.comp_hasDerivAt t
       (hA.clm_apply (hasDerivAt_const t (EuclideanSpace.single j 1)))
-    simpa only [ContinuousLinearMap.comp_apply, map_zero, add_zero] using hentry
+    simpa only [Function.comp_def, EuclideanSpace.coe_proj,
+      ContinuousLinearMap.comp_apply, map_zero, add_zero] using hentry
   have hdet := ((hd 0 0).mul (hd 1 1)).sub ((hd 1 0).mul (hd 0 1))
   convert hdet using 1
-  simp only [linearDet2]
-  rw [clm_apply_coordinate_two B (A t (EuclideanSpace.single 0 1)) 0,
-    clm_apply_coordinate_two B (A t (EuclideanSpace.single 0 1)) 1,
-    clm_apply_coordinate_two B (A t (EuclideanSpace.single 1 1)) 0,
-    clm_apply_coordinate_two B (A t (EuclideanSpace.single 1 1)) 1]
-  ring
+  · funext u
+    simp only [linearDet2, Pi.sub_apply, Pi.mul_apply]
+  · simp only [linearDet2]
+    rw [clm_apply_coordinate_two B (A t (EuclideanSpace.single 0 1)) 0,
+      clm_apply_coordinate_two B (A t (EuclideanSpace.single 0 1)) 1,
+      clm_apply_coordinate_two B (A t (EuclideanSpace.single 1 1)) 0,
+      clm_apply_coordinate_two B (A t (EuclideanSpace.single 1 1)) 1]
+    ring
 
 theorem linearDet2_variational_eq_one {A B : ℝ → R2 →L[ℝ] R2}
     {T : ℝ} (_hT : 0 ≤ T) (hA0 : A 0 = ContinuousLinearMap.id ℝ R2)

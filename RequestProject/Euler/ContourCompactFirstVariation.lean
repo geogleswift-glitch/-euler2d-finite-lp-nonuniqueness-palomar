@@ -21,7 +21,7 @@ theorem fderiv_contourSelfLogFiniteKernel_apply (q v : ℂ × ℂ) (hq : q.1 ≠
     fderiv ℝ contourSelfLogFiniteKernel q v =
       (v.1 / q.1).re • q.2 + Real.log ‖q.1‖ • v.2 := by
   have hp : HasDerivAt (fun t : ℝ => q + t • v) v 0 := by
-    simpa only [one_smul] using ((hasDerivAt_id (0 : ℝ)).smul_const v).const_add q
+    simpa only [id_eq, one_smul] using ((hasDerivAt_id (0 : ℝ)).smul_const v).const_add q
   have hφ : HasFDerivAt contourSelfLogFiniteKernel (fderiv ℝ contourSelfLogFiniteKernel q) q :=
     ((contDiffOn_contourSelfLogFiniteKernel q hq).contDiffAt
       ((isOpen_ne_fun continuous_fst continuous_const).mem_nhds hq)).differentiableAt
@@ -30,9 +30,9 @@ theorem fderiv_contourSelfLogFiniteKernel_apply (q v : ℂ × ℂ) (hq : q.1 ≠
   change HasDerivAt (fun t : ℝ => Real.log ‖q.1 + t • v.1‖ • (q.2 + t • v.2))
     (fderiv ℝ contourSelfLogFiniteKernel q v) 0 at hd
   have h1 : HasDerivAt (fun t : ℝ => q.1 + t • v.1) v.1 0 := by
-    simpa only [one_smul] using ((hasDerivAt_id (0 : ℝ)).smul_const v.1).const_add q.1
+    simpa only [id_eq, one_smul] using ((hasDerivAt_id (0 : ℝ)).smul_const v.1).const_add q.1
   have h2 : HasDerivAt (fun t : ℝ => q.2 + t • v.2) v.2 0 := by
-    simpa only [one_smul] using ((hasDerivAt_id (0 : ℝ)).smul_const v.2).const_add q.2
+    simpa only [id_eq, one_smul] using ((hasDerivAt_id (0 : ℝ)).smul_const v.2).const_add q.2
   have hl := hasDerivAt_log_norm_complex h1 (by simpa only [zero_smul, add_zero] using hq)
   have he := hl.smul h2
   simp only [zero_smul, add_zero] at he

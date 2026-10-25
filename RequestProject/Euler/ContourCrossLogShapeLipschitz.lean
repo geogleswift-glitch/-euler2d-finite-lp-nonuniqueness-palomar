@@ -49,9 +49,11 @@ theorem abs_contourCrossLogKernel_le {γ : ℝ≥0} (Z W : ContourC1Space γ) {�
     have hz : ‖ContourC1Space.lift γ Z θ‖ ≤ M := (ContourC1Space.norm_eval_le Z (θ : ContourCircle)).trans hZM
     have hw : ‖ContourC1Space.lift γ W φ‖ ≤ M := (ContourC1Space.norm_eval_le W (φ : ContourCircle)).trans hWM
     linarith [norm_sub_le (ContourC1Space.lift γ Z θ) (ContourC1Space.lift γ W φ)]
+  have hlower := hsep (θ : ContourCircle) (φ : ContourCircle)
+  change σ ≤ ‖ContourC1Space.lift γ Z θ - ContourC1Space.lift γ W φ‖ at hlower
   simpa only [mul_one, Real.log_one, abs_zero, add_zero] using
     abs_log_le_of_mul_lower hσ (by norm_num : (0 : ℝ) < 1)
-      (by simpa only [mul_one] using hsep (θ : ContourCircle) (φ : ContourCircle)) hupper
+      (by simpa only [mul_one] using hlower) hupper
 
 theorem norm_contourCrossLogIntegrand_shape_sub_le {γ : ℝ≥0}
     (Z W Z' W' : ContourC1Space γ) {σ M : ℝ} (hσ : 0 < σ)

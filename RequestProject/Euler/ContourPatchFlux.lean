@@ -68,10 +68,10 @@ theorem integral_normalFlux_patch_zero
         (conj (((2 * Real.pi : ℝ) : ℂ) * a) * dz θ).im =
           (2 * Real.pi) * (conj a * dz θ).im := by
       simp [map_mul, Complex.conj_ofReal, mul_assoc, Complex.mul_im]
-    simpa only [he, hs, F, U] using hh
+    simpa only [Function.comp_def, he, hs, F, U] using hh
   have hab : (0 : ℝ) ≤ 2 * Real.pi := by positivity
   have hB : IntegrableOn (fun _ : ℝ => K * D) (Ioc (0 : ℝ) (2 * Real.pi)) :=
-    (intervalIntegrable_iff_integrableOn_Ioc_of_le hab).mp intervalIntegral.intervalIntegrable_const
+    (intervalIntegrable_iff_integrableOn_Ioc_of_le hab).mp intervalIntegrable_const
   have hDCT := tendsto_integral_filter_of_dominated_convergence
     (μ := volume.restrict (Ioc (0 : ℝ) (2 * Real.pi))) (fun _ => K * D)
     (Eventually.of_forall hmeas) (Eventually.of_forall fun δ => ae_of_all _ (hbound δ)) hB hlim

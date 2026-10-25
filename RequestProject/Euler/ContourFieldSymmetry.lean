@@ -60,7 +60,7 @@ theorem contourC1EnclosedDomain_mul_I_iff {γ : ℝ≥0}
       x ∈ contourC1EnclosedDomain Z Z₀ hr href hsmall := by
   have hD : contourC1EnclosedDomain Z Z₀ hr href hsmall =
       contourRadialFill (ContourC1Space.lift γ Z) :=
-    nearCircleEnclosedDomain_eq_contourRadialFill hr (norm_nonneg _) hsmall
+    nearCircleEnclosedDomain_eq_contourRadialFill hr (norm_nonneg (Z - Z₀)) hsmall
       (fun θ => (ContourC1Space.hasDerivAt_lift Z θ).differentiableAt.hasDerivAt)
       (contourC1_norm_sub_ref_le Z Z₀ href) (contourC1_norm_deriv_sub_ref_le Z Z₀ href)
       (ContourC1Space.periodic_lift Z)

@@ -56,7 +56,7 @@ theorem velocityC_contourC1PatchVorticity {γ : ℝ≥0} (Z Z₀ : ContourC1Spac
   have hdp : Function.Periodic (deriv (ContourC1Space.lift γ Z)) (2 * Real.pi) := by
     intro θ
     rw [ContourC1Space.deriv_lift, ContourC1Space.deriv_lift, AddCircle.coe_add_period]
-  exact velocityC_nearCircleEnclosedDomain_eq_boundaryIntegral hr (norm_nonneg _) hsmall
+  exact velocityC_nearCircleEnclosedDomain_eq_boundaryIntegral hr (norm_nonneg (Z - Z₀)) hsmall
     (fun θ => (ContourC1Space.hasDerivAt_lift Z θ).differentiableAt.hasDerivAt)
     (contourC1_norm_sub_ref_le Z Z₀ href) (contourC1_norm_deriv_sub_ref_le Z Z₀ href)
     (contDiff_one_iff_deriv.mp (ContourC1Space.contDiff_lift Z)).2
