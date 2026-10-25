@@ -62,7 +62,7 @@ theorem hasDerivAt_shiftedRetardedTransfer {b : ℝ}
     push_cast
     ring
   have hshift : HasDerivAt (fun t : ℝ => s + t) 1 τ := by
-    simpa only [zero_add] using (hasDerivAt_const τ s).add (hasDerivAt_id τ)
+    simpa only [Pi.add_def, id_eq, zero_add] using (hasDerivAt_const τ s).add (hasDerivAt_id τ)
   have hraw := (P.hasDerivAt_retarded_transfer (ρ := ρ) hb (s + τ)).scomp τ hshift
   simp only [one_smul, Function.comp_def] at hraw
   have hh := hraw.const_mul u
@@ -124,7 +124,7 @@ theorem dist_shiftedRetardedTransfer_le_of_forced_equation
     intro τ
     apply LipschitzWith.of_dist_le_mul
     intro z w
-    change ‖c * z + F τ - (c * w + F τ)‖ ≤ ‖c‖ * ‖z - w‖
+    simp only [V, dist_eq_norm, coe_nnnorm]
     rw [show c * z + F τ - (c * w + F τ) = c * (z - w) by ring, norm_mul]
   have hRd : ∀ τ ∈ Ico a d, HasDerivWithinAt R (V τ (R τ)) (Ici τ) τ :=
     fun τ _ => (P.hasDerivAt_shiftedRetardedTransfer hb ρ θp θc s τ).hasDerivWithinAt

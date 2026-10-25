@@ -71,7 +71,7 @@ theorem tendsto_retarded_lookback_tail {b : ℝ}
       (Real.exp (-(b * sigma) * (s - L)) *
         ‖retardedSol ((b : ℂ) * lamStar) ((b : ℂ) * (sigma + 5 / 4 * I))
           Kstar P.moment (s - L)‖)) atTop (𝓝 0) := by
-    simpa only [mul_zero] using
+    simpa only [Function.comp_def, mul_zero] using
       ((P.tendsto_normalized_retarded_transfer_atBot hb).comp htime).const_mul (Real.exp (b * sigma * (s + d)))
   apply hh.congr
   intro L

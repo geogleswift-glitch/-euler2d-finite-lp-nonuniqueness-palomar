@@ -25,7 +25,9 @@ theorem memLp_circularPhasePatchPlanarVorticity {γ : ℝ≥0}
     MemLp (circularPhasePatchPlanarVorticity Z) p volume := by
   let B := finiteContourPatchSupBound circularContourStrengths
   have hmajor : MemLp ((closedBall (0 : R2) (5 / 4)).indicator (fun _ => B)) p volume :=
-    memLp_indicator_const p measurableSet_closedBall B (Or.inr measure_closedBall_lt_top.ne)
+    memLp_indicator_const p measurableSet_closedBall.nullMeasurableSet B
+      (Or.inr (measure_closedBall_lt_top (μ := (volume : Measure R2))
+        (x := (0 : R2)) (r := (5 / 4 : ℝ))).ne)
   apply hmajor.mono' (integrable_circularPhasePatchPlanarVorticity hγ hγ1 hZ).aestronglyMeasurable
   apply ae_of_all
   intro x

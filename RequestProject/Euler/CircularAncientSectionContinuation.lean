@@ -50,7 +50,10 @@ theorem exists_ancient_section_global_continuation {s : ℝ} (hs : s ≤ 0) :
       HasDerivAt Z (circularBanachField hγ hγ1 (Z τ)) τ := by
     have hh := (P.ancient_derivative (s + τ) (htime τ hτ)).scomp τ
       ((hasDerivAt_id τ).const_add s)
-    simpa only [one_smul] using hh
+    simp only [Function.comp_def, one_smul] at hh
+    change HasDerivAt (fun u : ℝ => P.ancient (s + u))
+      (circularBanachField hγ hγ1 (P.ancient (s + τ))) τ
+    exact hh
   have hZ0 : Z 0 = P.ancient s := by simp only [Z, add_zero]
   obtain ⟨Q⟩ := exists_circularPhasePatch_globalPlanarEuler hγ hγ1 (P.ancient_domain s hs)
   have hagreement := exists_circularPhase_globalEuler_material_agreement hγ hγ1 Z

@@ -35,7 +35,7 @@ theorem tendsto_weightedNormPropagationExponent_diag (K b Cup Cdown C₀ Ctorus 
   have hb : Tendsto (fun _x : ℝ => b) atTop (𝓝 b) := tendsto_const_nhds
   have hh := (hbk.add (hpow.const_mul Ctorus)).add (hb.mul (hcup.add hratio))
   simpa only [weightedNormPropagationExponent, weightedInteractionRowFeedback,
-    zero_pow (by norm_num : 8 ≠ 0), mul_zero, sub_zero, div_one, add_zero] using hh
+    Pi.div_apply, zero_pow (by norm_num : 8 ≠ 0), mul_zero, sub_zero, div_one, add_zero] using hh
 
 namespace CircularMaterialTransferProfile
 

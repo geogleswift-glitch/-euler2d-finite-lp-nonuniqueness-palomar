@@ -54,7 +54,7 @@ theorem LaplaceHyp.eventually_norm_lower_bound {σ ν δ d : ℝ} {κ : ℂ} {N 
   obtain ⟨C, hC, hbound⟩ := h.bot.exists_pos
   have hκ : 0 < ‖κ‖ := norm_pos_iff.mpr h.kappa_ne
   have hlim : Tendsto (fun s : ℝ => C * Real.exp (δ * s)) atBot (𝓝 0) := by
-    simpa only [mul_zero] using
+    simpa only [Function.comp_def, id_eq, mul_zero] using
       (Real.tendsto_exp_atBot.comp ((tendsto_const_mul_atBot_of_pos h.delta_pos).mpr tendsto_id)).const_mul C
   filter_upwards [hbound.bound, hlim.eventually (eventually_lt_nhds (half_pos hκ))] with s hs hsmall
   have heq : Real.exp ((σ + δ) * s) = Real.exp (δ * s) * Real.exp (σ * s) := by
@@ -79,10 +79,12 @@ theorem circularConstraintProjection_chart_identity {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1) (v : CircularConstrainedTangentSpace γ) :
     circularConstraintProjectionToTangentCLM hγ hγ1.le
       (circularConstrainedChart hγ hγ1 v - littleCircularReference hγ hγ1) = v := by
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
   apply Subtype.ext
-  rw [circularConstraintProjectionToTangentCLM_val,
-    circularConstraintProjection_sub_reference hγ hγ1 _ (circularConstrainedChart_fourfold hγ hγ1 v),
-    circularAreaChartInverseFamily_chart]
+  exact (circularConstraintProjectionToTangentCLM_val hγ hγle _).trans
+    ((circularConstraintProjection_sub_reference hγ hγ1 _
+      (circularConstrainedChart_fourfold hγ hγ1 v)).trans
+      (circularAreaChartInverseFamily_chart hγ hγ1 v))
 
 namespace CircularMaterialTransferProfile
 
@@ -104,6 +106,7 @@ theorem ancient_unstable_samples_tendsto_zero :
       (circularConstraintProjectionToTangentCLM hγ hγ1.le
         (P.ancient (-(n : ℝ) * (period + period)) - littleCircularReference hγ hγ1)))
       atTop (𝓝 0) := by
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
   have hv := (circularConstraintProjectionToTangentCLM hγ hγ1.le).continuous.tendsto 0
   have hp := (circularConstrainedUnstableProjectionCLM hγ hγ1.le).continuous.tendsto 0
   have hlim : Tendsto (fun n : ℕ => P.ancient (-(n : ℝ) * (period + period)) - littleCircularReference hγ hγ1)
@@ -111,8 +114,9 @@ theorem ancient_unstable_samples_tendsto_zero :
     simpa only [sub_self] using P.ancient_samples_tendsto.sub_const (littleCircularReference hγ hγ1)
   have hvlim : Tendsto (fun n : ℕ => circularConstraintProjectionToTangentCLM hγ hγ1.le
       (P.ancient (-(n : ℝ) * (period + period)) - littleCircularReference hγ hγ1)) atTop (𝓝 0) := by
-    simpa only [map_zero] using hv.comp hlim
-  simpa only [map_zero] using hp.comp hvlim
+    simpa only [Function.comp_def, map_zero] using hv.comp hlim
+  simpa only [Function.comp_def, ContinuousLinearMap.map_zero
+    (circularConstrainedUnstableProjectionCLM hγ hγle)] using hp.comp hvlim
 
 theorem ancient_flattened_samples_eventually_seed
     {F : CircularConstrainedTangentSpace γ → CircularConstrainedTangentSpace γ} {r : ℝ}
@@ -134,7 +138,7 @@ theorem ancient_flattened_samples_eventually_seed
   have ht : Tendsto (fun n : ℕ => -(n : ℝ) * (period + period)) atTop atBot := by
     have hh : Tendsto (fun n : ℕ => (n : ℝ) * (period + period)) atTop atTop :=
       (tendsto_mul_const_atTop_of_pos (add_pos hperiod hperiod)).mpr tendsto_natCast_atTop_atTop
-    simpa only [neg_mul] using tendsto_neg_atTop_atBot.comp hh
+    simpa only [Function.comp_def, neg_mul] using tendsto_neg_atTop_atBot.comp hh
   have hlim : Tendsto (fun n : ℕ => ‖circularConstrainedUnstableProjectionCLM hγ hγ1.le
       (circularConstraintProjectionToTangentCLM hγ hγ1.le
         (P.ancient (-(n : ℝ) * (period + period)) - littleCircularReference hγ hγ1))‖) atTop (𝓝 0) := by

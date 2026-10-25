@@ -87,7 +87,7 @@ theorem eventually_ancient_cells_on_same_graph {R r : ℝ} (hR : 0 < R) (hr : 0 
   have hzero : Tendsto (fun n : ℕ => P.ancient (-(n : ℝ) * L) - c) atTop (𝓝 0) := by
     simpa only [L, c, sub_self] using P.ancient_samples_tendsto.sub_const c
   have hlim : Tendsto (fun n : ℕ => B (P.ancient (-(n : ℝ) * L) - c)) atTop (𝓝 0) := by
-    simpa only [map_zero] using (B.continuous.tendsto 0).comp hzero
+    simpa only [Function.comp_def, map_zero] using (B.continuous.tendsto 0).comp hzero
   intro ε hε
   let δ := min η (ε / (C + 1))
   have hδ : 0 < δ := lt_min hη (div_pos hε (by positivity))

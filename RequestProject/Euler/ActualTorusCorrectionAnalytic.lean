@@ -25,7 +25,7 @@ theorem complexPerpGradientOperator_normSq (z : ℂ) :
     complexPerpGradientOperator (fderiv ℝ (fun x : ℂ => ‖x‖ ^ 2) z) = 2 * I * z := by
   rw [complexPerpGradientOperator_apply, fderiv_norm_sq_apply]
   apply Complex.ext <;>
-    simp [ContinuousLinearMap.smul_apply, innerSL_apply, Complex.inner, smul_eq_mul] <;> ring
+    simp [ContinuousLinearMap.smul_apply, innerSL_apply_apply, Complex.inner, smul_eq_mul] <;> ring
 
 theorem actualComplexRemainderKernel_eq_harmonic (z : ℂ) :
     actualComplexRemainderKernel z =
@@ -61,7 +61,7 @@ theorem actualTorusCorrectionVelocity_eq_harmonic
     simpa only [pow_one] using integrable_mul_pow_of_supp hw hsupp 1
   have hwo : Integrable (fun y : ℂ => (w y : ℂ)) := hw.ofReal
   have hlin : Integrable (fun y => (w y : ℂ) * (x - y)) := by
-    simpa only [mul_sub] using (hwo.mul_const x).sub hI1
+    simpa only [Pi.sub_def, mul_sub] using (hwo.mul_const x).sub hI1
   have hlinzero : (∫ y, (w y : ℂ) * (x - y)) = 0 := by
     simp_rw [mul_sub]
     rw [integral_sub (hwo.mul_const x) hI1, integral_mul_const, integral_complex_ofReal,

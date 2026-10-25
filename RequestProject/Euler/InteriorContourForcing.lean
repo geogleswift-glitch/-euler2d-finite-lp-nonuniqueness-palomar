@@ -62,7 +62,9 @@ theorem hasDerivAt_planarCauchyTransform_interior {w : ℂ → ℝ} {a : ℝ}
       exact hasDerivAt_const x 0
     have hxy : x - y ≠ 0 := norm_pos_iff.mp (hd.trans_le (hsep x hx y hy))
     convert (((hasDerivAt_id x).sub_const y).inv hxy).const_mul (w y : ℂ) using 1 <;>
-      simp only [id_eq] <;> ring
+      simp only [id_eq] <;> try ring
+    funext u
+    simp only [Pi.inv_apply, sub_eq_add_neg, add_comm]
 
 theorem analyticOnNhd_conj_velocityC_interior {w : ℂ → ℝ} {a : ℝ}
     (hw : Integrable w) (hzero : ∀ y, ‖y‖ < a → w y = 0) :
