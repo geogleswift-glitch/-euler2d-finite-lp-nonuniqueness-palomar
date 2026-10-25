@@ -63,9 +63,12 @@ theorem circularMaterialPatchFourthMoment_chart {γ : ℝ≥0}
 theorem circularMaterialPatchFourthMoment_reference {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1) :
     circularMaterialPatchFourthMoment hγ hγ1.le (littleCircularReference hγ hγ1) = 0 := by
-  have h := circularMaterialPatchFourthMoment_chart hγ hγ1 0
-  rw [circularConstrainedChart_zero, circularConstrainedPatchFourthMoment_zero] at h
-  exact h
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+  have h : circularMaterialPatchFourthMoment hγ hγle (circularConstrainedChart hγ hγ1 0) =
+      circularConstrainedPatchFourthMoment hγ hγle 0 :=
+    circularMaterialPatchFourthMoment_chart hγ hγ1 0
+  rw [circularConstrainedChart_zero hγ hγ1] at h
+  exact h.trans (circularConstrainedPatchFourthMoment_zero hγ hγle)
 
 theorem eventually_circularConstrainedChart_patch_near {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1) :

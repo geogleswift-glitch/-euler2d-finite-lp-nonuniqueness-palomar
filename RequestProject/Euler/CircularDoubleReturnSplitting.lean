@@ -93,8 +93,10 @@ theorem circularConstrainedDoubleDerivative_projection_eigen (v : CircularConstr
   let L := fderiv ℝ (circularConstrainedReturnMap hγ hγ1 (fun W => X W period)) 0
   let P := circularConstrainedUnstableProjectionCLM hγ hγ1.le
   have he : L (P v) = (-lamMult : ℝ) • P v := by
-    change L (circularConstrainedUnstableProjectionCLM hγ hγ1.le v) = _
-    rw [circularConstrainedUnstableProjection_eq_embedding]
+    have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+    change L (circularConstrainedUnstableProjectionCLM hγ hγle v) =
+      (-lamMult : ℝ) • circularConstrainedUnstableProjectionCLM hγ hγle v
+    rw [circularConstrainedUnstableProjection_eq_embedding hγ hγle v]
     exact circularConstrainedReturnMap_derivative_unstable hγ hγ1 hR hX hd _
   simpa only [neg_sq] using continuousLinearMap_square_eigenvector L (P v) (-lamMult) he
 
