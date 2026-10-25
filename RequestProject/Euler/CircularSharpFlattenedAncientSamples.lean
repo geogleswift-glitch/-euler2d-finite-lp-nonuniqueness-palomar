@@ -165,7 +165,7 @@ theorem exists_circularAncientMaterial_sharp_with_flattenedGraph {γ : ℝ≥0}
   have hΦδ : ∀ᶠ u in 𝓝 (0 : CircularConstrainedTangentSpace γ),
       ‖Φ u - littleCircularReference hγ hγ1‖ < δ :=
     ((hΦ.sub continuousAt_const).norm).eventually (eventually_lt_nhds (by
-      dsimp only
+      change ‖Φ 0 - littleCircularReference hγ hγ1‖ < δ
       rw [hΦ0, sub_self, norm_zero]
       exact hδ))
   have hgood : ∀ᶠ u in 𝓝 (0 : CircularConstrainedTangentSpace γ),
@@ -238,7 +238,8 @@ theorem exists_circularAncientMaterial_sharp_with_flattenedGraph {γ : ℝ≥0}
     (by simpa only [littleCircularMaterialContours_zero] using hquad)
     (by simpa only [littleCircularMaterialContours_zero] using fun n => (hg n).2.2.1)
     (by simpa only [littleCircularMaterialContours_zero] using hchart2.1)
-    (by simpa only [littleCircularMaterialContours_zero] using hchart2.2)
+    (by simpa only [littleCircularMaterialContours_zero, z, Braw, L,
+      Submodule.subtypeL_apply] using hchart2.2)
     (fun q hq => hM _ (mem_image_of_mem _ hq)) n hq
   calc
     _ ≤ (κ * ((1 + K * r) * C) ^ 2 + M * Braw) * (circularAncientBackwardRatio ^ 2) ^ (n + 1) := he
