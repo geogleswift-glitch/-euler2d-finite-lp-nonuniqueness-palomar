@@ -42,7 +42,7 @@ theorem circularUncoupledAmplitudeGenerator_apply (N : ℕ) (p : CircularFourier
       ((fun i => I * (circularDiagonalNormalFrequency N i : ℂ) * p.1 i),
         (fun i => (circularDiagonalTangentForcing i : ℂ) * p.1 i +
           I * (circularDiagonalTangentFrequency N i : ℂ) * p.2 i)) := by
-  apply Prod.ext <;> funext i <;>
+  apply Prod.ext <;> funext i <;> fin_cases i <;>
     simp [circularUncoupledAmplitudeGenerator, circularUncoupledAmplitudeGeneratorComplex,
       Matrix.mulVecLin_apply, Matrix.mulVec_diagonal]
 
@@ -53,6 +53,8 @@ theorem norm_circularUnitPhase (freq t : ℝ) : ‖circularUnitPhase freq t‖ =
 
 theorem hasDerivAt_circularUnitPhase (freq t : ℝ) :
     HasDerivAt (circularUnitPhase freq) (I * (freq : ℂ) * circularUnitPhase freq t) t := by
+  change HasDerivAt (fun s : ℝ => Complex.exp ((s : ℂ) * (freq : ℂ) * I))
+    (I * (freq : ℂ) * Complex.exp ((t : ℂ) * (freq : ℂ) * I)) t
   convert ((((hasDerivAt_id t).ofReal_comp).mul_const (freq : ℂ)).mul_const I).cexp using 1 <;>
     simp only [circularUnitPhase, id_eq, Complex.ofReal_one, one_mul] <;> ring
 
@@ -76,6 +78,9 @@ theorem circularUncoupledAmplitudeCurve_hasDerivAt (N : ℕ) (p : CircularFourie
         (hasDerivAt_circularUnitPhase (circularDiagonalTangentFrequency N i) t)).const_mul
           (circularDiagonalResponse i)).mul_const (p.1 i)))
   convert hη.prodMk hτ using 1
+  · funext s
+    apply Prod.ext <;> funext i <;>
+      simp only [circularUncoupledAmplitudeCurve, Pi.add_apply, Pi.sub_apply]
   rw [circularUncoupledAmplitudeGenerator_apply]
   apply Prod.ext
   · funext i

@@ -94,7 +94,8 @@ theorem velocityC_normalizedRotatingComplexDensity {A r : ℝ} (hA : 0 < A) (hr 
     velocityC (normalizedRotatingComplexDensity A r θ w) z =
       Complex.exp (-((θ : ℂ) * I)) *
         ((A * r)⁻¹ • velocityC w (r • (Complex.exp ((θ : ℂ) * I) * z))) := by
-  simpa only [normalizedRotatingComplexDensity, Circle.coe_exp, ← Complex.exp_neg] using
+  unfold normalizedRotatingComplexDensity
+  simpa only [Circle.coe_exp, ← Complex.exp_neg] using
     (velocityC_normalized_rotation A hA.ne' hr (Circle.exp θ) w z).symm
 
 end Euler2D

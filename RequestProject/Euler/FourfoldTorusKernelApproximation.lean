@@ -123,7 +123,7 @@ theorem tendsto_fourfoldRegularizedTorusKernel_L1 {ι : Type*} {l : Filter ι}
     filter_upwards [hlim.eventually (gt_mem_nhds (by norm_num : (0 : ℝ) < 1 / 2))] with i hi
     exact hi.le
   have hm : Tendsto (fun i => C * logFlowModulus (ε i)) l (𝓝 0) := by
-    simpa only [logFlowModulus, log_zero, mul_zero, sub_zero] using
+    simpa only [Function.comp_def, logFlowModulus, log_zero, mul_zero, sub_zero] using
       (continuous_logFlowModulus.tendsto 0 |>.comp hlim).const_mul C
   apply squeeze_zero' (Eventually.of_forall fun i => fourfoldRegularizedTorusKernelL1Error_nonneg _ _) ?_ hm
   filter_upwards [he] with i hi
@@ -136,6 +136,9 @@ theorem integral_norm_fourfoldRegularizedTorusKernel_le {ε : ℝ} (hε : 0 < ε
     (fourfoldTorusKernelMollifier_test hε hε1).1.continuous (fourfoldTorusKernelMollifier_nonneg ε hε)
     integrable_torusBiotSavartKernel measurable_torusBiotSavartKernel
     isTorusPeriodic_torusBiotSavartKernel
+  change (∫ x in torusBox,
+    ‖torusKernelAverage (fourfoldTorusKernelMollifier ε hε) torusBiotSavartKernel x‖) ≤
+      ∫ x in torusBox, ‖torusBiotSavartKernel x‖
   simpa only [fourfoldTorusKernelMollifier_integral hε hε1, one_mul] using h
 
 lemma fourfoldRegularizedTorusKernel_sub_eq_average {ε : ℝ} (hε : 0 < ε) (hε1 : ε ≤ 1)
@@ -150,6 +153,8 @@ lemma fourfoldRegularizedTorusKernel_sub_eq_average {ε : ℝ} (hε : 0 < ε) (h
     simpa only [Real.norm_eq_abs] using hM y hy
   have he := torusKernelAverage_sub_spatial hw.aestronglyMeasurable hb
     integrable_torusBiotSavartKernel isTorusPeriodic_torusBiotSavartKernel (x + h) x
+  change torusKernelAverage (fourfoldTorusKernelMollifier ε hε) torusBiotSavartKernel (x + h) -
+    torusKernelAverage (fourfoldTorusKernelMollifier ε hε) torusBiotSavartKernel x = _
   simpa only [add_sub_cancel_left] using he
 
 theorem integral_norm_fourfoldRegularizedTorusKernel_translation_le {ε : ℝ}
@@ -170,6 +175,7 @@ theorem integral_norm_fourfoldRegularizedTorusKernel_translation_le {ε : ℝ}
   have hb := integral_norm_torusKernelAverage_le
     (fourfoldTorusKernelMollifier_test hε hε1).1.continuous (fourfoldTorusKernelMollifier_nonneg ε hε)
     (integrable_torusBiotSavartKernel_translation_difference h) hgm hgp
+  unfold torusKernelTranslationError
   simpa only [fourfoldTorusKernelMollifier_integral hε hε1, one_mul] using hb
 
 theorem exists_uniform_fourfoldRegularizedKernel_translation_le_logFlowModulus :

@@ -83,8 +83,10 @@ theorem fderiv_circularFamilyPatchFourthMoment_growing {γ : ℝ≥0}
       (circularGrowingVariation hγ hγ1 0) = circularPatchGrowingResponse := by
   have hs : HasDerivAt (fun s : ℝ => s • circularGrowingVariation hγ hγ1 0)
       (circularGrowingVariation hγ hγ1 0) 0 := by
-    simpa only [ContinuousLinearMap.toSpanSingleton_apply, one_smul] using
-      (ContinuousLinearMap.toSpanSingleton ℝ (circularGrowingVariation hγ hγ1 0)).hasDerivAt (x := (0 : ℝ))
+    apply hasDerivAt_pi.mpr
+    intro i
+    simpa only [Pi.smul_apply, id_eq, one_smul] using
+      (hasDerivAt_id (0 : ℝ)).smul_const (circularGrowingVariation hγ hγ1 0 i)
   have hd : HasFDerivAt (circularFamilyPatchFourthMoment hγ hγ1.le)
       (fderiv ℝ (circularFamilyPatchFourthMoment hγ hγ1.le) 0)
       ((fun s : ℝ => s • circularGrowingVariation hγ hγ1 0) 0) := by

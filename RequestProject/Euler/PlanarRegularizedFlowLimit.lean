@@ -90,7 +90,7 @@ theorem smoothing_error_tendsto :
     Tendsto (fun n => S.C * logFlowModulus (planarVelocityApproxScale (S.indices n)))
       atTop (𝓝 (0 : ℝ)) := by
   have hs := tendsto_planarVelocityApproxScale.comp S.indices_strictMono.tendsto_atTop
-  simpa only [logFlowModulus, zero_mul, mul_zero, sub_zero] using
+  simpa only [Function.comp_def, logFlowModulus, zero_mul, mul_zero, sub_zero] using
     ((continuous_logFlowModulus.tendsto 0).comp hs).const_mul S.C
 
 theorem velocity_tendsto_along_positions {B : ℝ}
@@ -108,7 +108,7 @@ theorem velocity_tendsto_along_positions {B : ℝ}
       planarKernelVelocity kernelK ((S.system (S.indices n)).vorticity t) (x n))
       atTop (𝓝 (0 : R2)) :=
     squeeze_zero_norm (fun n => S.error (S.indices n) t t.property (x n)) S.smoothing_error_tendsto
-  simpa only [sub_add_cancel, zero_add] using he.add hb
+  simpa only [PlanarTransportFlowLimit.velocity, sub_add_cancel, zero_add] using he.add hb
 
 end PlanarRegularizedFlowLimit
 

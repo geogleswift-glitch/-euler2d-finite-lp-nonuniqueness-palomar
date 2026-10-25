@@ -287,6 +287,10 @@ theorem circularPeriod_derivative_unstableEmbedding {γ : ℝ≥0}
     fderiv ℝ (fun W => X W period) (littleCircularReference hγ hγ1)
       (circularUnstableEmbeddingCLM hγ hγ1.le c) =
       (-lamMult : ℝ) • circularUnstableEmbeddingCLM hγ hγ1.le c := by
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+  change fderiv ℝ (fun W => X W period) (littleCircularReference hγ hγ1)
+      (circularUnstableEmbeddingCLM hγ hγle c) =
+    (-lamMult : ℝ) • circularUnstableEmbeddingCLM hγ hγle c
   have hp := circularAmplitudeLinearFlow_unstable_period c
   have hn : circularNormalLinearFlow 2 (c • vPlus) period = (-lamMult : ℝ) • (c • vPlus) := by
     rw [← circularAmplitudeLinearFlow_normal 2 (c • vPlus, c • circularGrowingTangent)
@@ -294,9 +298,13 @@ theorem circularPeriod_derivative_unstableEmbedding {γ : ℝ≥0}
     exact congrArg Prod.fst hp
   have hτ : (circularAmplitudeLinearFlow 2 (c • vPlus, c • circularGrowingTangent) period).2 =
       (-lamMult : ℝ) • (c • circularGrowingTangent) := congrArg Prod.snd hp
-  rw [circularUnstableEmbeddingCLM_apply,
-    circularPeriod_derivative_Fourier_block hγ hγ1 hρ hX 2, hn, hτ,
-    circularNormalModeLittle_real_smul]
+  have hf : fderiv ℝ (fun W => X W period) (littleCircularReference hγ hγ1)
+      (circularNormalModeLittle hγ hγle 2 (c • vPlus) (c • circularGrowingTangent)) =
+    circularNormalModeLittle hγ hγle 2 (circularNormalLinearFlow 2 (c • vPlus) period)
+      (circularAmplitudeLinearFlow 2 (c • vPlus, c • circularGrowingTangent) period).2 :=
+    circularPeriod_derivative_Fourier_block hγ hγ1 hρ hX 2 (c • vPlus) (c • circularGrowingTangent)
+  rw [circularUnstableEmbeddingCLM_apply hγ hγle c, hf, hn, hτ,
+    circularNormalModeLittle_real_smul hγ hγle 2]
 
 theorem circularPeriod_derivative_on_unstableSpace {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1) {ρ : ℝ} (hρ : 0 < ρ)
@@ -317,7 +325,11 @@ theorem circularPeriod_derivative_unstableProjection_apply {γ : ℝ≥0}
     fderiv ℝ (fun W => X W period) (littleCircularReference hγ hγ1)
     (circularUnstableProjectionCLM hγ hγ1.le H) =
       (-lamMult : ℝ) • circularUnstableProjectionCLM hγ hγ1.le H := by
-  rw [circularUnstableProjectionCLM_apply]
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+  change fderiv ℝ (fun W => X W period) (littleCircularReference hγ hγ1)
+      (circularUnstableProjectionCLM hγ hγle H) =
+    (-lamMult : ℝ) • circularUnstableProjectionCLM hγ hγle H
+  rw [circularUnstableProjectionCLM_apply hγ hγle H]
   exact circularPeriod_derivative_unstableEmbedding hγ hγ1 hρ hX _
 
 instance finiteDimensional_circularUnstableSpace {γ : ℝ≥0}
@@ -333,7 +345,12 @@ instance completeSpace_circularUnstableSpace {γ : ℝ≥0}
 theorem circularUnstableEmbeddingCLM_one {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1) :
     circularUnstableEmbeddingCLM hγ hγ1.le 1 = circularGrowingVariation hγ hγ1 0 := by
-  rw [circularUnstableEmbeddingCLM_apply, circularGrowingVariation_zero]
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+  change circularUnstableEmbeddingCLM hγ hγle 1 = circularGrowingVariation hγ hγ1 0
+  have hz : circularGrowingVariation hγ hγ1 0 =
+      circularNormalModeLittle hγ hγle 2 vPlus circularGrowingTangent :=
+    circularGrowingVariation_zero hγ hγ1
+  rw [circularUnstableEmbeddingCLM_apply hγ hγle 1, hz]
   simp only [one_smul]
 
 theorem circularPeriod_derivative_unstable_norm {γ : ℝ≥0}

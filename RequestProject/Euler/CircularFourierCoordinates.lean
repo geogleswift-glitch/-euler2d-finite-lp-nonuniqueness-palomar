@@ -163,21 +163,32 @@ theorem circularPeriod_derivative_all_mode_coordinates {γ : ℝ≥0}
     circularModeAmplitudeCoefficientCLM γ N
         (fderiv ℝ (fun W => X W period) (littleCircularReference hγ hγ1) H) =
       circularAmplitudeLinearFlow N (circularModeAmplitudeCoefficientCLM γ N H) period := by
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
   let D := fderiv ℝ (fun W => X W period) (littleCircularReference hγ hγ1)
-  let P := circularAngularModeProjectionCLM hγ hγ1.le ((N + 2 : ℕ) : ℤ)
+  let P := circularAngularModeProjectionCLM hγ hγle ((N + 2 : ℕ) : ℤ)
   have he : D (P H) = P (D H) := congrArg (fun A => A H)
     (circularPeriod_derivative_angularProjection_commute hγ hγ1 hρ hX hd ((N + 2 : ℕ) : ℤ))
   change circularModeAmplitudeCoefficientCLM γ N (D H) = _
-  rw [← circularModeAmplitudeCoefficientCLM_projection hγ hγ1.le N (D H), ← he]
+  rw [← circularModeAmplitudeCoefficientCLM_projection hγ hγle N (D H), ← he]
   dsimp only [D, P]
-  rw [circularAngularModeProjectionCLM_eq_normalMode,
-    circularPeriod_derivative_Fourier_block hγ hγ1 hρ hX N]
+  rw [circularAngularModeProjectionCLM_eq_normalMode hγ hγle N H]
+  have hblock := circularPeriod_derivative_Fourier_block hγ hγ1 hρ hX N
+    (circularModeNormalCoefficientCLM γ N H) (circularModeTangentCoefficientCLM γ N H)
+  change fderiv ℝ (fun W => X W period) (littleCircularReference hγ hγ1)
+      (circularNormalModeLittle hγ hγle N
+        (circularModeNormalCoefficientCLM γ N H) (circularModeTangentCoefficientCLM γ N H)) =
+    circularNormalModeLittle hγ hγle N
+      (circularNormalLinearFlow N (circularModeNormalCoefficientCLM γ N H) period)
+      (circularAmplitudeLinearFlow N
+        (circularModeNormalCoefficientCLM γ N H, circularModeTangentCoefficientCLM γ N H) period).2
+    at hblock
+  rw [hblock]
   apply Prod.ext
-  · change circularModeNormalCoefficientCLM γ N (circularNormalModeLittle hγ hγ1.le N _ _) = _
+  · change circularModeNormalCoefficientCLM γ N (circularNormalModeLittle hγ hγle N _ _) = _
     rw [circularModeNormalCoefficientCLM_normalMode]
     exact (circularAmplitudeLinearFlow_normal N (circularModeAmplitudeCoefficientCLM γ N H)
       (show 0 ≤ period by unfold period; positivity)).symm
-  · change circularModeTangentCoefficientCLM γ N (circularNormalModeLittle hγ hγ1.le N _ _) = _
+  · change circularModeTangentCoefficientCLM γ N (circularNormalModeLittle hγ hγle N _ _) = _
     rw [circularModeTangentCoefficientCLM_normalMode]
     rfl
 

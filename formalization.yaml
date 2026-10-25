@@ -167,6 +167,11 @@ fidelity:
     derive it from their existing continuity proofs. The higher-level C1
     Sobolev statements are unchanged, and the localized estimate retains
     arbitrary sets without a new set-measurability assumption.
+    Three smoothing proofs reselect internal numerical bounds or integrable
+    dominating functions using direct estimates of the evaluated multiplication
+    map. Their public statements, actual mollifiers, kernels, and derivative
+    convolution formulas retain their original definitions. The internal
+    bounds are not asserted to equal their earlier numerical expressions.
 
 review:
   status: "agent-reviewed"

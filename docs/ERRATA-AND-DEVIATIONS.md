@@ -51,6 +51,14 @@ still applies to an arbitrary set without a new set-measurability assumption.
 This is another compatibility repair to generic formal helpers; it adds no
 analytic premise to the main theorem.
 
+Three smoothing proofs now estimate the evaluated multiplication map directly.
+In `BoundedVelocityMollification.lean` and `PlanarSmoothKernel.lean`, an
+existential Lipschitz-bound witness is reselected;
+`BoundedVelocityMollificationSpatialC1.lean` uses a new integrable dominating
+function. These internal bounds are not asserted to be numerically equal to
+their earlier expressions. The public statements, actual mollifiers and
+kernels, and derivative convolution formulas retain their original definitions.
+
 The source-facing files `RequestProject/Euler/Basic.lean` and
 `RequestProject/Euler/Theorems.lean` retain the original source bytes. The
 additional finite-exponent and Bochner bridges prove a stronger final statement

@@ -75,7 +75,7 @@ theorem regularizedApproximation_particle_integral_eq
     exact hgnpoint s hs
   have hXlim (s : ℝ) (hs : s ∈ Icc (0 : ℝ) T) :
       Tendsto (fun n => (S n).forward s a) atTop (𝓝 (F (projIcc 0 T hT s, a))) := by
-    simpa only [projIcc_of_mem hT hs] using hForward ⟨s, hs⟩ a
+    simpa only [S, regularizedApproximationForward, projIcc_of_mem hT hs] using hForward ⟨s, hs⟩ a
   have heq := particle_integral_eq_of_tendsto
     (Xn := fun n s => (S n).forward s a)
     (X := fun s => F (projIcc 0 T hT s, a)) (gn := gn) (g := g)
