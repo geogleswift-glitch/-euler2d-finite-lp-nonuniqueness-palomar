@@ -94,7 +94,9 @@ theorem norm_complex_curl_test_difference_le {u v : L2T} {w z : Lp ℝ 2 μT}
     _ ≤ ‖u - v‖ * ‖curlVelocityTest hre.1‖ + ‖u - v‖ * ‖curlVelocityTest him.1‖ := by
       rw [hR, hI]
       exact add_le_add (abs_curl_test_difference_le hc hd hre) (abs_curl_test_difference_le hc hd him)
-    _ = _ := by unfold complexCurlTestBound; ring
+    _ = _ := by
+      simp only [complexCurlTestBound, Function.comp_def, Complex.reCLM_apply,
+        Complex.imCLM_apply, mul_add]
 
 theorem velocity_departure_of_complex_curl_test {u v : L2T} {w z : Lp ℝ 2 μT}
     (hc : IsCurl u w) (hd : IsCurl v z) {Ψ : R2 → ℂ}

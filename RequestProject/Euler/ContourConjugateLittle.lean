@@ -28,7 +28,9 @@ def contourC1ConjugateCLM (γ : ℝ≥0) : ContourC1Space γ →L[ℝ] ContourC1
        change conj (c • ContourC1Space.toBCF γ Z x) = c • conj (ContourC1Space.toBCF γ Z x)
        exact map_smul (Complex.conjCLE : ℂ →L[ℝ] ℂ) c _ } :
     ContourC1Space γ →ₗ[ℝ] ContourC1Space γ).mkContinuous 1
-      (fun Z => by simpa only [one_mul] using norm_contourC1Conjugate_le Z)
+      (fun Z => by
+        change ‖contourC1Conjugate Z‖ ≤ 1 * ‖Z‖
+        simpa only [one_mul] using norm_contourC1Conjugate_le Z)
 
 @[simp] theorem contourC1ConjugateCLM_apply (γ : ℝ≥0) (Z : ContourC1Space γ) :
     contourC1ConjugateCLM γ Z = contourC1Conjugate Z := rfl

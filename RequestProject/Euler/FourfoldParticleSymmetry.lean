@@ -28,6 +28,7 @@ def quarterTurnDisplacementPrecomp : ParticleDisplacement →L[ℝ] ParticleDisp
       map_add' := by intro η ξ; ext a; rfl
       map_smul' := by intro c η; ext a; rfl }
     1 (fun η => by
+      change ‖η.compContinuous ⟨torusQuarterTurn, torusQuarterTurn_smooth.continuous⟩‖ ≤ 1 * ‖η‖
       simpa only [one_mul] using BoundedContinuousFunction.norm_compContinuous_le η
         ⟨torusQuarterTurn, torusQuarterTurn_smooth.continuous⟩)
 

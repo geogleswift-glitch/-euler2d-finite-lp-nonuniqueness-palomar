@@ -74,7 +74,9 @@ def littleContourFourierCoefficientCLM (γ : ℝ≥0) (k : ℤ) :
         simp_rw [he]
         rw [intervalIntegral.integral_const_mul]
         ring }
-    1 (fun H => by simpa only [one_mul] using norm_littleContourFourierCoefficient_le k H)
+    1 (fun H => by
+      change ‖littleContourFourierCoefficient γ k H‖ ≤ 1 * ‖H‖
+      simpa only [one_mul] using norm_littleContourFourierCoefficient_le k H)
 
 @[simp] theorem littleContourFourierCoefficientCLM_apply {γ : ℝ≥0}
     (k : ℤ) (H : LittleContourSpace γ) :

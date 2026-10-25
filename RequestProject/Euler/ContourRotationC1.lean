@@ -53,9 +53,12 @@ def contourRotationC1 (b : ℝ) (Z : ContourC1Space γ) : ContourC1Space γ :=
       intro θ
       have hd := ((ContourC1Space.hasDerivAt_lift Z (θ - b)).scomp θ
         ((hasDerivAt_id θ).sub_const b)).const_mul (Complex.exp ((b : ℂ) * Complex.I))
-      simpa only [one_smul, ContourC1Space.lift, contourRotationBCF,
-        BoundedContinuousFunction.mkOfCompact_apply, contourRotationHolder_apply,
-        AddCircle.coe_sub] using hd)
+      change HasDerivAt
+        (fun s : ℝ => Complex.exp ((b : ℂ) * Complex.I) *
+          ContourC1Space.toBCF γ Z ((s : ContourCircle) - (b : ContourCircle)))
+        (contourRotationHolder b (ContourC1Space.derivative γ Z) (θ : ContourCircle)) θ
+      simpa only [Function.comp_def, id_eq, one_smul, ContourC1Space.lift,
+        contourRotationHolder_apply, AddCircle.coe_sub] using hd)
 
 theorem contourRotationC1_lift (b : ℝ) (Z : ContourC1Space γ) :
     ContourC1Space.lift γ (contourRotationC1 b Z) = rotShift b (ContourC1Space.lift γ Z) := by
@@ -95,7 +98,9 @@ def contourRotationC1CLM (γ : ℝ≥0) (b : ℝ) : ContourC1Space γ →L[ℝ] 
             r • (Complex.exp ((b : ℂ) * Complex.I) * ContourC1Space.toBCF γ Z (x - (b : ContourCircle)))
         rw [Complex.real_smul, Complex.real_smul]
         ring }
-    1 (fun Z => by simpa only [one_mul] using norm_contourRotationC1_le b Z)
+    1 (fun Z => by
+      change ‖contourRotationC1 b Z‖ ≤ 1 * ‖Z‖
+      simpa only [one_mul] using norm_contourRotationC1_le b Z)
 
 @[simp] theorem contourRotationC1_zero (Z : ContourC1Space γ) : contourRotationC1 0 Z = Z := by
   apply ContourC1Space.ext

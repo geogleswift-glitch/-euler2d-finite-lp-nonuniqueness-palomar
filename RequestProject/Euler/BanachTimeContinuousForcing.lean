@@ -40,7 +40,7 @@ theorem continuousAt_timeState_of_lipschitzOn
     hcenter.dist continuousAt_const
   have hlim : Tendsto (fun p : ℝ × X =>
       (K : ℝ) * dist p.2 x + dist (f p.1 x) (f t x)) (𝓝 (t, x)) (𝓝 0) := by
-    simpa only [Pi.add_apply, dist_self, mul_zero, add_zero] using (hfirst.add hsecond).tendsto
+    simpa only [Pi.add_def, dist_self, mul_zero, add_zero] using (hfirst.add hsecond).tendsto
   exact tendsto_iff_dist_tendsto_zero.mpr
     (squeeze_zero' (Eventually.of_forall (fun _ => dist_nonneg)) hbound hlim)
 

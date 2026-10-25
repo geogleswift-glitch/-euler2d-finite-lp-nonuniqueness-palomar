@@ -53,15 +53,19 @@ theorem exists_bounded_nonautonomous_banachFlow
       (fun _ _ => (β b hb).compProj_mem_closedBall hpl.mul_max_le) b ht |>.congr_of_mem _ ht
     intro t' ht'
     nth_rw 1 [← hβ b hb]
-    rw [FunSpace.compProj_of_mem ht', FunSpace.next_apply]
+    change FunSpace.compProj (FunSpace.next hpl hb (β b hb)) t' =
+      picard F (t₀ : ℝ) b (β b hb).compProj t'
+    rw [FunSpace.compProj_of_mem (α := FunSpace.next hpl hb (β b hb)) ht']
+    exact FunSpace.next_apply hpl hb (β b hb) (t := ⟨t', ht'⟩)
   refine ⟨X, ?_⟩
   constructor
   · intro b hb
     have hbc : b ∈ closedBall x R := ball_subset_closedBall hb
     change (if hb : b ∈ closedBall x R then (β b hb).compProj else fun _ => b) 0 = b
     rw [dif_pos hbc]
-    change (β b hbc).compProj (t₀ : ℝ) = b
-    rw [FunSpace.compProj_val, ← hβ b hbc, FunSpace.next_apply₀]
+    change FunSpace.compProj (β b hbc) (t₀ : ℝ) = b
+    rw [FunSpace.compProj_val (α := β b hbc) (t := t₀), ← hβ b hbc]
+    exact FunSpace.next_apply₀ hpl hbc (β b hbc)
   · intro b hb
     have hbc : b ∈ closedBall x R := ball_subset_closedBall hb
     have he : X b = (β b hbc).compProj := dif_pos hbc

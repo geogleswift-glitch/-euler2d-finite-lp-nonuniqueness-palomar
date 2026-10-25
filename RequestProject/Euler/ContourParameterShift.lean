@@ -70,7 +70,9 @@ def contourParameterShiftC1CLM (γ : ℝ≥0) (b : ℝ) : ContourC1Space γ →L
         apply ContourC1Space.ext
         intro x
         rfl }
-    1 (fun Z => by simpa only [one_mul] using norm_contourParameterShiftC1_le b Z)
+    1 (fun Z => by
+      change ‖contourParameterShiftC1 b Z‖ ≤ 1 * ‖Z‖
+      simpa only [one_mul] using norm_contourParameterShiftC1_le b Z)
 
 @[simp] theorem contourParameterShiftC1_zero (Z : ContourC1Space γ) :
     contourParameterShiftC1 0 Z = Z := by

@@ -43,7 +43,7 @@ theorem intervalIntegrable_contourLogBoundaryIntegrand
     have hi' : IntervalIntegrable f volume (θ - Real.pi) ((θ - Real.pi) + 2 * Real.pi) := by
       rw [show (θ - Real.pi) + 2 * Real.pi = θ + Real.pi by ring]
       exact hi
-    exact hp.intervalIntegrable (by positivity) (by finiteness) hi' 0 (2 * Real.pi)
+    exact hp.intervalIntegrable (by positivity) hi' 0 (2 * Real.pi)
   · have hn : Continuous (fun φ : ℝ => ‖x - z φ‖) := by fun_prop
     have hlog : Continuous (fun φ : ℝ => Real.log ‖x - z φ‖) :=
       hn.log (fun φ => norm_ne_zero_iff.mpr (sub_ne_zero.mpr (by

@@ -145,7 +145,7 @@ theorem littleCircularMaterialContours_hasDerivAt {γ : ℝ≥0}
     apply hasDerivAt_pi.mpr
     intro i
     have hp := (hasDerivAt_id t).const_mul (circularContourAngularVelocities i)
-    simpa only [littleCircularMaterialContours, D, Function.comp_def, Pi.add_apply, id_eq, mul_one] using
+    simpa only [littleCircularMaterialContours, D, Function.comp_def, Pi.add_def, id_eq, mul_one] using
       (((Real.hasDerivAt_cos _).comp t hp).smul_const (littleCircularReference hγ hγ1 i)).add
         (((Real.hasDerivAt_sin _).comp t hp).smul_const
           (contourParameterShiftLittleCLM γ (Real.pi / 2) (littleCircularReference hγ hγ1 i)))

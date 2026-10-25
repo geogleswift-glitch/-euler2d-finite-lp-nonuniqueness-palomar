@@ -85,7 +85,7 @@ theorem exists_planarLogHomeomorphFlow_of_uniform_approximation
       ((hasDerivAt_id t).add_const 1)
     have hd' : HasDerivAt (fun s => S.forward (s + 1) (S.backward 1 a))
         (v t (S.forward (t + 1) (S.backward 1 a))) t := by
-      simpa only [w, Function.comp_def, add_sub_cancel_right, one_smul] using hd
+      simpa only [w, Function.comp_def, id_eq, add_sub_cancel_right, one_smul] using hd
     have hf := hd'.congr_of_eventuallyEq heq
     simpa only [heq.eq_of_nhds] using hf
 

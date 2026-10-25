@@ -65,9 +65,12 @@ def multiplier (m : (Fin 2 → ℤ) → ℂ) (hm : ∀ k, ‖m k‖ ≤ 1) :
     CoeffL2 →L[ℂ] CoeffL2 :=
   LinearMap.mkContinuous
     { toFun := multiplierSeq m hm
-      map_add' := by intro a b; ext k; simp [multiplierSeq, mul_add]
+       map_add' := by intro a b; ext k; simp [multiplierSeq, Pi.add_apply, mul_add]
       map_smul' := by intro c a; ext k; simp [multiplierSeq, mul_left_comm] }
-    1 (by intro a; simpa only [one_mul] using multiplierSeq_norm_le m hm a)
+    1 (by
+      intro a
+      change ‖multiplierSeq m hm a‖ ≤ 1 * ‖a‖
+      simpa only [one_mul] using multiplierSeq_norm_le m hm a)
 
 lemma multiplier_apply (m : (Fin 2 → ℤ) → ℂ) (hm : ∀ k, ‖m k‖ ≤ 1)
     (a : CoeffL2) (k : Fin 2 → ℤ) : multiplier m hm a k = m k * a k := rfl
@@ -334,7 +337,7 @@ lemma realPart_complexify (f : Lp ℝ 2 μT) : boxRealPart (complexify f) = f :=
 
 lemma tendsto_realPart_trunc_complexify (f : Lp ℝ 2 μT) :
     Tendsto (fun N => boxRealPart (boxScalarFourierTrunc N (complexify f))) atTop (𝓝 f) := by
-  simpa only [realPart_complexify] using
+  simpa only [Function.comp_def, realPart_complexify] using
     (boxRealPart.continuous.tendsto (complexify f)).comp
       (tendsto_boxScalarFourierTrunc (complexify f))
 

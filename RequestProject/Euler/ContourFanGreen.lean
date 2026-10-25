@@ -52,10 +52,11 @@ theorem hasDerivAt_contourFanRadialPrimitive {ψ : ℂ → ℝ} {dψ : ℂ → �
     HasDerivAt (contourFanRadialPrimitive ψ z dz θ)
       (contourFanRadialDerivative ψ dψ z dz θ s) s := by
   have hs : HasDerivAt (fun t : ℝ => t • z θ) (z θ) s := by
-    simpa only [one_smul] using (hasDerivAt_id s).smul_const (z θ)
+    simpa only [id_eq, one_smul] using (hasDerivAt_id s).smul_const (z θ)
   have hp := (hψ (s • z θ)).comp_hasDerivAt s hs
   have hh := ((hasDerivAt_id s).mul hp).smul_const (-I * dz θ)
-  simpa only [contourFanRadialPrimitive, contourFanRadialDerivative,
+  unfold contourFanRadialPrimitive
+  simpa only [contourFanRadialDerivative, Pi.mul_def, Function.comp_def,
     one_mul, id_eq] using hh
 
 theorem hasDerivAt_contourFanAngularPrimitive {ψ : ℂ → ℝ} {dψ : ℂ → ℂ →L[ℝ] ℝ}
@@ -65,8 +66,9 @@ theorem hasDerivAt_contourFanAngularPrimitive {ψ : ℂ → ℝ} {dψ : ℂ → 
       (contourFanAngularDerivative ψ dψ z dz s θ) θ := by
   have hp := (hψ (s • z θ)).comp_hasDerivAt θ ((hz θ).const_smul s)
   have hh := hp.smul ((hz θ).const_mul I)
-  simpa only [contourFanAngularPrimitive, contourFanAngularDerivative,
-    Function.comp_def, Pi.smul_apply, map_smul, smul_eq_mul, add_comm] using hh
+  unfold contourFanAngularPrimitive
+  simpa only [contourFanAngularDerivative, Function.comp_def, Pi.smul_def',
+    Pi.smul_apply, map_smul, smul_eq_mul, add_comm] using hh
 
 theorem contourFan_gradient_identity (ψ : ℂ → ℝ) (dψ : ℂ → ℂ →L[ℝ] ℝ)
     (z dz : ℝ → ℂ) (s θ : ℝ) :

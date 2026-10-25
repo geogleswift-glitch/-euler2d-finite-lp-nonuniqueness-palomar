@@ -23,12 +23,12 @@ theorem tendsto_contourC1CauchyTruncated_near_circle {γ : ℝ≥0}
       (deriv (ContourC1Space.lift γ Z)) θ Real.pi) (𝓝[>] (0 : ℝ))
       (𝓝 (-Complex.I * (Real.pi : ℂ))) := by
   have hp : ContDiff ℝ 1 (fun t : ℝ => ContourC1Space.lift γ Z t - refCircle r t) := by
-    simpa only [ContourC1Space.lift_sub, Pi.sub_apply, href] using
+    simpa only [ContourC1Space.lift_sub, Pi.sub_def, href] using
       (ContourC1Space.contDiff_lift (Z - Z₀))
   have hd : ∀ t : ℝ,
       ‖deriv (fun s : ℝ => ContourC1Space.lift γ Z s - refCircle r s) t‖ ≤ ‖Z - Z₀‖ := by
     intro t
-    simpa only [ContourC1Space.lift_sub, Pi.sub_apply, href] using
+    simpa only [ContourC1Space.lift_sub, Pi.sub_def, href] using
       (ContourC1Space.norm_deriv_lift_le (Z - Z₀) t)
   exact tendsto_nearCircleCauchyTruncated hr (norm_nonneg (Z - Z₀)) hsmall
     (ContourC1Space.contDiff_lift Z) hp hd (ContourC1Space.periodic_lift Z)

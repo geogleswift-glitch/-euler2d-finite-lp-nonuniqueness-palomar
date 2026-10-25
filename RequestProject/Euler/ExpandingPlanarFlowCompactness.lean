@@ -107,8 +107,16 @@ theorem equicontinuous_expanding_planarFlow_pairs
   have hqmem : (q.1 : ℝ) ∈ Icc (0 : ℝ) K := ⟨q.1.coe_nonneg, hqK.le⟩
   have hep : (projIcc 0 K hK (p.1 : ℝ) : ℝ) = p.1 := congrArg Subtype.val (projIcc_of_mem hK hpmem)
   have heq : (projIcc 0 K hK (q.1 : ℝ) : ℝ) = q.1 := congrArg Subtype.val (projIcc_of_mem hK hqmem)
-  simpa only [j, planarFlowPairMap, positivePlanarFlowPairMap, ContinuousMap.coe_mk, Q, hep, heq]
-    using hq n
+  have hqn := hq n
+  change (((P (n + N)).forward (projIcc 0 K hK (p.1 : ℝ) : ℝ) p.2,
+      (P (n + N)).backward (projIcc 0 K hK (p.1 : ℝ) : ℝ) p.2),
+    ((P (n + N)).forward (projIcc 0 K hK (q.1 : ℝ) : ℝ) q.2,
+      (P (n + N)).backward (projIcc 0 K hK (q.1 : ℝ) : ℝ) q.2)) ∈ W at hqn
+  change (((P (n + N)).forward (p.1 : ℝ) p.2,
+      (P (n + N)).backward (p.1 : ℝ) p.2),
+    ((P (n + N)).forward (q.1 : ℝ) q.2,
+      (P (n + N)).backward (q.1 : ℝ) q.2)) ∈ W
+  simpa only [hep, heq] using hqn
 
 theorem exists_compactOpen_expandingPlanarFlow_subseq
     {C V : ℝ} (hC : 0 ≤ C) (hV : 0 ≤ V)

@@ -40,7 +40,9 @@ def contourComplexHolderShiftCLM (γ : ℝ≥0) (τ : ℝ) :
         apply HolderFunctionSpace.ext
         intro x
         rfl }
-    1 (fun f => by simpa only [one_mul] using norm_contourHolderShift_le f τ)
+    1 (fun f => by
+      change ‖contourHolderShift f τ‖ ≤ 1 * ‖f‖
+      simpa only [one_mul] using norm_contourHolderShift_le f τ)
 
 def contourComplexNormalizedChordCLM (hγ : 0 < (γ : ℝ)) (τ : ℝ) :
     ContourC1Space γ →L[ℂ] ContourHolderSpace γ :=
@@ -77,7 +79,9 @@ def contourComplexNormalizedChordCLM (hγ : 0 < (γ : ℝ)) (τ : ℝ) :
               ContourC1Space.toBCF γ Z (x + (τ : ContourCircle))))
           rw [Complex.real_smul, Complex.real_smul]
           ring }
-    1 (fun Z => by simpa only [one_mul] using norm_contourNormalizedChord_le hγ Z τ)
+    1 (fun Z => by
+      change ‖contourNormalizedChord hγ Z τ‖ ≤ 1 * ‖Z‖
+      simpa only [one_mul] using norm_contourNormalizedChord_le hγ Z τ)
 
 @[simp] theorem contourComplexNormalizedChordCLM_apply (hγ : 0 < (γ : ℝ))
     (τ : ℝ) (Z : ContourC1Space γ) :

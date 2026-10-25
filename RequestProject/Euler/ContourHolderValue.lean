@@ -44,7 +44,7 @@ theorem holderWith_contourC1_value {γ : ℝ≥0} (hγ1 : (γ : ℝ) ≤ 1) (Z :
   apply contour_holderWith_of_norm_bound (by positivity)
   intro x y
   have hb : ‖ContourC1Space.toBCF γ Z x - ContourC1Space.toBCF γ Z y‖ ≤ ‖Z‖ * dist x y := by
-    simpa only [dist_eq_norm] using hl.dist_le_mul x y
+    simpa only [dist_eq_norm, coe_nnnorm] using hl.dist_le_mul x y
   exact (hb.trans (mul_le_mul_of_nonneg_left (contour_dist_le_holder_power hγ1 x y)
     (norm_nonneg _))).trans_eq (by ring)
 
@@ -72,7 +72,10 @@ theorem norm_contourC1ValueHolder_le {γ : ℝ≥0} (hγ1 : (γ : ℝ) ≤ 1) (Z
   · intro x y
     have hb : ‖ContourC1Space.toBCF γ Z x - ContourC1Space.toBCF γ Z y‖ ≤
         (Real.pi ^ (1 - (γ : ℝ)) * ‖Z‖) * dist x y ^ (γ : ℝ) := by
-      simpa only [dist_eq_norm] using (holderWith_contourC1_value hγ1 Z).dist_le x y
+      have h := (holderWith_contourC1_value hγ1 Z).dist_le x y
+      change dist (ContourC1Space.toBCF γ Z x) (ContourC1Space.toBCF γ Z y) ≤
+        (Real.pi ^ (1 - (γ : ℝ)) * ‖Z‖) * dist x y ^ (γ : ℝ) at h
+      simpa only [dist_eq_norm] using h
     exact hb.trans (mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_right hP (norm_nonneg _))
       (Real.rpow_nonneg dist_nonneg _))
 
@@ -93,7 +96,9 @@ def contourHolderConstantCLM (γ : ℝ≥0) : ℂ →L[ℝ] ContourHolderSpace �
      map_add' := fun a b => by apply HolderFunctionSpace.ext; intro x; rfl
      map_smul' := fun a b => by apply HolderFunctionSpace.ext; intro x; rfl } :
       ℂ →ₗ[ℝ] ContourHolderSpace γ).mkContinuous 1
-    (fun a => by simpa only [one_mul] using HolderFunctionSpace.norm_const_le (γ := γ) a)
+    (fun a => by
+      change ‖HolderFunctionSpace.const γ a‖ ≤ 1 * ‖a‖
+      simpa only [one_mul] using HolderFunctionSpace.norm_const_le (γ := γ) a)
 
 @[simp] theorem contourHolderConstantCLM_apply (γ : ℝ≥0) (a : ℂ) (x : ContourCircle) :
     contourHolderConstantCLM γ a x = a := rfl
@@ -138,7 +143,9 @@ def contourHolderRealPartCLM (γ : ℝ≥0) : ContourHolderSpace γ →L[ℝ] Co
        intro x
        change (((a • f x).re : ℝ) : ℂ) = a • ((f x).re : ℂ)
        simp [Complex.real_smul] } : ContourHolderSpace γ →ₗ[ℝ] ContourHolderSpace γ).mkContinuous 1
-    (fun f => by simpa only [one_mul] using norm_contourHolderRealPart_le f)
+    (fun f => by
+      change ‖contourHolderRealPart f‖ ≤ 1 * ‖f‖
+      simpa only [one_mul] using norm_contourHolderRealPart_le f)
 
 @[simp] theorem contourHolderRealPartCLM_apply {γ : ℝ≥0} (f : ContourHolderSpace γ) (x : ContourCircle) :
     contourHolderRealPartCLM γ f x = ((f x).re : ℂ) := rfl

@@ -112,7 +112,7 @@ theorem norm_materialFourthMoment_sub_le {w f : R2 → ℝ} {R η : ℝ}
   have hb := norm_integral_le_of_norm_le hi (ae_of_all _ hpoint)
   calc
     _ ≤ ∫ b, (4 * R ^ 3 * η) * ‖w b‖ + R ^ 4 * ‖w b - f b‖ := by
-      simpa only [ψ, Pi.add_apply, Pi.sub_apply] using hb
+      simpa only [ψ, Pi.add_def, Pi.sub_apply] using hb
     _ = _ := by
       have he := integral_add (hw.norm.const_mul (4 * R ^ 3 * η)) ((hw.sub hf).norm.const_mul (R ^ 4))
       simpa only [Pi.add_apply, Pi.sub_apply, integral_const_mul] using he

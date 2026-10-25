@@ -25,6 +25,10 @@ theorem hasFDerivAt_contourFanMap {z dz : ℝ → ℂ}
   have hzi : HasFDerivAt (fun q : ℂ => z q.im)
       (Complex.imCLM.smulRight (dz p.im)) p := by
     convert (hz p.im).hasFDerivAt.comp p Complex.imCLM.hasFDerivAt using 1
+    · rfl
+    · ext q
+      simp only [ContinuousLinearMap.smulRight_apply, ContinuousLinearMap.comp_apply,
+        ContinuousLinearMap.toSpanSingleton_apply]
   exact Complex.reCLM.hasFDerivAt.smul hzi
 
 theorem det_contourFanMapDerivative (z dz : ℝ → ℂ) (p : ℂ) :

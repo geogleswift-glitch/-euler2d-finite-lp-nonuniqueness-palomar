@@ -29,7 +29,7 @@ theorem exists_boundedODE_continuous_curve {E : Type*} [NormedAddCommGroup E]
       ∀ t ∈ Ioo (-1 : ℝ) (T + 1), HasDerivAt α (f t (α t)) t := by
   have hp : IsPicardLindelof f
       (⟨0, by norm_num, by linarith⟩ : Icc (-1 : ℝ) (T + 1)) a
-      (M * ⟨T + 2, by linarith⟩) 0 M K := by
+      (M * NNReal.mk (T + 2) (by linarith)) 0 M K := by
     refine ⟨fun t ht => (hfL t).lipschitzOnWith, ?_, fun t ht x hx => hfM t x, ?_⟩
     · intro x hx
       exact (hfc.comp (continuous_id.prodMk continuous_const)).continuousOn
@@ -89,20 +89,24 @@ theorem exists_variational_curve {B : ℝ → R2 →L[ℝ] R2} {K : ℝ≥0}
     intro t
     apply LipschitzWith.of_dist_le_mul
     intro C D
-    change ‖(B t).comp (G C) - (B t).comp (G D)‖ ≤ _
-    rw [← ContinuousLinearMap.comp_sub]
+    change dist ((B t).comp (G C)) ((B t).comp (G D)) ≤ _
+    rw [dist_eq_norm, ← ContinuousLinearMap.comp_sub]
     calc
       ‖(B t).comp (G C - G D)‖ ≤ ‖B t‖ * ‖G C - G D‖ := ContinuousLinearMap.opNorm_comp_le _ _
       _ ≤ (K : ℝ) * ((L : ℝ) * dist C D) :=
         mul_le_mul (hB t) (by simpa only [dist_eq_norm] using hGL.dist_le_mul C D)
           (norm_nonneg _) K.2
       _ = _ := by simp only [NNReal.coe_mul]; ring
-  have hfM : ∀ t C, ‖f t C‖ ≤ (K * ⟨R + 1, by linarith⟩ : ℝ≥0) := by
+  have hfM : ∀ t C, ‖f t C‖ ≤ (K * NNReal.mk (R + 1) (by linarith) : ℝ≥0) := by
     intro t C
     exact (ContinuousLinearMap.opNorm_comp_le _ _).trans
       (mul_le_mul (hB t) (hGb C) (norm_nonneg _) K.2)
-  obtain ⟨A, hAc, hA0, hAd⟩ := exists_boundedODE_continuous_curve hfc hfL hfM hT
-    (ContinuousLinearMap.id ℝ R2)
+  letI : CompleteSpace R2 := PiLp.completeSpace (p := 2) (β := fun _ : Fin 2 => ℝ)
+  letI : CompleteSpace E :=
+    ContinuousLinearMap.instCompleteSpace (σ := RingHom.id ℝ) (E := R2) (F := R2)
+  obtain ⟨A, hAc, hA0, hAd⟩ := exists_boundedODE_continuous_curve
+    (E := E) (f := f) (K := K * L) (M := K * NNReal.mk (R + 1) (by linarith))
+    hfc hfL hfM hT (ContinuousLinearMap.id ℝ R2)
   have hgrowth (t : ℝ) (ht : t ∈ Icc (0 : ℝ) T) : ‖A t‖ ≤ Real.exp ((K : ℝ) * t) := by
     have hd := norm_le_gronwallBound_of_norm_deriv_right_le hAc.continuousOn
       (fun u hu => (hAd u (by constructor <;> linarith [hu.1, hu.2, ht.2])).hasDerivWithinAt)

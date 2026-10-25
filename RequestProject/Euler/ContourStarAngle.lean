@@ -37,12 +37,17 @@ theorem hasDerivAt_contourAngleLift {z : ℝ → ℂ} {r ε θ : ℝ} {dz : ℂ}
   have hl : HasDerivAt (fun s => Complex.log (contourCircleRatio z r s))
       (dz / z θ - I) θ := by
     convert hlog using 1
-    exact he.symm
+    · funext s
+      simp only [contourCircleRatio, Pi.div_apply]
+    · exact he.symm
   have hi := Complex.imCLM.hasFDerivAt.comp_hasDerivAt θ hl
   have hi' : HasDerivAt (fun s => (Complex.log (contourCircleRatio z r s)).im)
       ((dz / z θ).im - 1) θ := by
     simpa only [Function.comp_def, Complex.imCLM_apply, Complex.sub_im, Complex.I_im] using hi
-  convert (hasDerivAt_id θ).add hi' using 1 <;> simp [contourAngleLift]
+  convert (hasDerivAt_id θ).add hi' using 1
+  · funext s
+    simp only [contourAngleLift, Pi.add_apply, id_eq]
+  · ring
 
 theorem im_div_eq_angularJacobian {z dz : ℝ → ℂ} (θ : ℝ) :
     (dz θ / z θ).im = contourAngularJacobian z dz θ / ‖z θ‖ ^ 2 := by
@@ -82,7 +87,7 @@ theorem tendsto_contourAngleLift_atTop (z : ℝ → ℂ) (r : ℝ) :
 
 theorem tendsto_contourAngleLift_atBot (z : ℝ → ℂ) (r : ℝ) :
     Tendsto (contourAngleLift z r) atBot atBot := by
-  apply tendsto_atBot_mono (g := fun θ : ℝ => θ + Real.pi)
+  apply tendsto_atBot_mono (f := fun θ : ℝ => θ + Real.pi)
   · intro θ
     have h := (abs_le.mp (abs_contourAngleLift_sub_le_pi z r θ)).2
     linarith
