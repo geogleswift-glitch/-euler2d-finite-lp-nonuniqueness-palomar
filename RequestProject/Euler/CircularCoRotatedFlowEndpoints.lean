@@ -68,10 +68,17 @@ theorem circularConstrainedChart_projection_left_inverse {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1) (v : CircularConstrainedTangentSpace γ) :
     circularConstraintProjectionToTangentCLM hγ hγ1.le
       (circularConstrainedChart hγ hγ1 v - littleCircularReference hγ hγ1) = v := by
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+  change circularConstraintProjectionToTangentCLM hγ hγle
+    (circularConstrainedChart hγ hγ1 v - littleCircularReference hγ hγ1) = v
   apply Subtype.ext
-  rw [circularConstraintProjectionToTangentCLM_val,
-    circularConstraintProjection_sub_reference hγ hγ1 _ (circularConstrainedChart_fourfold hγ hγ1 v)]
-  exact circularAreaChartInverseFamily_chart hγ hγ1 v
+  rw [circularConstraintProjectionToTangentCLM_val hγ hγle]
+  have hproj : circularConstraintProjectionCLM hγ hγle
+      (circularConstrainedChart hγ hγ1 v - littleCircularReference hγ hγ1) =
+      circularAreaChartInverseFamily hγ hγ1 (circularConstrainedChart hγ hγ1 v) :=
+    circularConstraintProjection_sub_reference hγ hγ1 _
+      (circularConstrainedChart_fourfold hγ hγ1 v)
+  exact hproj.trans (circularAreaChartInverseFamily_chart hγ hγ1 v)
 
 theorem circularCoRotatedConstrainedMap_zero {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1) {V : Set (Fin 2 → LittleContourSpace γ)} {T : ℝ}

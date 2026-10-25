@@ -146,7 +146,11 @@ theorem exists_same_circularBackwardGraph_exact_rotation_radius {γ : ℝ≥0}
   intro b ξ hξ hξη
   have hbase : circularConstrainedUnstableProjectionCLM hγ hγ1.le
       (circularConstrainedRotationCLM γ b (x ξ 0)) = circularConstrainedRotationCLM γ b ξ := by
-    rw [circularConstrainedUnstableProjectionCLM_rotation, hg.coordinate ξ hξ (hξη.trans hηr)]
+    have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+    change circularConstrainedUnstableProjectionCLM hγ hγle
+      (circularConstrainedRotationCLM γ b (x ξ 0)) = circularConstrainedRotationCLM γ b ξ
+    rw [circularConstrainedUnstableProjectionCLM_rotation hγ hγle b (x ξ 0)]
+    exact congrArg (circularConstrainedRotationCLM γ b) (hg.coordinate ξ hξ (hξη.trans hηr))
   have he := (hinv b ξ hξ hξη).2
   rw [hbase] at he
   exact he

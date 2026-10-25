@@ -118,8 +118,10 @@ theorem exists_circularConstrained_flattenedReturn_bounds {γ : ℝ≥0}
   intro α w hα hw hsize
   have hLα : L α = (-lamMult : ℝ) • α := by
     have heigen : L (P α) = (-lamMult : ℝ) • P α := by
-      change L (circularConstrainedUnstableProjectionCLM hγ hγ1.le α) = _
-      rw [circularConstrainedUnstableProjection_eq_embedding]
+      have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+      change L (circularConstrainedUnstableProjectionCLM hγ hγle α) =
+        (-lamMult : ℝ) • circularConstrainedUnstableProjectionCLM hγ hγle α
+      rw [circularConstrainedUnstableProjection_eq_embedding hγ hγle α]
       exact circularConstrainedReturnMap_derivative_unstable hγ hγ1 hR hX hfd _
     calc
       L α = L (P α) := congrArg L hα.symm

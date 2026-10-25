@@ -97,10 +97,14 @@ theorem exists_circularConstrained_nonzero_asymptotic_orbit {γ : ℝ≥0}
     exists_norm_circularConstrainedDoubleDerivative_complement_power_le hγ hγ1 hR hX hfd hfix harea
   have horbit := circularConstrainedReturn_hasSharpBackwardOrbits hγ hγ1 hR hX
     (hd.of_le (by norm_num)) hfix harea
-  have hφ := (hasFDerivAt_circularConstrainedPatchFourthMoment_zero hγ hγ1.le).differentiableAt.hasFDerivAt
-  have hg : fderiv ℝ (circularConstrainedPatchFourthMoment hγ hγ1.le) 0
-      (circularConstrainedUnstableEmbeddingCLM hγ hγ1.le 1) ≠ 0 := by
-    rw [fderiv_circularConstrainedPatchFourthMoment_growing hγ hγ1]
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+  have hφ := (hasFDerivAt_circularConstrainedPatchFourthMoment_zero hγ hγle).differentiableAt.hasFDerivAt
+  have hresponse : fderiv ℝ (circularConstrainedPatchFourthMoment hγ hγle) 0
+      (circularConstrainedUnstableEmbeddingCLM hγ hγle 1) = circularPatchGrowingResponse :=
+    fderiv_circularConstrainedPatchFourthMoment_growing hγ hγ1
+  have hg : fderiv ℝ (circularConstrainedPatchFourthMoment hγ hγle) 0
+      (circularConstrainedUnstableEmbeddingCLM hγ hγle 1) ≠ 0 := by
+    rw [hresponse]
     exact circularPatchGrowingResponse_ne_zero
   have h := exists_backwardOrbit_nonzero_asymptotic (E := CircularConstrainedTangentSpace γ)
     (F := banachDoubleReturn F) (w := circularAncientBackwardWeight) (a := lamMult ^ 2) (M := M) (β := 2)
@@ -111,9 +115,13 @@ theorem exists_circularConstrained_nonzero_asymptotic_orbit {γ : ℝ≥0}
     (by rw [circularAncientBackwardWeight_inv]; exact circularAncientBackwardRatio_unstable_quadratic_gap)
     (by rw [circularAncientBackwardWeight_inv]; exact circularAncientBackwardRatio_stable_gaps.1)
     (by rw [circularAncientBackwardWeight_inv]; exact circularAncientBackwardRatio_stable_gaps.2)
-    heigen hbound horbit hφ (circularConstrainedUnstableEmbeddingCLM hγ hγ1.le 1)
-    (circularConstrainedUnstableProjection_embedding hγ hγ1.le 1) hg hrmax
-  simpa only [circularAncientBackwardWeight_inv, circularConstrainedPatchFourthMoment_zero] using h
+    heigen hbound horbit hφ (circularConstrainedUnstableEmbeddingCLM hγ hγle 1)
+    (circularConstrainedUnstableProjection_embedding hγ hγle 1) hg hrmax
+  have hzero : circularConstrainedPatchFourthMoment hγ hγle
+      (0 : CircularConstrainedTangentSpace γ) = 0 :=
+    circularConstrainedPatchFourthMoment_zero hγ hγle
+  simp only [circularAncientBackwardWeight_inv, hzero] at h
+  exact h
 
 end Euler2D
 
