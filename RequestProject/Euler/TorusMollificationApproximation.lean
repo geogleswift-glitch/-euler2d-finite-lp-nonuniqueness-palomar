@@ -122,7 +122,7 @@ theorem tendsto_regularizedTorusKernel_L1 {ι : Type*} {l : Filter ι}
     filter_upwards [hlim.eventually (gt_mem_nhds (by norm_num : (0 : ℝ) < 1 / 2))] with i hi
     exact hi.le
   have hm : Tendsto (fun i => C * logFlowModulus (ε i)) l (𝓝 0) := by
-    simpa only [logFlowModulus, log_zero, mul_zero, sub_zero] using
+    simpa only [Function.comp_def, logFlowModulus, log_zero, mul_zero, sub_zero] using
       (continuous_logFlowModulus.tendsto 0 |>.comp hlim).const_mul C
   apply squeeze_zero' (Eventually.of_forall fun i => regularizedTorusKernelL1Error_nonneg _ _) ?_ hm
   filter_upwards [he] with i hi

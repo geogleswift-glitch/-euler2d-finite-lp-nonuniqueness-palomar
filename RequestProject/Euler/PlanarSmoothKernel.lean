@@ -39,7 +39,7 @@ theorem exists_lipschitz_planarKernelVelocity_kernelK {φ : R2 → ℝ}
       _ ≤ c + ‖K0 z‖ := add_le_add (by
         simpa only [Nat.cast_zero, zero_add, inv_one, mul_one] using norm_planarExpandingKernelCutoff_sub_le 0 z) le_rfl
       _ = _ := by ring
-  let B := ‖L'‖ * (M * (∫ y, ‖K0 y‖) + c * ∫ y, ‖fderiv ℝ φ y‖)
+  let B := M * (∫ y, ‖K0 y‖) + c * ∫ y, ‖fderiv ℝ φ y‖
   have hB : 0 ≤ B := by dsimp only [B]; positivity
   refine ⟨⟨B, hB⟩, ?_⟩
   apply lipschitzWith_of_nnnorm_fderiv_le
@@ -53,22 +53,29 @@ theorem exists_lipschitz_planarKernelVelocity_kernelK {φ : R2 → ℝ}
     (((integrable_planarExpandingKernelCutoff 0).comp_sub_left x).norm).const_mul M
   have hfar : Integrable (fun y => c * ‖fderiv ℝ φ y‖) := hDint.const_mul c
   have hpoint (y : R2) : ‖L' (fderiv ℝ φ y) (kernelK (x - y))‖ ≤
-      ‖L'‖ * (M * ‖K0 (x - y)‖ + c * ‖fderiv ℝ φ y‖) := by
+      M * ‖K0 (x - y)‖ + c * ‖fderiv ℝ φ y‖ := by
     calc
-      _ ≤ ‖L'‖ * ‖fderiv ℝ φ y‖ * ‖kernelK (x - y)‖ := L'.le_opNorm₂ _ _
-      _ ≤ ‖L'‖ * ‖fderiv ℝ φ y‖ * (‖K0 (x - y)‖ + c) :=
-        mul_le_mul_of_nonneg_left (hK _) (mul_nonneg (norm_nonneg L') (norm_nonneg (fderiv ℝ φ y)))
+      _ ≤ ‖fderiv ℝ φ y‖ * ‖kernelK (x - y)‖ := by
+        apply ContinuousLinearMap.opNorm_le_bound _ (mul_nonneg (norm_nonneg _) (norm_nonneg _))
+        intro v
+        simp only [L', ContinuousLinearMap.precompL_apply, L,
+          ContinuousLinearMap.lsmul_apply, norm_smul]
+        calc
+          ‖fderiv ℝ φ y v‖ * ‖kernelK (x - y)‖ ≤
+              (‖fderiv ℝ φ y‖ * ‖v‖) * ‖kernelK (x - y)‖ :=
+            mul_le_mul_of_nonneg_right ((fderiv ℝ φ y).le_opNorm v) (norm_nonneg _)
+          _ = (‖fderiv ℝ φ y‖ * ‖kernelK (x - y)‖) * ‖v‖ := by ring
+      _ ≤ ‖fderiv ℝ φ y‖ * (‖K0 (x - y)‖ + c) :=
+        mul_le_mul_of_nonneg_left (hK _) (norm_nonneg (fderiv ℝ φ y))
       _ ≤ _ := by
         have he := mul_le_mul_of_nonneg_right (hM y) (norm_nonneg (K0 (x - y)))
-        have he' := mul_le_mul_of_nonneg_left he (norm_nonneg L')
         nlinarith
-  have hi := ((hnear.add hfar).const_mul ‖L'‖)
+  have hi : Integrable (fun y => M * ‖K0 (x - y)‖ + c * ‖fderiv ℝ φ y‖) := by
+    simpa only [Pi.add_def] using hnear.add hfar
   have he := norm_integral_le_of_norm_le hi (ae_of_all _ hpoint)
   have htrans : (∫ y, ‖K0 (x - y)‖) = ∫ y, ‖K0 y‖ :=
     integral_sub_left_eq_self (μ := volume) (fun y => ‖K0 y‖) x
   exact he.trans_eq (by
-    rw [integral_const_mul]
-    dsimp only [Pi.add_apply]
     rw [integral_add hnear hfar, integral_const_mul, integral_const_mul, htrans])
 
 theorem exists_smooth_bounded_planarKernelVelocity_kernelK {φ : R2 → ℝ}

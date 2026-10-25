@@ -78,16 +78,18 @@ def circularNormalLinearFlow (N : ℕ) (η : CircularFourierVector) (t : ℝ) :
 theorem circularAmplitudeLinearFlow_hasDerivAt (N : ℕ) (p : CircularFourierAmplitudes) (t : ℝ) :
     HasDerivAt (circularAmplitudeLinearFlow N p)
       (circularAmplitudeGenerator N (circularAmplitudeLinearFlow N p t)) t := by
+  unfold circularAmplitudeLinearFlow
   have hd := (hasDerivAt_exp_smul_const' (circularAmplitudeGenerator N) t).clm_apply
     (hasDerivAt_const t p)
-  simpa only [circularAmplitudeLinearFlow, ContinuousLinearMap.mul_apply, map_zero, add_zero] using hd
+  simpa only [ContinuousLinearMap.mul_apply, map_zero, add_zero] using hd
 
 theorem circularNormalLinearFlow_hasDerivAt (N : ℕ) (η : CircularFourierVector) (t : ℝ) :
     HasDerivAt (circularNormalLinearFlow N η)
       (circularNormalGenerator N (circularNormalLinearFlow N η t)) t := by
+  unfold circularNormalLinearFlow
   have hd := (hasDerivAt_exp_smul_const' (circularNormalGenerator N) t).clm_apply
     (hasDerivAt_const t η)
-  simpa only [circularNormalLinearFlow, ContinuousLinearMap.mul_apply, map_zero, add_zero] using hd
+  simpa only [ContinuousLinearMap.mul_apply, map_zero, add_zero] using hd
 
 theorem circularAmplitudeLinearFlow_zero (N : ℕ) (p : CircularFourierAmplitudes) :
     circularAmplitudeLinearFlow N p 0 = p := by

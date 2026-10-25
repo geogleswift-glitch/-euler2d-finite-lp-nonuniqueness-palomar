@@ -32,6 +32,8 @@ jobs:
           python3 -c 'import shutil; assert shutil.disk_usage(".").free >= 20 * 1024**3, "At least 20 GiB of free disk is required before dependency retrieval"'
       - name: Validate the source and metadata
         run: |
+          bash -n scripts/build-bounded.sh
+          bash -n scripts/verify-comparator.sh
           python3 -m pip install --disable-pip-version-check 'PyYAML==6.0.3'
           python3 scripts/check_sources.py
           python3 scripts/validate_metadata.py

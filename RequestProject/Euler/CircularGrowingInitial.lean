@@ -29,8 +29,8 @@ theorem circularGrowingInitial_zero {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1) :
     circularGrowingInitial hγ hγ1 0 = littleCircularReference hγ hγ1 := by
   funext i
-  simp only [circularGrowingInitial, zero_smul, littleAreaChart_zero]
-  rfl
+  simp only [circularGrowingInitial, zero_smul]
+  exact littleAreaChart_zero hγ (by exact_mod_cast hγ1.le) (circularContourRadii i)
 
 theorem circularGrowingInitial_hasDerivAt_zero {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1) :
@@ -39,13 +39,18 @@ theorem circularGrowingInitial_hasDerivAt_zero {γ : ℝ≥0}
   intro i
   have hl : HasDerivAt (fun s : ℝ => s • circularGrowingVariation hγ hγ1 0 i)
       (circularGrowingVariation hγ hγ1 0 i) 0 := by
-    simpa only [ContinuousLinearMap.toSpanSingleton_apply, one_smul] using
-      (ContinuousLinearMap.toSpanSingleton ℝ
-        (circularGrowingVariation hγ hγ1 0 i)).hasDerivAt (x := (0 : ℝ))
+    have h := (ContinuousLinearMap.toSpanSingleton ℝ
+      (circularGrowingVariation hγ hγ1 0 i)).hasDerivAt (x := (0 : ℝ))
+    change HasDerivAt (fun s : ℝ => s • circularGrowingVariation hγ hγ1 0 i)
+      ((1 : ℝ) • circularGrowingVariation hγ hγ1 0 i) 0 at h
+    rw [one_smul] at h
+    exact h
   have hc : HasFDerivAt (littleAreaChart hγ hγ1.le (circularContourRadii i))
       (ContinuousLinearMap.id ℝ (LittleContourSpace γ))
       ((0 : ℝ) • circularGrowingVariation hγ hγ1 0 i) := by
     simpa only [zero_smul] using hasFDerivAt_littleAreaChart_zero hγ hγ1.le (circularContourRadii i)
+  change HasDerivAt (fun s : ℝ => littleAreaChart hγ hγ1.le (circularContourRadii i)
+    (s • circularGrowingVariation hγ hγ1 0 i)) (circularGrowingVariation hγ hγ1 0 i) 0
   simpa only [Function.comp_def, ContinuousLinearMap.id_apply] using hc.comp_hasDerivAt 0 hl
 
 theorem circularGrowingInitial_fourfold {γ : ℝ≥0}
@@ -71,7 +76,9 @@ theorem eventually_circularGrowingInitial_area {γ : ℝ≥0}
       s • circularGrowingVariation hγ hγ1 0 i ∈ ball (0 : LittleContourSpace γ) ε :=
     hc.continuousAt (by simpa only [zero_smul] using ball_mem_nhds (0 : LittleContourSpace γ) hε)
   filter_upwards [hs] with s hs
-  exact (hchart _ (by simpa only [mem_ball, dist_zero_right] using hs) (by
+  exact (hchart _ (by
+    simp only [mem_ball, dist_zero_right] at hs
+    exact hs) (by
     rw [map_smul]
     have hz : littleContourEllCLM γ (circularContourRadii i)
         (circularGrowingVariation hγ hγ1 0 i) = 0 :=

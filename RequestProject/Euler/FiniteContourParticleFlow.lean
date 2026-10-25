@@ -69,6 +69,11 @@ theorem exists_finiteContour_particleFlow
           (finiteContourC1PatchVorticity g (Z t) Z₀ r hr href (hsmall t ht)) (F t a)) := by
       have h := finiteContourPlanarVelocity_apply hT g Zi Z₀ r hr href hsmalli
         (⟨t, ht⟩ : Icc (0 : ℝ) T) (complexPhysicalPlane.symm (G t (complexPhysicalPlane a)))
+      change finiteContourPlanarVelocity hT g Zi Z₀ r hr href hsmalli t
+          (G t (complexPhysicalPlane a)) =
+        complexPhysicalPlane (velocityC
+          (finiteContourC1PatchVorticity g (Zi ⟨t, ht⟩) Z₀ r hr href (hsmalli ⟨t, ht⟩))
+          (complexPhysicalPlane.symm (G t (complexPhysicalPlane a))))
       simpa only [LinearIsometryEquiv.apply_symm_apply] using h
     rw [he, LinearIsometryEquiv.symm_apply_apply] at hd
     rw [finiteContourPatchVorticityOnInterval_of_mem g Z Z₀ r hr href hsmall ht]

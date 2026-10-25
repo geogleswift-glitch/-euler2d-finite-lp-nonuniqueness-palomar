@@ -137,12 +137,15 @@ theorem hasDerivAt_contourFourthMoment {γ : ℝ≥0}
   have hr := contourRealPartBCF.hasFDerivAt.comp_hasDerivAt t hp
   have hd := (contourDerivativeBCF γ).hasFDerivAt.comp_hasDerivAt t hZ
   have hm := contourComplexIntegralSymmetric.hasFDerivAt.comp_hasDerivAt t (hr.mul hd)
-  convert hm.const_mul (-I / 5) using 1
-  congr 1
-  symm
+  have hf : HasDerivAt (fun s => contourFourthMoment γ (Z s)) _ t :=
+    (hm.const_mul (-I / 5)).congr_of_eventuallyEq (Eventually.of_forall fun s => by
+      simp only [contourFourthMoment, Function.comp_def, Pi.mul_apply, Pi.pow_apply])
+  apply hf.congr_deriv
+  apply congrArg (fun v : ℂ => (-I / 5) * v)
+  change (∫ θ in (-Real.pi : ℝ)..Real.pi, _) = _
   apply intervalIntegral.integral_congr
   intro θ _
-  dsimp only
+  dsimp only [Function.comp_def, Pi.pow_apply]
   rw [ContourC1Space.deriv_lift, ContourC1Space.deriv_lift]
   change
     ((5 * ContourC1Space.lift γ (Z t) θ ^ (5 - 1) * ContourC1Space.lift γ H θ).re : ℂ) *
@@ -260,9 +263,8 @@ theorem hasDerivAt_littleAreaChart_fourthMoment {γ : ℝ≥0}
       (Real.pi * (circularContourRadii i : ℂ) ^ 6 * η i) 0 := by
   have hs : HasDerivAt (fun ε : ℝ => ε • circularNormalModeLittle hγ hγ1 2 η τ i)
       (circularNormalModeLittle hγ hγ1 2 η τ i) 0 := by
-    simpa only [ContinuousLinearMap.toSpanSingleton_apply, one_smul] using
-      (ContinuousLinearMap.toSpanSingleton ℝ
-        (circularNormalModeLittle hγ hγ1 2 η τ i)).hasDerivAt (x := (0 : ℝ))
+    simpa only [id_eq, one_smul] using
+      (hasDerivAt_id (0 : ℝ)).smul_const (circularNormalModeLittle hγ hγ1 2 η τ i)
   have hchart : HasFDerivAt (littleAreaChart hγ hγ1 (circularContourRadii i))
       (ContinuousLinearMap.id ℝ (LittleContourSpace γ))
       ((fun ε : ℝ => ε • circularNormalModeLittle hγ hγ1 2 η τ i) 0) := by
@@ -270,7 +272,8 @@ theorem hasDerivAt_littleAreaChart_fourthMoment {γ : ℝ≥0}
   have hc := hchart.comp_hasDerivAt (0 : ℝ) hs
   have hc' := (LittleContourSpace.inclusion γ).hasFDerivAt.comp_hasDerivAt (0 : ℝ) hc
   apply hasDerivAt_contourFourthMoment_fourthMode hγ hγ1 η τ i
-  · simpa only [ContinuousLinearMap.id_apply] using hc'
+  · simpa only [Function.comp_def, LittleContourSpace.inclusion_apply,
+      circularNormalModeC1, ContinuousLinearMap.id_apply] using hc'
   · simp only [zero_smul, littleAreaChart_zero]
 
 theorem circularGrowingMoment_boundary_hasDerivAt {γ : ℝ≥0}
@@ -363,16 +366,16 @@ theorem circularGrowingMoment_patch_hasDerivAt {γ : ℝ≥0}
       (Real.pi * (circularContourRadii i : ℂ) ^ 6 * vPlus i) 0 := by
   have hs : HasDerivAt (fun ε : ℝ => ε • circularGrowingVariation hγ hγ1 0 i)
       (circularGrowingVariation hγ hγ1 0 i) 0 := by
-    simpa only [ContinuousLinearMap.toSpanSingleton_apply, one_smul] using
-      (ContinuousLinearMap.toSpanSingleton ℝ
-        (circularGrowingVariation hγ hγ1 0 i)).hasDerivAt (x := (0 : ℝ))
+    simpa only [id_eq, one_smul] using
+      (hasDerivAt_id (0 : ℝ)).smul_const (circularGrowingVariation hγ hγ1 0 i)
   have hchart : HasFDerivAt (littleAreaChart hγ hγ1.le (circularContourRadii i))
       (ContinuousLinearMap.id ℝ (LittleContourSpace γ))
       ((fun ε : ℝ => ε • circularGrowingVariation hγ hγ1 0 i) 0) := by
     simpa only [zero_smul] using hasFDerivAt_littleAreaChart_zero hγ hγ1.le (circularContourRadii i)
   apply hasDerivAt_littlePatchFourthMoment_of_boundary hγ hγ1.le (growingMoment_radius_pos i)
   · exact (hchart.comp_hasDerivAt (0 : ℝ) hs).continuousAt
-  · simp only [zero_smul, littleAreaChart_zero]
+  · simp only [zero_smul]
+    exact littleAreaChart_zero hγ (by exact_mod_cast hγ1.le) (circularContourRadii i)
   · exact circularGrowingMoment_boundary_hasDerivAt hγ hγ1 i
 
 theorem fderiv_circularAreaChartFourthMoment_growing {γ : ℝ≥0}
@@ -382,9 +385,8 @@ theorem fderiv_circularAreaChartFourthMoment_growing {γ : ℝ≥0}
       Real.pi * (circularContourRadii i : ℂ) ^ 6 * vPlus i := by
   have hs : HasDerivAt (fun ε : ℝ => ε • circularGrowingVariation hγ hγ1 0 i)
       (circularGrowingVariation hγ hγ1 0 i) 0 := by
-    simpa only [ContinuousLinearMap.toSpanSingleton_apply, one_smul] using
-      (ContinuousLinearMap.toSpanSingleton ℝ
-        (circularGrowingVariation hγ hγ1 0 i)).hasDerivAt (x := (0 : ℝ))
+    simpa only [id_eq, one_smul] using
+      (hasDerivAt_id (0 : ℝ)).smul_const (circularGrowingVariation hγ hγ1 0 i)
   have hd : HasFDerivAt (circularAreaChartFourthMoment hγ hγ1.le i)
       (fderiv ℝ (circularAreaChartFourthMoment hγ hγ1.le i) 0)
       ((fun ε : ℝ => ε • circularGrowingVariation hγ hγ1 0 i) 0) := by
@@ -469,18 +471,29 @@ theorem fderiv_circularFamilyInnerFourthMoment_growing {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1) :
     fderiv ℝ (circularFamilyInnerFourthMoment hγ hγ1.le) 0
       (circularGrowingVariation hγ hγ1 0) = Real.pi * (cellA : ℂ) ^ 6 := by
+  letI : IsBoundedSMul ℝ (Fin 2 → LittleContourSpace γ) :=
+    NormedSpace.toIsBoundedSMul (𝕜 := ℝ) (E := Fin 2 → LittleContourSpace γ)
+  letI : ContinuousSMul ℝ (Fin 2 → LittleContourSpace γ) := IsBoundedSMul.continuousSMul
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+  change fderiv ℝ (circularFamilyInnerFourthMoment hγ hγle) 0
+    (circularGrowingVariation hγ hγ1 0) = _
   let p : (Fin 2 → LittleContourSpace γ) →L[ℝ] LittleContourSpace γ :=
     ContinuousLinearMap.proj 0
-  have hd := (differentiableAt_circularAreaChartFourthMoment_zero hγ hγ1.le 0).hasFDerivAt.comp
+  have hd := (differentiableAt_circularAreaChartFourthMoment_zero hγ hγle 0).hasFDerivAt.comp
     (0 : Fin 2 → LittleContourSpace γ) p.hasFDerivAt
-  have hfamily : HasFDerivAt (circularFamilyInnerFourthMoment hγ hγ1.le)
-      ((fderiv ℝ (circularAreaChartFourthMoment hγ hγ1.le 0) 0).comp p) 0 := by
+  have hfamily : HasFDerivAt (circularFamilyInnerFourthMoment hγ hγle)
+      ((fderiv ℝ (circularAreaChartFourthMoment hγ hγle 0) 0).comp p) 0 := by
+    change HasFDerivAt ((circularAreaChartFourthMoment hγ hγle 0) ∘ p)
+      ((fderiv ℝ (circularAreaChartFourthMoment hγ hγle 0) 0).comp p) 0
     simpa only [ContinuousLinearMap.map_zero] using hd
   rw [hfamily.fderiv]
-  change fderiv ℝ (circularAreaChartFourthMoment hγ hγ1.le 0) 0
+  change fderiv ℝ (circularAreaChartFourthMoment hγ hγle 0) 0
     (circularGrowingVariation hγ hγ1 0 0) = _
-  rw [fderiv_circularAreaChartFourthMoment_growing]
-  simp only [circularContourRadii, vPlus, Matrix.cons_val_zero, mul_one]
+  have hi := fderiv_circularAreaChartFourthMoment_growing hγ hγ1 0
+  change fderiv ℝ (circularAreaChartFourthMoment hγ hγle 0) 0
+    (circularGrowingVariation hγ hγ1 0 0) =
+      Real.pi * (circularContourRadii 0 : ℂ) ^ 6 * vPlus 0 at hi
+  simpa only [circularContourRadii, vPlus, Matrix.cons_val_zero, mul_one] using hi
 
 theorem fderiv_circularFamilyInnerFourthMoment_growing_ne_zero {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1) :
