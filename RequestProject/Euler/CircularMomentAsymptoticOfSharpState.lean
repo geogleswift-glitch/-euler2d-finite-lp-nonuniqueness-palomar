@@ -68,12 +68,15 @@ theorem circularAncient_fourthMoment_asymptotic_of_sharp_state {γ : ℝ≥0}
     calc
       _ = circularConstrainedUnstableProjectionCLM hγ hγ1.le v := hvP.symm
       _ = _ := by unfold circularConstrainedUnstableProjectionCLM; rfl
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
   have hvraw : v.val = circularUnstableEmbeddingCLM hγ hγ1.le ζ := by
-    rw [hvS, circularConstrainedUnstableEmbeddingCLM_val]
+    rw [hvS]
+    exact circularConstrainedUnstableEmbeddingCLM_val hγ hγle ζ
   have hζ : ζ ≠ 0 := by
     intro hz
     apply hv0
-    rw [hvS, hz, map_zero]
+    rw [hvS, hz]
+    exact ContinuousLinearMap.map_zero (circularConstrainedUnstableEmbeddingCLM hγ hγle)
   let κ := circularPatchGrowingResponse * ζ
   have hκ : κ ≠ 0 := mul_ne_zero circularPatchGrowingResponse_ne_zero hζ
   let q := (lamMult ^ 2)⁻¹

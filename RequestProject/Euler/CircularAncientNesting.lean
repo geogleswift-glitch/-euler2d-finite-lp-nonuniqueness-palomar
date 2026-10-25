@@ -90,7 +90,8 @@ theorem circularAncientMaterial_closure_nested
       change ‖(circularReferenceC1 hγ hγ1 i) - circularReferenceC1 hγ hγ1 i‖ < e
       simpa only [sub_self, norm_zero] using he
     have hev := hl.eventually (eventually_lt_nhds hlimit)
-    simpa only [Function.comp_apply] using hev
+    simpa only [Function.comp_apply, pr, ContinuousLinearMap.comp_apply,
+      ContinuousLinearMap.proj_apply, LittleContourSpace.inclusion_apply] using hev
   have hD : 0 < period + period := by unfold period; positivity
   obtain ⟨N, hN⟩ := exists_nat_gt (-t / (period + period))
   obtain ⟨n, hnnear, hnN⟩ := (hnear.and (eventually_ge_atTop N)).exists
