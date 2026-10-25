@@ -80,7 +80,11 @@ theorem circularComplexGrowingVariation_zero {γ : ℝ≥0}
     circularComplexGrowingVariation hγ hγ1 c 0 = circularUnstableEmbeddingCLM hγ hγ1.le c := by
   simp only [circularComplexGrowingVariation, circularGrowingNormal, circularGrowingTangential,
     Complex.ofReal_zero, zero_mul, exp_zero, one_smul, mul_zero]
-  rw [circularUnstableEmbeddingCLM_apply]
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+  change contourParameterShiftFamilyCLM γ (fun _ : Fin 2 => 0)
+      (circularNormalModeLittle hγ hγle 2 (c • vPlus) (c • circularGrowingTangent)) =
+    circularUnstableEmbeddingCLM hγ hγle c
+  rw [circularUnstableEmbeddingCLM_apply hγ hγle c]
   exact contourParameterShiftFamilyCLM_zero _
 
 theorem circularReference_variational_operator_unstable {γ : ℝ≥0}

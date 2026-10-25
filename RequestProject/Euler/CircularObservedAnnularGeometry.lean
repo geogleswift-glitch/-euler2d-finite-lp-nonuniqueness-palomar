@@ -79,7 +79,8 @@ theorem circular_near_contour_actual_annular_geometry {γ : ℝ≥0}
   refine ⟨by positivity, by linarith only [hηtwenty], hD, ?_, ?_, ?_⟩
   · intro z hz
     have hb : cellA - η ≤ ‖z‖ ∧ ‖z‖ ≤ cellA + η := by
-      simpa only [circularContourRadii] using circular_norm_bounds_symmDiff_of_ball_sandwich hη.le (hlo 0) (hhi 0) hz
+      simpa only [circularContourRadii, Matrix.cons_val_zero] using
+        circular_norm_bounds_symmDiff_of_ball_sandwich hη.le (hlo 0) (hhi 0) hz
     have hsqLo := (sq_le_sq₀ (sub_nonneg.mpr hηr) (norm_nonneg z)).mpr hb.1
     have hsqHi := (sq_le_sq₀ (norm_nonneg z) (by linarith only [cellA_pos, hη])).mpr hb.2
     have hc : (2 * cellA + η) * η ≤ 3 * η :=
@@ -88,15 +89,21 @@ theorem circular_near_contour_actual_annular_geometry {γ : ℝ≥0}
     constructor <;> nlinarith only [hsqLo, hsqHi, cellA_sq, hc, sq_nonneg η]
   · intro z hz
     have hb : 1 - η ≤ ‖z‖ ∧ ‖z‖ ≤ 1 + η := by
-      simpa only [circularContourRadii] using circular_norm_bounds_symmDiff_of_ball_sandwich hη.le (hlo 1) (hhi 1) hz
+      simpa only [circularContourRadii, Matrix.cons_val_one, Matrix.cons_val_zero] using
+        circular_norm_bounds_symmDiff_of_ball_sandwich hη.le (hlo 1) (hhi 1) hz
     have hsqLo := (sq_le_sq₀ (by linarith only [hηtwenty]) (norm_nonneg z)).mpr hb.1
     have hh : 2 * (3 * η) ≤ ‖z‖ ^ 2 - 3 / 5 := by
       nlinarith only [hsqLo, hηtwenty.le, sq_nonneg η]
     exact hh.trans (le_abs_self _)
-  · have hs0 : ‖(Z 0).val - (littleReferenceCircle hγ hγ1.le cellA).val‖ ≤ cellA / 4 := by
-      simpa only [circularContourRadii] using hsmall 0
-    rw [littlePatchFourthMoment, dif_pos hs0]
-    exact congrArg (fun D : Set ℂ => momentJ D 4) (hfill 0)
+  · have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+    have hs0 : ‖(Z 0).val - (littleReferenceCircle hγ hγle cellA).val‖ ≤ cellA / 4 := by
+      simpa only [circularContourRadii, Matrix.cons_val_zero] using hsmall 0
+    change momentJ (contourRadialFill (LittleContourSpace.lift γ (Z 0))) 4 =
+      littlePatchFourthMoment hγ hγle cellA cellA_pos (Z 0)
+    unfold littlePatchFourthMoment
+    rw [dif_pos hs0]
+    simpa only [circularContourRadii, Matrix.cons_val_zero] using
+      congrArg (fun D : Set ℂ => momentJ D 4) (hfill 0)
 
 end Euler2D
 

@@ -50,7 +50,11 @@ theorem exists_circularPhasePatchPlanarVorticity_L1_neighborhood {γ : ℝ≥0}
   intro Z hZW
   have he : (∫ x : R2, |circularPhasePatchPlanarVorticity Z x - circularPhasePatchPlanarVorticity W x|) =
       ∫ z : ℂ, |circularPhasePatchVorticity Z z - circularPhasePatchVorticity W z| := by
-    simpa only [circularPhasePatchPlanarVorticity] using
+    have hcoord (x : R2) : complexPhysicalPlane.symm x = planeComplexEquiv x := by
+      apply complexPhysicalPlane.injective
+      rw [complexPhysicalPlane.apply_symm_apply, complexPhysicalPlane_eq_planeComplexEquiv_symm,
+        planeComplexEquiv.symm_apply_apply]
+    simpa only [circularPhasePatchPlanarVorticity, hcoord] using
       measurePreserving_planeComplexEquiv.integral_comp'
         (fun z => |circularPhasePatchVorticity Z z - circularPhasePatchVorticity W z|)
   rw [he]

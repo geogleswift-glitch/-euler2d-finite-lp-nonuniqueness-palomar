@@ -97,8 +97,10 @@ theorem exists_circularConstrained_backward_orbit {γ : ℝ≥0}
     change L (L (P v)) = P (L (L v))
     rw [hcommv, hcommv]
   have heigen1 (v : CircularConstrainedTangentSpace γ) : L (P v) = (-lamMult : ℝ) • P v := by
-    change L (circularConstrainedUnstableProjectionCLM hγ hγ1.le v) = _
-    rw [circularConstrainedUnstableProjection_eq_embedding]
+    have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+    change L (circularConstrainedUnstableProjectionCLM hγ hγle v) =
+      (-lamMult : ℝ) • circularConstrainedUnstableProjectionCLM hγ hγle v
+    rw [circularConstrainedUnstableProjection_eq_embedding hγ hγle v]
     exact circularConstrainedReturnMap_derivative_unstable hγ hγ1 hR hX hfd _
   have heigen2 (v : CircularConstrainedTangentSpace γ) : (L ^ 2) (P v) = lamMult ^ 2 • P v := by
     have h := continuousLinearMap_square_eigenvector L (P v) (-lamMult) (heigen1 v)

@@ -53,7 +53,8 @@ theorem continuous_phaseFiniteContourPatchVelocity
     have he : U.restrict (fun q : P × ℂ => velocityC (phaseFiniteContourPatchVorticity g (Z q.1)) q.2) =
         (fun q : U => velocityC (finiteContourC1PatchVorticity g (W q) Z₀ r hr href (hsmall q)) q.val.2) := by
       funext q
-      rw [Set.restrict_apply, phaseFiniteContourPatchVorticity_eq_chart g (Z q.val.1) Z₀ r hr href b (hsmall q)]
+      change velocityC (phaseFiniteContourPatchVorticity g (Z q.val.1)) q.val.2 = _
+      rw [phaseFiniteContourPatchVorticity_eq_chart g (Z q.val.1) Z₀ r hr href b (hsmall q)]
     rw [he]
     have hj : Continuous (fun q : U => (q, q.val.2)) :=
       continuous_id.prodMk (continuous_snd.comp continuous_subtype_val)
