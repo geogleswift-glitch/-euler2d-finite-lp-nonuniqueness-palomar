@@ -33,7 +33,8 @@ theorem circularFourthNormal_ker_ellPlus {η : CircularFourierVector} (hη : ell
   funext i
   fin_cases i
   · simp
-  · simpa only [Pi.smul_apply, smul_eq_mul, Matrix.cons_val_one, Matrix.cons_val_fin_one, mul_comm] using h1
+  · change η 1 = η 0 * (-I * (cellA : ℂ))
+    exact h1.trans (mul_comm _ _)
 
 theorem circularNormalGenerator_fourth_ker_ellPlus {η : CircularFourierVector}
     (hη : ellPlus η = 0) :

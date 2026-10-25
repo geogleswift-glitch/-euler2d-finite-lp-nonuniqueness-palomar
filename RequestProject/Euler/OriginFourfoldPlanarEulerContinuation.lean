@@ -30,7 +30,7 @@ theorem exists_originFourfoldGlobalPlanarEulerParticleSystem_of_shifted_box
     ∃ S : GlobalPlanarEulerParticleSystem w, IsOriginFourfoldGlobalPlanarEulerParticleSystem S := by
   let wc : R2 → ℝ := fun x => w (x - torusCenter)
   have hwc : Integrable wc := by
-    simpa only [wc, sub_eq_add_neg] using
+    simpa only [wc, Function.comp_def, sub_eq_add_neg] using
       (measurePreserving_add_right volume (-torusCenter)).integrable_comp_of_integrable hw
   have hbox : planarBoxSource wc = wc := by
     funext x
@@ -95,7 +95,6 @@ theorem velocity (hwrot : ∀ x, w (perpJ x) = w x) (t : ℝ) (x : R2) :
   rw [S.selfconsistent, S.selfconsistent]
   apply planarKernelVelocity_perpJ kernelK_perpJ
   intro y
-  dsimp only
   rw [hS.backward, hwrot]
 
 end IsOriginFourfoldGlobalPlanarEulerParticleSystem

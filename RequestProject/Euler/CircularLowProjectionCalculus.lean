@@ -101,21 +101,22 @@ theorem circularPeriod_derivative_lowProjection_commute {γ : ℝ≥0}
         (fderiv ℝ (fun W => X W period) (littleCircularReference hγ hγ1)) := by
   apply ContinuousLinearMap.ext
   intro H
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
   let D := fderiv ℝ (fun W => X W period) (littleCircularReference hγ hγ1)
-  let Q0 := circularAngularModeProjectionCLM hγ hγ1.le 0
-  let Q1 := circularAngularModeProjectionCLM hγ hγ1.le 1
+  let Q0 := circularAngularModeProjectionCLM hγ hγle 0
+  let Q1 := circularAngularModeProjectionCLM hγ hγle 1
   have he0 : D (Q0 H) = Q0 (D H) := congrArg (fun A => A H)
     (circularPeriod_derivative_angularProjection_commute hγ hγ1 hρ hX hd 0)
   have he1 : D (Q1 H) = Q1 (D H) := congrArg (fun A => A H)
     (circularPeriod_derivative_angularProjection_commute hγ hγ1 hρ hX hd 1)
-  change D (circularLowFourierProjectionCLM hγ hγ1.le H) =
-    circularLowFourierProjectionCLM hγ hγ1.le (D H)
-  rw [circularLowFourierProjectionCLM_eq_angular, map_add]
+  change D (circularLowFourierProjectionCLM hγ hγle H) =
+    circularLowFourierProjectionCLM hγ hγle (D H)
+  rw [circularLowFourierProjectionCLM_eq_angular hγ hγle H, map_add]
   have hsmul : D ((1 / 2 : ℝ) • Q0 H) = (1 / 2 : ℝ) • D (Q0 H) :=
     D.toLinearMap.map_smul' (1 / 2 : ℝ) (Q0 H)
   change D ((1 / 2 : ℝ) • Q0 H) + D (Q1 H) = _
   rw [hsmul, he0, he1]
-  exact (circularLowFourierProjectionCLM_eq_angular hγ hγ1.le (D H)).symm
+  exact (circularLowFourierProjectionCLM_eq_angular hγ hγle (D H)).symm
 
 end Euler2D
 

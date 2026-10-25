@@ -66,17 +66,28 @@ theorem fderiv_circularConstrainedPatchFourthMoment_growing {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1) :
     fderiv ℝ (circularConstrainedPatchFourthMoment hγ hγ1.le) 0
       (circularConstrainedUnstableEmbeddingCLM hγ hγ1.le 1) = circularPatchGrowingResponse := by
-  rw [(hasFDerivAt_circularConstrainedPatchFourthMoment_zero hγ hγ1.le).fderiv]
-  change fderiv ℝ (circularFamilyPatchFourthMoment hγ hγ1.le) 0
-    (circularConstrainedUnstableEmbeddingCLM hγ hγ1.le 1).val = _
-  rw [circularConstrainedUnstableEmbeddingCLM_val, circularUnstableEmbeddingCLM_one]
+  letI : IsBoundedSMul ℝ (CircularConstrainedTangentSpace γ) :=
+    @NormedSpace.toIsBoundedSMul ℝ (CircularConstrainedTangentSpace γ) _ _
+      (constrainedMomentTangent_space γ)
+  letI : ContinuousSMul ℝ (CircularConstrainedTangentSpace γ) :=
+    IsBoundedSMul.continuousSMul
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+  change fderiv ℝ (circularConstrainedPatchFourthMoment hγ hγle) 0
+    (circularConstrainedUnstableEmbeddingCLM hγ hγle 1) = circularPatchGrowingResponse
+  rw [(hasFDerivAt_circularConstrainedPatchFourthMoment_zero hγ hγle).fderiv]
+  change fderiv ℝ (circularFamilyPatchFourthMoment hγ hγle) 0
+    (circularConstrainedUnstableEmbeddingCLM hγ hγle 1).val = _
+  rw [circularConstrainedUnstableEmbeddingCLM_val hγ hγle]
+  have hone : circularUnstableEmbeddingCLM hγ hγle 1 = circularGrowingVariation hγ hγ1 0 :=
+    circularUnstableEmbeddingCLM_one hγ hγ1
+  rw [hone]
   exact fderiv_circularFamilyPatchFourthMoment_growing hγ hγ1
 
 theorem circularConstrainedUnstableEmbedding_ne_zero {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : γ ≤ 1) : circularConstrainedUnstableEmbeddingCLM hγ hγ1 1 ≠ 0 := by
   intro hz
   have he := circularConstrainedUnstableCoordinate_embedding hγ hγ1 1
-  rw [hz, map_zero] at he
+  rw [hz, ContinuousLinearMap.map_zero (circularConstrainedUnstableCoordinateCLM γ)] at he
   exact one_ne_zero he.symm
 
 theorem circularConstrainedUnstableProjection_embedding {γ : ℝ≥0}
@@ -95,15 +106,22 @@ theorem exists_circularConstrainedPatchFourthMoment_departure_cone {γ : ℝ≥0
         ε * |t| * ‖circularConstrainedUnstableEmbeddingCLM hγ hγ1.le 1‖ →
       (‖circularPatchGrowingResponse‖ / 2) * |t| ≤
         ‖circularConstrainedPatchFourthMoment hγ hγ1.le v‖ := by
-  have hφ := hasFDerivAt_circularConstrainedPatchFourthMoment_zero hγ hγ1.le
-  have hg : fderiv ℝ (circularConstrainedPatchFourthMoment hγ hγ1.le) 0
-      (circularConstrainedUnstableEmbeddingCLM hγ hγ1.le 1) ≠ 0 := by
-    rw [fderiv_circularConstrainedPatchFourthMoment_growing hγ hγ1]
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+  have hφ := hasFDerivAt_circularConstrainedPatchFourthMoment_zero hγ hγle
+  have hresponse : fderiv ℝ (circularConstrainedPatchFourthMoment hγ hγle) 0
+      (circularConstrainedUnstableEmbeddingCLM hγ hγle 1) = circularPatchGrowingResponse :=
+    fderiv_circularConstrainedPatchFourthMoment_growing hγ hγ1
+  have hg : fderiv ℝ (circularConstrainedPatchFourthMoment hγ hγle) 0
+      (circularConstrainedUnstableEmbeddingCLM hγ hγle 1) ≠ 0 := by
+    rw [hresponse]
     exact circularPatchGrowingResponse_ne_zero
   have h := exists_observable_departure_cone hφ.differentiableAt.hasFDerivAt
-    (circularConstrainedUnstableEmbeddingCLM hγ hγ1.le 1) hg
-  simpa only [fderiv_circularConstrainedPatchFourthMoment_growing hγ hγ1,
-    circularConstrainedPatchFourthMoment_zero, sub_zero] using h
+    (circularConstrainedUnstableEmbeddingCLM hγ hγle 1) hg
+  have hzero : circularConstrainedPatchFourthMoment hγ hγle
+      (0 : CircularConstrainedTangentSpace γ) = 0 :=
+    circularConstrainedPatchFourthMoment_zero hγ hγle
+  simp only [hresponse, hzero, sub_zero] at h
+  exact h
 
 end Euler2D
 
