@@ -53,8 +53,8 @@ theorem circularAreaChartFourthMoment_mode_hasDerivAt {γ : ℝ≥0}
       (Real.pi * (circularContourRadii i : ℂ) ^ 6 * η i) 0 := by
   have hs : HasDerivAt (fun s : ℝ => s • circularNormalModeLittle hγ hγ1 2 η τ i)
       (circularNormalModeLittle hγ hγ1 2 η τ i) 0 := by
-    simpa only [ContinuousLinearMap.toSpanSingleton_apply, one_smul] using
-      (ContinuousLinearMap.toSpanSingleton ℝ (circularNormalModeLittle hγ hγ1 2 η τ i)).hasDerivAt (x := (0 : ℝ))
+    simpa only [id_eq, one_smul] using
+      (hasDerivAt_id (0 : ℝ)).smul_const (circularNormalModeLittle hγ hγ1 2 η τ i)
   have hchart : HasFDerivAt (littleAreaChart hγ hγ1 (circularContourRadii i))
       (ContinuousLinearMap.id ℝ (LittleContourSpace γ))
       ((fun s : ℝ => s • circularNormalModeLittle hγ hγ1 2 η τ i) 0) := by
@@ -86,8 +86,10 @@ theorem fderiv_circularFamilyPatchFourthMoment_normalMode {γ : ℝ≥0}
         (Real.pi * (circularContourRadii i : ℂ) ^ 6 * η i) := by
   have hs : HasDerivAt (fun s : ℝ => s • circularNormalModeLittle hγ hγ1 2 η τ)
       (circularNormalModeLittle hγ hγ1 2 η τ) 0 := by
-    simpa only [ContinuousLinearMap.toSpanSingleton_apply, one_smul] using
-      (ContinuousLinearMap.toSpanSingleton ℝ (circularNormalModeLittle hγ hγ1 2 η τ)).hasDerivAt (x := (0 : ℝ))
+    apply hasDerivAt_pi.mpr
+    intro i
+    simpa only [Pi.smul_apply, id_eq, one_smul] using
+      (hasDerivAt_id (0 : ℝ)).smul_const (circularNormalModeLittle hγ hγ1 2 η τ i)
   have hd : HasFDerivAt (circularFamilyPatchFourthMoment hγ hγ1)
       (fderiv ℝ (circularFamilyPatchFourthMoment hγ hγ1) 0)
       ((fun s : ℝ => s • circularNormalModeLittle hγ hγ1 2 η τ) 0) := by
@@ -99,8 +101,11 @@ theorem fderiv_circularFamilyPatchFourthMoment_unstableEmbedding {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1) (c : ℂ) :
     fderiv ℝ (circularFamilyPatchFourthMoment hγ hγ1.le) 0
       (circularUnstableEmbeddingCLM hγ hγ1.le c) = circularPatchGrowingResponse * c := by
-  rw [circularUnstableEmbeddingCLM_apply,
-    fderiv_circularFamilyPatchFourthMoment_normalMode hγ hγ1.le]
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+  change fderiv ℝ (circularFamilyPatchFourthMoment hγ hγle) 0
+    (circularUnstableEmbeddingCLM hγ hγle c) = circularPatchGrowingResponse * c
+  rw [circularUnstableEmbeddingCLM_apply hγ hγle c,
+    fderiv_circularFamilyPatchFourthMoment_normalMode hγ hγle]
   simp only [Fin.sum_univ_two, Pi.smul_apply, smul_eq_mul]
   norm_num [circularContourStrengths, circularContourRadii, vPlus, circularPatchGrowingResponse]
   ring
@@ -109,26 +114,40 @@ theorem fderiv_circularConstrainedPatchFourthMoment_unstableEmbedding {γ : ℝ�
     (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1) (c : ℂ) :
     fderiv ℝ (circularConstrainedPatchFourthMoment hγ hγ1.le) 0
       (circularConstrainedUnstableEmbeddingCLM hγ hγ1.le c) = circularPatchGrowingResponse * c := by
-  rw [(hasFDerivAt_circularConstrainedPatchFourthMoment_zero hγ hγ1.le).fderiv]
-  change fderiv ℝ (circularFamilyPatchFourthMoment hγ hγ1.le) 0
-    (circularConstrainedUnstableEmbeddingCLM hγ hγ1.le c).val = _
-  rw [circularConstrainedUnstableEmbeddingCLM_val]
+  letI : IsBoundedSMul ℝ (CircularConstrainedTangentSpace γ) :=
+    @NormedSpace.toIsBoundedSMul ℝ (CircularConstrainedTangentSpace γ) _ _
+      (linearMomentTangent_space γ)
+  letI : ContinuousSMul ℝ (CircularConstrainedTangentSpace γ) :=
+    IsBoundedSMul.continuousSMul
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+  change fderiv ℝ (circularConstrainedPatchFourthMoment hγ hγle) 0
+    (circularConstrainedUnstableEmbeddingCLM hγ hγle c) = circularPatchGrowingResponse * c
+  rw [(hasFDerivAt_circularConstrainedPatchFourthMoment_zero hγ hγle).fderiv]
+  change fderiv ℝ (circularFamilyPatchFourthMoment hγ hγle) 0
+    (circularConstrainedUnstableEmbeddingCLM hγ hγle c).val = _
+  rw [circularConstrainedUnstableEmbeddingCLM_val hγ hγle c]
   exact fderiv_circularFamilyPatchFourthMoment_unstableEmbedding hγ hγ1 c
 
 theorem fderiv_circularConstrainedPatchFourthMoment_ne_zero_on_unstable {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1) (v : CircularConstrainedTangentSpace γ)
     (hv : circularConstrainedUnstableProjectionCLM hγ hγ1.le v = v) (hv0 : v ≠ 0) :
     fderiv ℝ (circularConstrainedPatchFourthMoment hγ hγ1.le) 0 v ≠ 0 := by
-  have he : v = circularConstrainedUnstableEmbeddingCLM hγ hγ1.le
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+  change fderiv ℝ (circularConstrainedPatchFourthMoment hγ hγle) 0 v ≠ 0
+  have he : v = circularConstrainedUnstableEmbeddingCLM hγ hγle
       (circularConstrainedUnstableCoordinateCLM γ v) := by
     calc
-      v = circularConstrainedUnstableProjectionCLM hγ hγ1.le v := hv.symm
+      v = circularConstrainedUnstableProjectionCLM hγ hγle v := hv.symm
       _ = _ := by unfold circularConstrainedUnstableProjectionCLM; rfl
   have hcoord : circularConstrainedUnstableCoordinateCLM γ v ≠ 0 := by
     intro hz
     apply hv0
-    rw [he, hz, map_zero]
-  rw [he, fderiv_circularConstrainedPatchFourthMoment_unstableEmbedding hγ hγ1]
+    rw [he, hz, ContinuousLinearMap.map_zero (circularConstrainedUnstableEmbeddingCLM hγ hγle)]
+  have hresponse : fderiv ℝ (circularConstrainedPatchFourthMoment hγ hγle) 0
+      (circularConstrainedUnstableEmbeddingCLM hγ hγle (circularConstrainedUnstableCoordinateCLM γ v)) =
+    circularPatchGrowingResponse * circularConstrainedUnstableCoordinateCLM γ v :=
+    fderiv_circularConstrainedPatchFourthMoment_unstableEmbedding hγ hγ1 _
+  rw [he, hresponse]
   exact mul_ne_zero circularPatchGrowingResponse_ne_zero hcoord
 
 end Euler2D

@@ -94,6 +94,8 @@ theorem hasDerivAt_circularMaterialGrowingCoordinate_linearized {γ : ℝ≥0}
     exact circularUnstableCoordinate_eq_ellPlus_amplitude Z
   simp_rw [hU]
   convert hd using 1
+  · funext u
+    rfl
   change (a : ℂ) * lamStar * circularEllPlusCLM (n t) +
       circularEllPlusCLM (circularModeNormalCoefficientCLM γ 2 (S t p)) =
     circularEllPlusCLM (a • circularAngularNormalAmplitude 2 (n t) +

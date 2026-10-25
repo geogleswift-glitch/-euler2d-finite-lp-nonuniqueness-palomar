@@ -91,17 +91,27 @@ theorem circularLowFourierProjection_eq_tangentialMean {γ : ℝ≥0}
     circularLowFourierProjectionCLM hγ hγ1.le H =
       circularTangentialMeanLittle hγ hγ1
         (fun i => (littleContourFourierCoefficient γ 1 (H i)).im / circularContourRadii i) := by
+  have hγ1n : γ ≤ 1 := by exact_mod_cast hγ1.le
+  change circularLowFourierProjectionCLM hγ hγ1n H =
+    circularTangentialMeanLittle hγ hγ1
+      (fun i => (littleContourFourierCoefficient γ 1 (H i)).im / circularContourRadii i)
   funext i
   have h0 : littleContourFourierCoefficient γ 0 (H i) = 0 :=
     littleContourFourierCoefficient_fourfold_eq_zero (hfour i) 0 (by norm_num)
   have h2 : littleContourFourierCoefficient γ 2 (H i) = 0 :=
     littleContourFourierCoefficient_fourfold_eq_zero (hfour i) 2 (by norm_num)
-  have hz (k : ℤ) : littleContourFourierMode hγ hγ1.le k 0 = 0 := by
-    rw [← littleContourFourierModeCLM_apply]
-    exact (littleContourFourierModeCLM hγ hγ1.le k).map_zero
-  rw [circularLowFourierProjectionCLM_apply, h0, h2, hz, zero_add, hz, add_zero,
-    circularTangentialMeanLittle_eq_fourierMode]
-  apply congrArg (littleContourFourierMode hγ hγ1.le 1)
+  have hz (k : ℤ) : littleContourFourierMode hγ hγ1n k 0 = 0 := by
+    rw [← littleContourFourierModeCLM_apply hγ hγ1n k 0]
+    exact (littleContourFourierModeCLM hγ hγ1n k).map_zero
+  rw [circularLowFourierProjectionCLM_apply hγ hγ1n H i, h0, h2, hz, zero_add, hz, add_zero]
+  have hmean := circularTangentialMeanLittle_eq_fourierMode hγ hγ1
+    (fun j => (littleContourFourierCoefficient γ 1 (H j)).im / circularContourRadii j) i
+  change circularTangentialMeanLittle hγ hγ1
+      (fun j => (littleContourFourierCoefficient γ 1 (H j)).im / circularContourRadii j) i =
+    littleContourFourierMode hγ hγ1n 1 ((circularContourRadii i : ℂ) * I *
+      (((littleContourFourierCoefficient γ 1 (H i)).im / circularContourRadii i : ℝ) : ℂ)) at hmean
+  rw [hmean]
+  apply congrArg (littleContourFourierMode hγ hγ1n 1)
   let c := littleContourFourierCoefficient γ 1 (H i)
   have hr : (circularContourRadii i : ℂ) ≠ 0 :=
     Complex.ofReal_ne_zero.mpr (circularContourRadii_bounds i).1.ne'
