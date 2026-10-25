@@ -32,7 +32,9 @@ theorem contDiffAt_iterate_zero {F : E → E} {n : ℕ∞} (hF0 : F 0 = 0)
 theorem hasFDerivAt_iterate_zero {F : E → E} {L : E →L[ℝ] E} (hF0 : F 0 = 0)
     (hf : HasFDerivAt F L 0) (m : ℕ) : HasFDerivAt F^[m] (L ^ m) 0 := by
   induction m with
-  | zero => simpa only [Function.iterate_zero, pow_zero] using hasFDerivAt_id (𝕜 := ℝ) (0 : E)
+  | zero =>
+    simpa only [Function.iterate_zero, pow_zero, ContinuousLinearMap.one_def] using
+      hasFDerivAt_id (𝕜 := ℝ) (0 : E)
   | succ m ih =>
     have ho : HasFDerivAt F L (F^[m] 0) := by rw [iterate_zero_of_map_zero hF0]; exact hf
     simpa only [Function.iterate_succ', Function.comp_def, pow_succ', ContinuousLinearMap.mul_def]

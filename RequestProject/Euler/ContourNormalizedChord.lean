@@ -23,6 +23,7 @@ theorem contour_holderWith_of_norm_bound {γ : ℝ≥0} {C : ℝ} (hC : 0 ≤ C)
     {f : ContourCircle → ℂ}
     (hf : ∀ x y, ‖f x - f y‖ ≤ C * dist x y ^ (γ : ℝ)) :
     HolderWith (⟨C, hC⟩ : ℝ≥0) γ f := by
+  change HolderWith (NNReal.mk C hC) γ f
   intro x y
   rw [edist_nndist, edist_nndist, ← ENNReal.coe_rpow_of_nonneg _ γ.coe_nonneg,
     ← ENNReal.coe_mul, ENNReal.coe_le_coe]
@@ -43,18 +44,24 @@ def contourHolderShift {γ : ℝ≥0} (f : ContourHolderSpace γ) (τ : ℝ) :
       ⟨fun x => f (x + (τ : ContourCircle)),
         (HolderFunctionSpace.toBCF γ f).continuous.comp (continuous_id.add continuous_const)⟩)
     (contour_holderWith_of_norm_bound (norm_nonneg f) (fun x y => by
+      change ‖f (x + (τ : ContourCircle)) - f (y + (τ : ContourCircle))‖ ≤
+        ‖f‖ * dist x y ^ (γ : ℝ)
       simpa only [dist_add_right] using
         HolderFunctionSpace.norm_sub_le_holder f (x + (τ : ContourCircle))
           (y + (τ : ContourCircle)))).memHolder
 
 @[simp] theorem contourHolderShift_apply {γ : ℝ≥0} (f : ContourHolderSpace γ)
-    (τ : ℝ) (x : ContourCircle) : contourHolderShift f τ x = f (x + (τ : ContourCircle)) := rfl
+    (τ : ℝ) (x : ContourCircle) : contourHolderShift f τ x = f (x + (τ : ContourCircle)) := by
+  simp only [contourHolderShift, HolderFunctionSpace.ofMemHolder_apply,
+    BoundedContinuousFunction.mkOfCompact_apply, ContinuousMap.coe_mk]
+  rfl
 
 theorem norm_contourHolderShift_le {γ : ℝ≥0} (f : ContourHolderSpace γ) (τ : ℝ) :
     ‖contourHolderShift f τ‖ ≤ ‖f‖ := by
   apply norm_contourHolder_le_of_bounds _ (norm_nonneg f)
   · intro x
-    exact HolderFunctionSpace.norm_eval_le f _
+    simpa only [contourHolderShift_apply] using
+      HolderFunctionSpace.norm_eval_le f (x + (τ : ContourCircle))
   · intro x y
     simpa only [contourHolderShift_apply, dist_add_right] using
       HolderFunctionSpace.norm_sub_le_holder f (x + (τ : ContourCircle))
@@ -64,7 +71,7 @@ theorem contourHolderShift_sub {γ : ℝ≥0} (f g : ContourHolderSpace γ) (τ 
     contourHolderShift (f - g) τ = contourHolderShift f τ - contourHolderShift g τ := by
   apply HolderFunctionSpace.ext
   intro x
-  rfl
+  simp only [contourHolderShift_apply, HolderFunctionSpace.sub_apply]
 
 /-- The true normalized chord, completed at zero by its actual limit. -/
 def contourNormalizedChordFunction {γ : ℝ≥0} (Z : ContourC1Space γ)
@@ -84,7 +91,8 @@ theorem norm_contourNormalizedChordFunction_le {γ : ℝ≥0}
     ‖contourNormalizedChordFunction Z τ x‖ ≤ ‖Z‖ := by
   by_cases hτ : τ = 0
   · subst τ
-    simpa only [contourNormalizedChordFunction, if_pos, norm_neg] using
+    simpa only [contourNormalizedChordFunction, if_pos, norm_neg,
+      ContourC1Space.derivativeEval_apply] using
       ContourC1Space.norm_derivativeEval_le Z x
   obtain ⟨θ, rfl⟩ := QuotientAddGroup.mk_surjective x
   rw [contourNormalizedChordFunction_coe Z hτ, norm_smul, Real.norm_eq_abs, abs_inv]
@@ -118,7 +126,7 @@ theorem norm_contourNormalizedChordFunction_sub_le {γ : ℝ≥0}
       mul_le_mul_of_nonneg_left hb (inv_nonneg.mpr (abs_nonneg _))
     _ = ‖Z‖ * dist (θ : ContourCircle) (η : ContourCircle) ^ (γ : ℝ) := by
       rw [hθ, hη, hdist]
-      field_simp
+      rw [mul_left_comm, inv_mul_cancel₀ (abs_ne_zero.mpr hτ), mul_one]
 
 def contourNormalizedChord {γ : ℝ≥0} (hγ : 0 < (γ : ℝ))
     (Z : ContourC1Space γ) (τ : ℝ) : ContourHolderSpace γ :=

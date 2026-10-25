@@ -60,9 +60,10 @@ theorem planarParticleFamily_surjective_of_approximation
     (hXc.comp (continuous_id.prodMk continuous_const)) hRc
     (fun s hs => hX s ⟨hs.1, hs.2.trans ht.2⟩ (Y t)) hRd
     (fun s _ x y hxy => logMod_planarVelocity_of_uniform_approximation hmod hconv s x y hxy)
-    (by simpa only [sub_zero] using hinit (Y t))
+    (by simpa only [Function.comp_def, Function.uncurry, id_eq, sub_zero] using hinit (Y t))
   refine ⟨Y t, ?_⟩
-  simpa only [sub_self, hY0] using he (show t ∈ Icc (0 : ℝ) t from ⟨ht.1, le_rfl⟩)
+  simpa only [Function.comp_def, Function.uncurry, id_eq, sub_self, hY0] using
+    he (show t ∈ Icc (0 : ℝ) t from ⟨ht.1, le_rfl⟩)
 
 end Euler2D
 

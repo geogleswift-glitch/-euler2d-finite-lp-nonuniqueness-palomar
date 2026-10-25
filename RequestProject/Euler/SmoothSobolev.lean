@@ -84,7 +84,8 @@ theorem w1pBoundedBy_of_C1_bounds {u : R2 → R2}
       (continuous_memLp_torus
         ((EuclideanSpace.proj j : R2 →L[ℝ] ℝ).continuous.comp
           (continuous_pd_of_contDiff_one u hu i)) q).aestronglyMeasurable
-      q (by simpa only [Real.norm_eq_abs] using hgrad i j)
+      q (by simpa only [Function.comp_def, EuclideanSpace.coe_proj, Real.norm_eq_abs]
+        using hgrad i j)
   · exact integral_coord_mul_pd_matching_faces hu hfaces i j hψ
 
 /-- The same conversion using the actual support measure rather than the
@@ -147,7 +148,8 @@ theorem w1pBoundedBy_of_C1_localized_bounds {u : R2 → R2}
       (continuous_memLp_torus
         ((EuclideanSpace.proj j : R2 →L[ℝ] ℝ).continuous.comp
           (continuous_pd_of_contDiff_one u hu i)) q).aestronglyMeasurable hB q s
-      (by simpa only [Real.norm_eq_abs] using hgrad i j)
+      (by simpa only [Function.comp_def, EuclideanSpace.coe_proj, Real.norm_eq_abs]
+        using hgrad i j)
   · exact integral_coord_mul_pd_matching_faces hu hfaces i j hψ
 
 end Euler2D

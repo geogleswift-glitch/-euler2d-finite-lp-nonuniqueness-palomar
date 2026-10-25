@@ -60,8 +60,8 @@ lemma isPicardLindelof_boundedVelocity {v : ℝ → R2 → R2} {K M : ℝ≥0}
         ((M * NNReal.mk (T + 2) (by linarith) + r : ℝ≥0) : ℝ) - (r : ℝ)
     have hmax : max (T + 1 - (s : ℝ)) ((s : ℝ) - -1) ≤ T + 2 :=
       max_le (by linarith [s.2.1]) (by linarith [s.2.2])
-    simpa only [NNReal.coe_add, NNReal.coe_mul, NNReal.coe_mk,
-      add_sub_cancel_right] using mul_le_mul_of_nonneg_left hmax M.2
+    simp only [NNReal.coe_add, NNReal.coe_mul, NNReal.coe_mk, add_sub_cancel_right]
+    exact mul_le_mul_of_nonneg_left hmax M.2
 
 /-- Actual existence, derived from Picard--Lindelöf with a radius chosen
 from the speed bound and the prescribed finite time window. -/

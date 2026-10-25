@@ -143,7 +143,7 @@ theorem exists_littleAreaChart_analytic_radius {γ : ℝ≥0}
   refine ⟨ε, hε, fun v hv => ?_⟩
   have hpos := hball (y := v) (by
     rw [Subtype.dist_eq, Submodule.coe_zero, dist_zero_right]
-    simpa only [littleContourSpace_norm] using hv)
+    exact (Submodule.norm_coe v).trans_lt hv)
   exact ⟨hpos, analyticAt_littleAreaChart hγ₀ hγ₁ r v hpos⟩
 
 theorem loopArea_littleAreaChart {γ : ℝ≥0} (hγ₀ : 0 < γ) (hγ₁ : γ ≤ 1)

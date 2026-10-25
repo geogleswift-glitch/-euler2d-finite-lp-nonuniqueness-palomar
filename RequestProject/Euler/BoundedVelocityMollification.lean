@@ -43,8 +43,10 @@ theorem continuous_boundedVelocityMollification
   apply continuous_of_dominated (F := fun (p : ℝ × R2) y => φ y • v p.1 (p.2 - y))
     (fun p => (integrable_boundedVelocityMollification_integrand hφ hv hM p.1 p.2).aestronglyMeasurable)
     (fun p => ae_of_all _ (fun y => ?_)) (hφ.norm.mul_const M)
-    (ae_of_all _ (fun y => continuous_const.smul (hv.comp
-      (continuous_fst.prodMk (continuous_snd.sub continuous_const)))))
+    (ae_of_all _ (fun y => by
+      have harg : Continuous (fun p : ℝ × R2 => (p.1, p.2 - y)) := by fun_prop
+      simpa only [Pi.smul_def', Function.comp_def, Function.uncurry_apply_pair] using
+        (continuous_const : Continuous (fun _ : ℝ × R2 => φ y)).smul (hv.comp harg)))
   rw [norm_smul]
   exact mul_le_mul_of_nonneg_left (hM p.1 (p.2 - y)) (norm_nonneg _)
 
@@ -73,14 +75,16 @@ theorem exists_lipschitz_boundedVelocityMollification
     (hs : HasCompactSupport φ) (hφ : ContDiff ℝ ∞ φ)
     (hv : Continuous (Function.uncurry v)) (hM : ∀ t x, ‖v t x‖ ≤ M) :
     ∃ K : ℝ≥0, ∀ t, LipschitzWith K (boundedVelocityMollification φ v t) := by
+  letI : NormedAddCommGroup R2 := inferInstance
+  letI : NormedSpace ℝ R2 := inferInstance
   let L := (ContinuousLinearMap.lsmul ℝ ℝ : ℝ →L[ℝ] R2 →L[ℝ] R2)
-  let L' := L.precompL R2
+  let L' : (R2 →L[ℝ] ℝ) →L[ℝ] R2 →L[ℝ] R2 →L[ℝ] R2 := L.precompL R2
   have hM0 : 0 ≤ M := (norm_nonneg (v 0 0)).trans (hM 0 0)
   have hi : Integrable (fun y => ‖fderiv ℝ φ y‖) :=
     ((hφ.continuous_fderiv (by simp)).integrable_of_hasCompactSupport (hs.fderiv ℝ)).norm
-  let B : ℝ := ‖L'‖ * M * ∫ y, ‖fderiv ℝ φ y‖
+  let B : ℝ := M * ∫ y, ‖fderiv ℝ φ y‖
   have hB : 0 ≤ B := by dsimp only [B]; positivity
-  refine ⟨⟨B, hB⟩, fun t => ?_⟩
+  refine ⟨NNReal.mk B hB, fun t => ?_⟩
   have hlocal : LocallyIntegrable (v t) volume :=
     (hv.comp ((continuous_const : Continuous (fun _ : R2 => t)).prodMk continuous_id)).locallyIntegrable
   have hd (x : R2) := hs.hasFDerivAt_convolution_left (μ := volume) (g := v t)
@@ -91,13 +95,19 @@ theorem exists_lipschitz_boundedVelocityMollification
   change ‖fderiv ℝ (φ ⋆[L, volume] v t) x‖ ≤ B
   rw [(hd x).fderiv]
   have hb (y : R2) : ‖L' (fderiv ℝ φ y) (v t (x - y))‖ ≤
-      (‖L'‖ * M) * ‖fderiv ℝ φ y‖ := by
+      M * ‖fderiv ℝ φ y‖ := by
+    apply ContinuousLinearMap.opNorm_le_bound _ (mul_nonneg hM0 (norm_nonneg _))
+    intro w
+    simp only [L', ContinuousLinearMap.precompL_apply, L,
+      ContinuousLinearMap.lsmul_apply, norm_smul]
     calc
-      ‖L' (fderiv ℝ φ y) (v t (x - y))‖ ≤
-          ‖L'‖ * ‖fderiv ℝ φ y‖ * ‖v t (x - y)‖ := L'.le_opNorm₂ _ _
-      _ ≤ ‖L'‖ * ‖fderiv ℝ φ y‖ * M := by gcongr; exact hM t _
-      _ = (‖L'‖ * M) * ‖fderiv ℝ φ y‖ := by ring
-  exact (norm_integral_le_of_norm_le (hi.const_mul (‖L'‖ * M)) (ae_of_all _ hb)).trans_eq
+      ‖fderiv ℝ φ y w‖ * ‖v t (x - y)‖ ≤
+          (‖fderiv ℝ φ y‖ * ‖w‖) * ‖v t (x - y)‖ :=
+        mul_le_mul_of_nonneg_right ((fderiv ℝ φ y).le_opNorm w) (norm_nonneg _)
+      _ ≤ (‖fderiv ℝ φ y‖ * ‖w‖) * M :=
+        mul_le_mul_of_nonneg_left (hM t _) (mul_nonneg (norm_nonneg _) (norm_nonneg _))
+      _ = (M * ‖fderiv ℝ φ y‖) * ‖w‖ := by ring
+  exact (norm_integral_le_of_norm_le (hi.const_mul M) (ae_of_all _ hb)).trans_eq
     (by rw [integral_const_mul])
 
 end Euler2D

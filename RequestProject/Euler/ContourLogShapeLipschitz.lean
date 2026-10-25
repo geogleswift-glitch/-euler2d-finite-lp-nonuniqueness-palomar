@@ -60,10 +60,10 @@ theorem norm_contourC1SelfIntegral_sub_le {γ : ℝ≥0} (Z W : ContourC1Space �
     ‖ContourC1Space.selfLogIntegral Z θ - ContourC1Space.selfLogIntegral W θ‖ ≤
       ‖Z - W‖ * contourLogShapeConstant c M := by
   have hp : ContDiff ℝ 1 (fun t => ContourC1Space.lift γ Z t - ContourC1Space.lift γ W t) := by
-    simpa only [ContourC1Space.lift_sub, Pi.sub_apply] using ContourC1Space.contDiff_lift (Z - W)
+    simpa only [ContourC1Space.lift_sub, Pi.sub_def] using ContourC1Space.contDiff_lift (Z - W)
   have hd : ∀ t, ‖deriv (fun s => ContourC1Space.lift γ Z s - ContourC1Space.lift γ W s) t‖ ≤ ‖Z - W‖ := by
     intro t
-    simpa only [ContourC1Space.lift_sub, Pi.sub_apply] using ContourC1Space.norm_deriv_lift_le (Z - W) t
+    simpa only [ContourC1Space.lift_sub, Pi.sub_def] using ContourC1Space.norm_deriv_lift_le (Z - W) t
   have hdiff (t : ℝ) :
       ‖deriv (ContourC1Space.lift γ Z) t - deriv (ContourC1Space.lift γ W) t‖ ≤ ‖Z - W‖ := by
     rw [ContourC1Space.deriv_lift, ContourC1Space.deriv_lift]

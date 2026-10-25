@@ -237,7 +237,7 @@ lemma abs_localKernelTranslationError_sub_le (h a : R2) :
     _ ≤ ∫ x, ‖localPlanarKernel (x + h) - localPlanarKernel (x + a)‖ := by
       apply integral_mono (hI.sub hJ).norm hR
       intro x
-      simpa only [sub_sub_sub_cancel_right] using
+      simpa only [Pi.sub_apply, Real.norm_eq_abs, sub_sub_sub_cancel_right] using
         abs_norm_sub_norm_le (localPlanarKernel (x + h) - localPlanarKernel x)
           (localPlanarKernel (x + a) - localPlanarKernel x)
     _ = _ := integral_norm_translation_two_shifts h a
@@ -252,8 +252,8 @@ theorem continuous_localKernelTranslationError : Continuous localKernelTranslati
   have hdiff : Tendsto (fun h => localKernelTranslationError h - localKernelTranslationError a)
       (𝓝 a) (𝓝 0) := by
     apply squeeze_zero_norm (fun h => ?_) hlim
-    simpa only [Real.norm_eq_abs] using abs_localKernelTranslationError_sub_le h a
-  simpa only [sub_add_cancel, zero_add] using hdiff.add_const (localKernelTranslationError a)
+    simpa only [Real.norm_eq_abs, Function.comp_def] using abs_localKernelTranslationError_sub_le h a
+  simpa only [ContinuousAt, sub_add_cancel, zero_add] using hdiff.add_const (localKernelTranslationError a)
 
 end Euler2D
 

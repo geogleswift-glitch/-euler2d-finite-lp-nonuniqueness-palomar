@@ -35,7 +35,7 @@ theorem tendsto_contourRegularizedLogBoundaryIntegral_of_separated
       (measurable_const.add (hn.measurable.pow_const 2))).const_mul (1 / 2 : ℝ)).smul
       hdzc.measurable).aestronglyMeasurable
   have hB : IntegrableOn (fun _ : ℝ => D * C) (Ioc (0 : ℝ) (2 * Real.pi)) :=
-    (intervalIntegrable_iff_integrableOn_Ioc_of_le hab).mp intervalIntegral.intervalIntegrable_const
+    (intervalIntegrable_iff_integrableOn_Ioc_of_le hab).mp intervalIntegrable_const
   have hb : ∀ᶠ δ : ℝ in 𝓝 0, ∀ᵐ φ ∂volume.restrict (Ioc (0 : ℝ) (2 * Real.pi)),
       ‖((1 / 2 : ℝ) * Real.log (δ ^ 2 + ‖x - z φ‖ ^ 2)) • dz φ‖ ≤ D * C := by
     filter_upwards [show ∀ᶠ δ : ℝ in 𝓝 0, |δ| ≤ 1 from by
@@ -64,7 +64,7 @@ theorem tendsto_contourRegularizedLogBoundaryIntegral_of_separated
         (‖x - z φ‖ ^ 2)
     have hl := ((Real.continuousAt_log (sq_pos_of_pos hv).ne').tendsto.comp ht).const_mul (1 / 2 : ℝ)
     have hs := hl.smul_const (dz φ)
-    simpa only [Real.log_pow, Nat.cast_ofNat,
+    simpa only [Function.comp_def, Real.log_pow, Nat.cast_ofNat,
       show (1 / 2 : ℝ) * (2 * Real.log ‖x - z φ‖) = Real.log ‖x - z φ‖ by ring] using hs
   have hDCT := tendsto_integral_filter_of_dominated_convergence
     (μ := volume.restrict (Ioc (0 : ℝ) (2 * Real.pi)))

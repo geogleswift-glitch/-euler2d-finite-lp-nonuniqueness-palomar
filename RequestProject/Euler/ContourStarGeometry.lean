@@ -165,7 +165,7 @@ theorem contourC1AngularJacobian_pos (hr : 0 < r) (hsmall : ‖Z - Z₀‖ ≤ r
     (θ : ℝ) :
     0 < contourAngularJacobian (ContourC1Space.lift γ Z)
       (deriv (ContourC1Space.lift γ Z)) θ :=
-  contourAngularJacobian_pos_of_quarter_radius hr (norm_nonneg _) hsmall
+  contourAngularJacobian_pos_of_quarter_radius (ε := ‖Z - Z₀‖) hr (norm_nonneg (Z - Z₀)) hsmall
     (contourC1_norm_sub_ref_le Z Z₀ href θ) (contourC1_norm_deriv_sub_ref_le Z Z₀ href θ)
 
 theorem contourC1_ne_zero (hr : 0 < r) (hsmall : ‖Z - Z₀‖ ≤ r / 4)

@@ -50,7 +50,7 @@ lemma W1pBoundedBy.add {q : ENNReal} (hq : 1 ≤ q) {M N : ℝ}
       eLpNorm (fun x => f x + g x) q μT ≤ ENNReal.ofReal (M + N) := by
     calc
       eLpNorm (fun x => f x + g x) q μT ≤ eLpNorm f q μT + eLpNorm g q μT :=
-        eLpNorm_add_le hf.1 hg.1 hq
+        eLpNorm_add_le hq
       _ ≤ ENNReal.ofReal M + ENNReal.ofReal N := add_le_add hfb hgb
       _ = ENNReal.ofReal (M + N) := (ENNReal.ofReal_add hM hN).symm
   have huv_mem : MemLp (fun x => u x + v x) q μT := humem.add hvmem

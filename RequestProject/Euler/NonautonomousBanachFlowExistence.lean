@@ -62,7 +62,8 @@ theorem exists_local_nonautonomous_banachFlow [CompleteSpace E]
     constructor <;> linarith [ht.1, ht.2]
   let t₀ : Icc (-(2 * T)) (2 * T) := ⟨0, by constructor <;> linarith⟩
   have hpl : IsPicardLindelof F t₀ x
-      (⟨a / 2, (half_pos ha).le⟩ : ℝ≥0) ⟨a / 4, by positivity⟩ ⟨L, hL.le⟩ K := by
+      (NNReal.mk (a / 2) (half_pos ha).le) (NNReal.mk (a / 4) (by positivity))
+      (NNReal.mk L hL.le) K := by
     refine ⟨fun t ht => (hLip t (htime ht)).mono
       ((closedBall_subset_ball (half_lt_self ha)).trans hball), ?_,
       fun t ht y hy => hb t (htime ht) y hy, ?_⟩
@@ -86,7 +87,8 @@ theorem exists_local_nonautonomous_banachFlow [CompleteSpace E]
       (fun _ _ => (β b hb).compProj_mem_closedBall hpl.mul_max_le) b ht |>.congr_of_mem _ ht
     intro t' ht'
     nth_rw 1 [← hβ b hb]
-    rw [FunSpace.compProj_of_mem ht', FunSpace.next_apply]
+    rw [FunSpace.compProj_of_mem ht']
+    exact FunSpace.next_apply hpl hb (β b hb) (t := ⟨t', ht'⟩)
   refine ⟨a, ha, hball, T, hT, hTmax, X, ?_⟩
   constructor
   · intro b hb
@@ -94,7 +96,8 @@ theorem exists_local_nonautonomous_banachFlow [CompleteSpace E]
     change (if hb : b ∈ closedBall x (a / 4) then (β b hb).compProj else fun _ => b) 0 = b
     rw [dif_pos hbc]
     change (β b hbc).compProj (t₀ : ℝ) = b
-    rw [FunSpace.compProj_val, ← hβ b hbc, FunSpace.next_apply₀]
+    rw [FunSpace.compProj_val, ← hβ b hbc]
+    exact FunSpace.next_apply₀ hpl hbc (β b hbc)
   · intro b hb
     have hbc : b ∈ closedBall x (a / 4) := ball_subset_closedBall hb
     have he : X b = (β b hbc).compProj := dif_pos hbc

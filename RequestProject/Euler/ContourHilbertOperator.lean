@@ -38,6 +38,9 @@ theorem holderWith_contourHilbertOnCircle {γ : ℝ≥0} (f : ContourHolderSpace
     HolderWith (⟨hilbertHolderConstant (γ : ℝ) * ‖f‖,
       mul_nonneg (hilbertHolderConstant_nonneg hγ hγ1) (norm_nonneg f)⟩ : ℝ≥0) γ
       (contourHilbertOnCircle f) := by
+  change HolderWith (NNReal.mk (hilbertHolderConstant (γ : ℝ) * ‖f‖)
+    (mul_nonneg (hilbertHolderConstant_nonneg hγ hγ1) (norm_nonneg f))) γ
+      (contourHilbertOnCircle f)
   intro x y
   rw [edist_nndist, edist_nndist, ← ENNReal.coe_rpow_of_nonneg _ γ.coe_nonneg,
     ← ENNReal.coe_mul, ENNReal.coe_le_coe]

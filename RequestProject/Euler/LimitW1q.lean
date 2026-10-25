@@ -32,7 +32,7 @@ lemma l2_norm_le_of_W1pBoundedBy {q : ENNReal} (hq : 2 ≤ q) {S : ℝ} {u : L2T
       (ENNReal.rpow_ne_top_of_nonneg hexp (measure_ne_top μT univ))
   rw [Lp.norm_def]
   apply ENNReal.toReal_mono hC
-  exact (eLpNorm_le_eLpNorm_mul_rpow_measure_univ hq h.1.1).trans
+  exact (eLpNorm_le_eLpNorm_mul_rpow_measure_univ hq h.1.aestronglyMeasurable).trans
     (mul_le_mul_left h.2.1 _)
 
 /-- The full conclusion of the limit proposition, including a uniform

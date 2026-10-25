@@ -81,7 +81,7 @@ theorem hasDerivAt_nearCircleLog {z : ℝ → ℂ} {r ε θ τ : ℝ}
     ((hz.differentiable one_ne_zero (θ + τ)).hasDerivAt) hz0 hr0
     (contourChordRatio_mem_slitPlane hr hε hsmall hp hd hangle hne)
   have ht : HasDerivAt (fun t : ℝ => θ + t) 1 τ := by
-    simpa only [Pi.add_apply, id_eq, zero_add] using
+    simpa only [Pi.add_def, id_eq, zero_add] using
       ((hasDerivAt_const τ θ).add (hasDerivAt_id τ))
   have hcomp := hh.scomp τ ht
   simpa only [Function.comp_def, zero_add, one_smul, contourCauchyKernelDifference] using hcomp

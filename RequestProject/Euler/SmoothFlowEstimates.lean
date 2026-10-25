@@ -44,7 +44,7 @@ theorem boundedParticleFlow_dist_le {v : ℝ → R2 → R2} {K M : ℝ≥0}
       have hd := (boundedParticleFlow_hasDerivAt hv hT s a
         (t := -u) (by constructor <;> linarith [s.2.2, t.2.1, hu.1, hu.2])).scomp u
           (hasDerivAt_neg u)
-      simpa only [neg_one_smul] using hd
+      simpa only [Function.comp_def, neg_one_smul] using hd
     have hd := dist_le_of_trajectories_ODE hvel
       ((boundedParticleFlow_continuous_time hv hT s a).comp continuous_neg).continuousOn
       (fun u hu => (hder a u hu).hasDerivWithinAt)
@@ -64,6 +64,8 @@ theorem boundedParticleFlow_lipschitz_space {v : ℝ → R2 → R2} {K M : ℝ�
       (boundedParticleFlow hv hT s t) := by
   apply LipschitzWith.of_dist_le_mul
   intro a b
+  change dist (boundedParticleFlow hv hT s t a) (boundedParticleFlow hv hT s t b) ≤
+    Real.exp ((K : ℝ) * |(t : ℝ) - s|) * dist a b
   simpa only [mul_comm] using boundedParticleFlow_dist_le hv hT s t a b
 
 theorem boundedParticleFlow_dist_lower_le {v : ℝ → R2 → R2} {K M : ℝ≥0}
@@ -103,9 +105,10 @@ theorem flowLinearizationError_hasDerivAt {v : ℝ → R2 → R2} {K M : ℝ≥0
     (boundedParticleFlow_hasDerivAt hv hT s a ht)
   have hAh := hA.clm_apply (hasDerivAt_const t h)
   simp only [ContinuousLinearMap.comp_apply, map_zero, add_zero] at hAh
-  convert hd.sub hAh using 1
-  simp only [flowLinearizationError, flowVelocityRemainder, particleDisplacement, map_sub]
-  abel
+  convert hd.sub hAh using 1 <;>
+    (try funext r) <;>
+    (try simp only [flowLinearizationError, flowVelocityRemainder, particleDisplacement,
+      Pi.sub_def, map_sub]) <;> abel
 
 /-- A uniform Taylor-remainder bound controls the actual spatial
 linearization error by the inhomogeneous Grönwall bound. -/

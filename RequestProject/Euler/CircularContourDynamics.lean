@@ -68,7 +68,7 @@ theorem contourBoundaryField_reparametrize {ι : Type*} [Fintype ι]
   have hd (j : ι) : deriv (fun φ => z j (φ + b j)) = fun φ => deriv (z j) (φ + b j) := by
     funext φ
     have h := ((hz j (φ + b j)).hasDerivAt).scomp φ ((hasDerivAt_id φ).add_const (b j))
-    simpa only [Function.comp_def, one_smul] using h.deriv
+    simpa only [Function.comp_def, id_eq, one_smul] using h.deriv
   unfold contourBoundaryField
   simp_rw [hd]
   apply congrArg ((-1 / (2 * Real.pi) : ℂ) * ·)
@@ -103,7 +103,9 @@ theorem circularMaterialContours_hasDerivAt (t : ℝ) (i : Fin 2) (θ : ℝ) :
   have hd := (hasDerivAt_refCircle (circularContourRadii i)
     (θ + circularContourAngularVelocities i * t)).scomp t
       ((hasDerivAt_const t θ).add ((hasDerivAt_id t).const_mul (circularContourAngularVelocities i)))
-  convert hd using 1 <;> simp only [Function.comp_def, zero_add, Complex.real_smul, refCircle] <;> ring
+  convert hd using 1 <;>
+    simp only [Function.comp_def, Pi.add_def, id_eq, zero_add, Complex.real_smul, refCircle] <;>
+    ring
 
 theorem circularMaterialContours_period (i : Fin 2) (θ : ℝ) :
     circularMaterialContours period i θ = circularMaterialContours 0 i θ := by

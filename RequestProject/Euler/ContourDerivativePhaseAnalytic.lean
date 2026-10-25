@@ -40,7 +40,8 @@ theorem analyticContourDerivativePhase_apply {γ : ℝ≥0} (Z : ContourC1Space 
     {c : ℝ} (hc : 0 < c) (hZ : ContourC1Space.HasChordArcLower Z c) (θ : ℝ) :
     analyticContourDerivativePhase γ Z (θ : ContourCircle) =
       conj (deriv (ContourC1Space.lift γ Z) θ) / deriv (ContourC1Space.lift γ Z) θ := by
-  rw [analyticContourDerivativePhase_eq Z hc hZ, contourDerivativePhase_apply]
+  rw [analyticContourDerivativePhase_eq Z hc hZ]
+  exact contourDerivativePhase_apply Z hc hZ θ
 
 /-- Genuine Banach-input real analyticity of the actual density. -/
 theorem analyticAt_contourDerivativePhase {γ : ℝ≥0} (Z : ContourC1Space γ)

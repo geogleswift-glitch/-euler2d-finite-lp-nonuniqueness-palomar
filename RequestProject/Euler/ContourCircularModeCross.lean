@@ -83,7 +83,7 @@ theorem circularContourModeVariation_outside_positive {r s : ℝ}
     circularContourModeVariation r s ((N + 2 : ℕ) : ℤ) a b =
       I * (Real.pi : ℂ) * (-a + ((r / s : ℝ) : ℂ) ^ N * conj b) := by
   have hA1 : circularCauchyMode r s 1 = -(s : ℂ)⁻¹ * (2 * Real.pi : ℂ) := by
-    simpa only [Nat.cast_one, pow_zero, one_mul] using circularCauchyMode_outside_positive hr.le hs hrs 0
+    simpa only [Nat.zero_add, Nat.cast_one, pow_zero, one_mul] using circularCauchyMode_outside_positive hr.le hs hrs 0
   have hAp : circularCauchyMode r s ((N + 3 : ℕ) : ℤ) =
       -(s : ℂ)⁻¹ * (((r / s : ℝ) : ℂ) ^ (N + 2) * (2 * Real.pi : ℂ)) :=
     circularCauchyMode_outside_positive hr.le hs hrs (N + 2)
@@ -109,7 +109,7 @@ theorem circularContourModeVariation_outside_negative {r s : ℝ}
     circularContourModeVariation r s (-((N + 1 : ℕ) : ℤ)) a b =
       I * (Real.pi : ℂ) * (-a + ((r / s : ℝ) : ℂ) ^ (N + 1) * b) := by
   have hA1 : circularCauchyMode r s 1 = -(s : ℂ)⁻¹ * (2 * Real.pi : ℂ) := by
-    simpa only [Nat.cast_one, pow_zero, one_mul] using circularCauchyMode_outside_positive hr.le hs hrs 0
+    simpa only [Nat.zero_add, Nat.cast_one, pow_zero, one_mul] using circularCauchyMode_outside_positive hr.le hs hrs 0
   rw [circularContourModeVariation_formula hr hs hrs.ne,
     show -((N + 1 : ℕ) : ℤ) + 1 = -(N : ℤ) by omega,
     show -((N + 1 : ℕ) : ℤ) - 1 = -((N + 2 : ℕ) : ℤ) by omega,

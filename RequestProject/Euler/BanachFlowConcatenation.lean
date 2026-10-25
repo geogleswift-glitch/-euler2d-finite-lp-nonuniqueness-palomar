@@ -94,7 +94,7 @@ theorem contDiffOn_concatenateBanachFlows
     ContDiffOn ℝ n (fun b => concatenateBanachFlows X Y T b t) V := by
   by_cases htT : t ≤ T
   · simpa only [concatenateBanachFlows, if_pos htT] using hX t ⟨ht.1, htT⟩
-  · simpa only [concatenateBanachFlows, if_neg htT] using
+  · simpa only [concatenateBanachFlows, if_neg htT, Function.comp_def] using
       (hY (t - T) ⟨by linarith, by linarith [ht.2]⟩).comp (hX T ⟨hT, le_rfl⟩) hmap
 
 end Euler2D

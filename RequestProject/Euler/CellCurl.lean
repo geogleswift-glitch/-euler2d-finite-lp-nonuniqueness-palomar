@@ -93,7 +93,7 @@ lemma cellOmegaSq_curl_identity (s : ℝ) :
 lemma tendsto_deriv_profileAverage_of_hasDerivAt {f : ℝ → ℝ} (hf : Continuous f)
     {s d : ℝ} (hd : HasDerivAt f d s) :
     Tendsto (fun n => deriv (profileAverage f (radialApproxScale n)) s) atTop (𝓝 d) := by
-  simpa only [deriv_profileAverage hf, smul_eq_mul] using
+  simpa only [deriv_profileAverage hf, smul_eq_mul, Function.comp_def] using
     hd.tendsto_slope_zero_right.comp tendsto_radialApproxScale
 
 lemma ae_sq_radius_ne_interfaces :
