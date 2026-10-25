@@ -27,7 +27,7 @@ private theorem real_analyticAt_complexOperator_apply
     {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] [NormedSpace ℂ V]
     [IsScalarTower ℝ ℂ V] (v : V) (L : V →L[ℂ] V) :
     AnalyticAt ℝ (fun p : V × (V →L[ℂ] V) => p.2 p.1) (v, L) :=
-  ((ContinuousLinearMap.apply ℂ V (E := V)).bilinearRestrictScalars ℝ).analyticAt_bilinear (v, L)
+  ((ContinuousLinearMap.apply ℂ V (E' := V)).bilinearRestrictScalars ℝ).analyticAt_bilinear (v, L)
 
 def analyticContourLogDerivativeHolder (hγ : 0 < (γ : ℝ)) (hγ1 : (γ : ℝ) < 1)
     (Z : ContourC1Space γ) : ContourHolderSpace γ :=

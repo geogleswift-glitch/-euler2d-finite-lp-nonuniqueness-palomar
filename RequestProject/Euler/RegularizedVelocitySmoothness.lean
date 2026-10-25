@@ -75,7 +75,7 @@ theorem hasFDerivAt_regularizedLabelVelocity {K : R2 → R2} {w : R2 → ℝ}
   · exact Eventually.of_forall fun b y _ => by
       have hd := ((hKC1.differentiable one_ne_zero _).hasFDerivAt.comp y
         (((hasFDerivAt_id y).sub_const (b + η b)).add_const torusCenter)).const_smul (w b)
-      simpa only [ContinuousLinearMap.comp_id] using hd
+      simpa only [Pi.smul_def, Function.comp_def, id_eq, ContinuousLinearMap.comp_id] using hd
 
 theorem fderiv_regularizedLabelVelocity {K : R2 → R2} {w : R2 → ℝ}
     {L M : ℝ≥0} (hKC1 : ContDiff ℝ 1 K) (hKL : LipschitzWith L K)
@@ -100,10 +100,10 @@ theorem continuous_regularizedLabelDerivative {K : R2 → R2} {w : R2 → ℝ}
       RegularizedVelocityRegularity.norm_label_derivative_le hKL _ _ b
   · exact hw.norm.const_mul _
   · exact Eventually.of_forall fun b => by
-      apply Continuous.const_smul
-      exact (hKC1.continuous_fderiv one_ne_zero).comp
-        ((continuous_snd.sub (continuous_const.add
-          ((hη.comp continuous_fst).eval continuous_const))).add continuous_const)
+      have harg : Continuous (fun p : ℝ × R2 =>
+          p.2 - (b + η p.1 b) + torusCenter) := by fun_prop
+      simpa only [Pi.smul_def, Function.comp_def] using
+        ((hKC1.continuous_fderiv one_ne_zero).comp harg).const_smul (w b)
 
 theorem isC1SpatialVelocity_regularizedLabelVelocity {K : R2 → R2} {w : R2 → ℝ}
     {L M : ℝ≥0} (hKC1 : ContDiff ℝ 1 K) (hKL : LipschitzWith L K)

@@ -57,7 +57,7 @@ theorem nearCircleSelfLogC1_mem_little {γ : ℝ≥0}
   have hvn : (v n).val = u n := by simp only [v, dif_pos hn]
   apply ContourC1Space.mem_little_of_lift_eq_smooth_selfLog
     (v n).val.val (nearCircleSelfLogC1 hγ hγ1 Z₀ hr href (v n))
-    (by simpa only [hvn] using hs n)
+    (by simpa only [hvn, LittleContourSpace.lift] using hs n)
     (positiveChordConstant_pos (nearCirclePositiveContour Z₀ hr href (v n)))
     (hasChordArcLower_positiveChordConstant (nearCirclePositiveContour Z₀ hr href (v n)))
     (lift_nearCircleSelfLogC1 hγ hγ1 Z₀ hr href (v n))

@@ -182,7 +182,7 @@ theorem circularBanachFlow_area {γ : ℝ≥0} (hγ : 0 < γ) (hγ1 : (γ : ℝ)
     exact Icc_subset_Icc le_rfl ht.2
   have he := intervalIntegral.integral_eq_sub_of_hasDerivAt
     (a := 0) (b := t) (fun s hs => hd s (hscope hs))
-    (intervalIntegral.intervalIntegrable_const :
+    (intervalIntegrable_const :
       IntervalIntegrable (fun _ : ℝ => (0 : ℝ)) volume 0 t)
   have heq := sub_eq_zero.mp (by simpa only [intervalIntegral.integral_zero] using he.symm)
   simpa only [hX.initial W hW] using heq

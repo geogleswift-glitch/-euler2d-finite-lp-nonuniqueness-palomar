@@ -34,18 +34,26 @@ theorem isC1SpatialVelocity_boundedVelocityMollification
     exact (hs.hasFDerivAt_convolution_left (μ := volume) (g := v p.1)
       L (hφ.of_le (by simp)) hlocal p.2).fderiv
   rw [he]
+  have hM0 : 0 ≤ M := (norm_nonneg (v 0 0)).trans (hM 0 0)
   have hb (p : ℝ × R2) (y : R2) :
-      ‖L' (fderiv ℝ φ y) (v p.1 (p.2 - y))‖ ≤ (‖L'‖ * M) * ‖fderiv ℝ φ y‖ := by
+      ‖L' (fderiv ℝ φ y) (v p.1 (p.2 - y))‖ ≤ M * ‖fderiv ℝ φ y‖ := by
+    apply ContinuousLinearMap.opNorm_le_bound _ (mul_nonneg hM0 (norm_nonneg _))
+    intro w
+    simp only [L', ContinuousLinearMap.precompL_apply, L,
+      ContinuousLinearMap.lsmul_apply, norm_smul]
     calc
-      _ ≤ ‖L'‖ * ‖fderiv ℝ φ y‖ * ‖v p.1 (p.2 - y)‖ := L'.le_opNorm₂ _ _
-      _ ≤ ‖L'‖ * ‖fderiv ℝ φ y‖ * M := by gcongr; exact hM p.1 _
-      _ = _ := by ring
+      ‖fderiv ℝ φ y w‖ * ‖v p.1 (p.2 - y)‖ ≤
+          (‖fderiv ℝ φ y‖ * ‖w‖) * ‖v p.1 (p.2 - y)‖ :=
+        mul_le_mul_of_nonneg_right ((fderiv ℝ φ y).le_opNorm w) (norm_nonneg _)
+      _ ≤ (‖fderiv ℝ φ y‖ * ‖w‖) * M :=
+        mul_le_mul_of_nonneg_left (hM p.1 _) (mul_nonneg (norm_nonneg _) (norm_nonneg _))
+      _ = (M * ‖fderiv ℝ φ y‖) * ‖w‖ := by ring
   have hm (p : ℝ × R2) :
       Continuous (fun y => L' (fderiv ℝ φ y) (v p.1 (p.2 - y))) :=
     (L'.continuous.comp hdφ).clm_apply
       (hv.comp (continuous_const.prodMk (continuous_const.sub continuous_id)))
   exact continuous_of_dominated (fun p => (hm p).aestronglyMeasurable)
-    (fun p => ae_of_all _ (hb p)) (hi.const_mul (‖L'‖ * M))
+    (fun p => ae_of_all _ (hb p)) (hi.const_mul M)
     (ae_of_all _ (fun y => (L' (fderiv ℝ φ y)).continuous.comp
       (hv.comp (continuous_fst.prodMk (continuous_snd.sub continuous_const)))))
 

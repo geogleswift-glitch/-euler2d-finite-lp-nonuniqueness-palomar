@@ -117,7 +117,7 @@ theorem contourArea_eq_initial_of_material_boundary_field
     exact Icc_subset_Icc le_rfl ht.2
   have he := intervalIntegral.integral_eq_sub_of_hasDerivAt
     (a := a) (b := t) (fun s hs => hd s (hscope hs))
-    (intervalIntegral.intervalIntegrable_const :
+    (intervalIntegrable_const :
       IntervalIntegrable (fun _ : ℝ => (0 : ℝ)) volume a t)
   exact sub_eq_zero.mp (by simpa only [intervalIntegral.integral_zero] using he.symm)
 

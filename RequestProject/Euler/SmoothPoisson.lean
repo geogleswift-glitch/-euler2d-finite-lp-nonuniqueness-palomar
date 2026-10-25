@@ -93,7 +93,8 @@ lemma boxFourierCoeff_regularizer {g : R2 → ℝ} (hg : IsScalarTest g) (k : Fi
   have h₀ := scalarTest_pd (scalarTest_pd hg 0) 0
   have h₁ := scalarTest_pd (scalarTest_pd hg 1) 1
   rw [show regularizer g = (fun x => (g x - pd 0 (pd 0 g) x) - pd 1 (pd 1 g) x) from rfl,
-    boxFourierCoeff_sub (hg.1.continuous.sub h₀.1.continuous) h₁.1.continuous,
+    boxFourierCoeff_sub (f := fun x => g x - pd 0 (pd 0 g) x)
+      (hg.1.continuous.sub h₀.1.continuous) h₁.1.continuous,
     boxFourierCoeff_sub hg.1.continuous h₀.1.continuous,
     boxFourierCoeff_pd (scalarTest_pd hg 0), boxFourierCoeff_pd hg,
     boxFourierCoeff_pd (scalarTest_pd hg 1), boxFourierCoeff_pd hg]
