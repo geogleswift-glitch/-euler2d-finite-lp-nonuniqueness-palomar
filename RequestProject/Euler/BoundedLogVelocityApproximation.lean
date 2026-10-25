@@ -42,9 +42,9 @@ theorem planarVelocityMollifier_zero {ε : ℝ} (hε : 0 < ε) {x : R2} (hx : ε
     planarVelocityMollifier ε hε x = 0 := by
   unfold planarVelocityMollifier ContDiffBump.normed
   rw [(planarVelocityMollifierBump ε hε).zero_of_le_dist
-    (by simpa only [dist_zero_right] using hx),
+    (by simpa only [dist_zero_right, planarVelocityMollifierBump] using hx),
     (planarVelocityMollifierBump ε hε).zero_of_le_dist
-      (by simpa only [dist_zero_right, norm_perpJ] using hx)]
+      (by simpa only [dist_zero_right, norm_perpJ, planarVelocityMollifierBump] using hx)]
   norm_num
 
 theorem planarVelocityMollifier_perpJ {ε : ℝ} (hε : 0 < ε) (x : R2) :
@@ -103,7 +103,8 @@ theorem planarVelocityApproxScale_le_half (n : ℕ) : planarVelocityApproxScale 
 theorem tendsto_planarVelocityApproxScale : Tendsto planarVelocityApproxScale atTop (𝓝 0) := by
   have hh : Tendsto (fun n : ℕ => 1 / ((n : ℝ) + 1)) atTop (𝓝 (0 : ℝ)) :=
     tendsto_one_div_add_atTop_nhds_zero_nat
-  simpa only [planarVelocityApproxScale, zero_div] using
+  change Tendsto (fun n : ℕ => (1 / ((n : ℝ) + 1)) / 4) atTop (𝓝 0)
+  simpa only [zero_div] using
     (hh.div_const (4 : ℝ))
 
 def smoothBoundedLogVelocityApproximation (v : ℝ → R2 → R2) (n : ℕ) : ℝ → R2 → R2 :=
@@ -139,7 +140,8 @@ theorem exists_smoothBoundedLogVelocityApproximation
   · have hlim : Tendsto (fun n => (C : ℝ) * logFlowModulus (planarVelocityApproxScale n))
         atTop (𝓝 0) := by
       have he := (continuous_logFlowModulus.tendsto 0).comp tendsto_planarVelocityApproxScale
-      simpa only [logFlowModulus, zero_mul, mul_zero, sub_zero] using he.const_mul (C : ℝ)
+      simpa only [Function.comp_def, logFlowModulus, zero_mul, mul_zero, sub_zero] using
+        he.const_mul (C : ℝ)
     rw [Metric.tendstoUniformly_iff]
     intro ε hε
     filter_upwards [(tendsto_order.mp hlim).2 ε hε] with n hn p

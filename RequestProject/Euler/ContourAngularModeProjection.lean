@@ -127,6 +127,8 @@ theorem contourAngularModeProjectionCLM_eq_rotationAverage {γ : ℝ≥0}
 theorem norm_contourAngularModeProjectionCLM_le {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : γ ≤ 1) (m : ℤ) :
     ‖contourAngularModeProjectionCLM hγ hγ1 m‖ ≤ 2 := by
+  letI : NormSMulClass ℝ (LittleContourSpace γ) :=
+    NormedSpace.toNormSMulClass (𝕜 := ℝ) (E := LittleContourSpace γ)
   apply (contourAngularModeProjectionCLM hγ hγ1 m).opNorm_le_bound (by norm_num)
   intro H
   rw [contourAngularModeProjectionCLM_eq_rotationAverage]
@@ -138,8 +140,15 @@ theorem norm_contourAngularModeProjectionCLM_le {γ : ℝ≥0}
       (fun b _ => by
         have hr : ‖contourRotationLittleCLM γ b H‖ = ‖H‖ :=
           norm_contourRotationLittleCLM b H
-        rw [norm_smul, hr, Real.norm_eq_abs]
-        exact (mul_le_mul_of_nonneg_right (Real.abs_cos_le_one _) (norm_nonneg H)).trans_eq (one_mul _))
+        calc
+          ‖Real.cos ((m : ℝ) * b) • contourRotationLittleCLM γ b H‖ =
+              ‖Real.cos ((m : ℝ) * b)‖ * ‖contourRotationLittleCLM γ b H‖ :=
+            norm_smul _ _
+          _ = ‖Real.cos ((m : ℝ) * b)‖ * ‖H‖ :=
+            congrArg (fun r : ℝ => ‖Real.cos ((m : ℝ) * b)‖ * r) hr
+          _ ≤ ‖H‖ := by
+            rw [Real.norm_eq_abs]
+            exact (mul_le_mul_of_nonneg_right (Real.abs_cos_le_one _) (norm_nonneg H)).trans_eq (one_mul _))
     calc
       _ ≤ ‖H‖ * |2 * Real.pi - (0 : ℝ)| := h
       _ = _ := by rw [sub_zero, abs_of_pos (by positivity : (0 : ℝ) < 2 * Real.pi)]

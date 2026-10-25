@@ -59,8 +59,13 @@ theorem neg_perpJ_perpJ_identity (x : R2) : -perpJ (perpJ x) = x := by
 
 theorem hasFDerivAt_torusQuarterTurnInverse (x : R2) :
     HasFDerivAt torusQuarterTurnInverse (-perpJL) x := by
-  convert (((-perpJL).hasFDerivAt (x := x - torusCenter)).comp x
-    ((hasFDerivAt_id x).sub_const torusCenter)).const_add torusCenter using 1
+  have hd := (((-perpJL).hasFDerivAt (x := x - torusCenter)).comp x
+    ((hasFDerivAt_id x).sub_const torusCenter)).const_add torusCenter
+  have hd' := hd.congr_fderiv (ContinuousLinearMap.comp_id (-perpJL))
+  exact hd'.congr_of_eventuallyEq (f₁ := torusQuarterTurnInverse)
+    (Eventually.of_forall fun y => by
+      simp only [torusQuarterTurnInverse, Function.comp_def, id_eq,
+        ContinuousLinearMap.neg_apply, perpJL_apply, sub_eq_add_neg])
 
 theorem planarMaterialLabelVelocity_quarterConjugate
     {K : R2 → R2} {w : R2 → ℝ}

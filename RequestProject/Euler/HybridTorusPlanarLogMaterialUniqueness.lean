@@ -70,7 +70,6 @@ theorem hybrid_local_material_particle_uniqueness_active_log_common
     rw [hYH] at hmain
     have hcommon := norm_commonLogField_sub_le_epsilon_affine hM hC
       (hEM t ht) (hElog t ht) hD (X t a) (Y t a) (hd a) hε hε1
-    dsimp only
     rw [heqX t ht a a.property, heqY t ht a a.property, add_sub_add_comm]
     exact (norm_add_le _ _).trans ((add_le_add hmain hcommon).trans_eq (by dsimp only [K]; ring))
 

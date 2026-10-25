@@ -188,7 +188,10 @@ theorem circularGrowingVariation_ne_zero {γ : ℝ≥0}
   have he := congrArg (fun H : Fin 2 → LittleContourSpace γ =>
     (LittleContourSpace.lift γ (H 0) 0).re) hzero
   rw [circularGrowingVariation_zero] at he
-  rw [lift_circularNormalModeLittle] at he
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+  change (LittleContourSpace.lift γ
+    (circularNormalModeLittle hγ hγle 2 vPlus circularGrowingTangent 0) 0).re = _ at he
+  rw [lift_circularNormalModeLittle hγ hγle 2 vPlus circularGrowingTangent 0 0] at he
   norm_num [vPlus, contourCircleCharacter_at_zero, refCircle, circularContourRadii,
     Complex.mul_re, Complex.mul_im] at he
   exact cellA_pos.ne' he

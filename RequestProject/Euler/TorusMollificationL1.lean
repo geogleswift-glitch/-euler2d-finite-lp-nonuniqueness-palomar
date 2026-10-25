@@ -95,6 +95,9 @@ theorem integral_norm_regularizedTorusKernel_le {ε : ℝ} (hε : 0 < ε) (hε1 
     (torusKernelMollifier_test hε hε1).1.continuous (torusKernelMollifier_nonneg ε hε)
     integrable_torusBiotSavartKernel measurable_torusBiotSavartKernel
     isTorusPeriodic_torusBiotSavartKernel
+  change (∫ x in torusBox,
+    ‖torusKernelAverage (torusKernelMollifier ε hε) torusBiotSavartKernel x‖) ≤
+      ∫ x in torusBox, ‖torusBiotSavartKernel x‖
   simpa only [torusKernelMollifier_integral hε hε1, one_mul] using h
 
 lemma regularizedTorusKernel_sub_eq_average {ε : ℝ} (hε : 0 < ε) (hε1 : ε ≤ 1)
@@ -139,6 +142,7 @@ theorem integral_norm_regularizedTorusKernel_translation_le {ε : ℝ}
   have hb := integral_norm_torusKernelAverage_le
     (torusKernelMollifier_test hε hε1).1.continuous (torusKernelMollifier_nonneg ε hε)
     (integrable_torusBiotSavartKernel_translation_difference h) hgm hgp
+  unfold torusKernelTranslationError
   simpa only [torusKernelMollifier_integral hε hε1, one_mul] using hb
 
 theorem exists_uniform_regularizedKernel_translation_le_logFlowModulus :
