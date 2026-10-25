@@ -25,7 +25,7 @@ theorem momentN_complexPhysicalPlane_fourth (w : R2 → ℝ) :
   have hh := complexPhysicalPlane.measurePreserving.integral_comp
     complexPhysicalPlane.toHomeomorph.measurableEmbedding (planarFourthMomentIntegrand w)
   simpa only [momentN, planarFourthMoment, planarFourthMomentIntegrand,
-    LinearIsometryEquiv.symm_apply_apply] using hh
+    LinearIsometryEquiv.symm_apply_apply, starRingEnd_apply] using hh
 
 namespace BoundedEulerParticleSystem
 

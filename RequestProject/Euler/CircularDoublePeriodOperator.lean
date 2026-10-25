@@ -73,9 +73,10 @@ theorem circularPeriod_derivative_square_remainder_supported_low {γ : ℝ≥0}
             circularDoublePeriodFourierRemainderCLM hγ hγ1.le H) := by
   apply circularLowFourierProjection_of_zero_amplitude hγ hγ1.le
   intro N
-  rw [map_sub, circularPeriod_derivative_square_mode_coordinates hγ hγ1 hρ hX hd,
-    circularModeAmplitudeCoefficient_doublePeriodFourierRemainder]
-  exact sub_self _
+  rw [map_sub, circularPeriod_derivative_square_mode_coordinates hγ hγ1 hρ hX hd]
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+  exact sub_eq_zero.mpr
+    (circularModeAmplitudeCoefficient_doublePeriodFourierRemainder hγ hγle H N).symm
 
 theorem circularPeriod_derivative_square_operator_decomposition {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1) {ρ : ℝ} (hρ : 0 < ρ)

@@ -123,7 +123,7 @@ theorem hasFDerivAt_correctionLabelField (t : ℝ) (x : R2) :
   · exact ae_of_all _ fun b y _ => by
       have hd := ((torusSmoothCorrectionKernel_smooth.differentiable (by simp) _).hasFDerivAt.comp y
         (((hasFDerivAt_id y).sub_const (S.forward t b)).add_const torusCenter)).const_smul (f b)
-      simpa only [ContinuousLinearMap.comp_id] using hd
+      simpa only [Function.comp_def, id_eq, Pi.smul_def, ContinuousLinearMap.comp_id] using hd
 
 theorem isC1SpatialVelocity_correctionLabelField : IsC1SpatialVelocity S.correctionLabelField where
   differentiable t x := (S.hasFDerivAt_correctionLabelField t x).differentiableAt

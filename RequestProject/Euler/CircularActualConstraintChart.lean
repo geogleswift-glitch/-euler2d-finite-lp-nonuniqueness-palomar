@@ -36,7 +36,10 @@ theorem circularConstrainedChart_projection_actual_of_area {γ : ℝ≥0}
         (Z - littleCircularReference hγ hγ1)) = Z := by
   have he : (circularConstraintProjectionToTangentCLM hγ hγ1.le
       (Z - littleCircularReference hγ hγ1)).val = circularAreaChartInverseFamily hγ hγ1 Z := by
-    rw [circularConstraintProjectionToTangentCLM_val]
+    have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+    change (circularConstraintProjectionToTangentCLM hγ hγle
+      (Z - littleCircularReference hγ hγ1)).val = circularAreaChartInverseFamily hγ hγ1 Z
+    rw [circularConstraintProjectionToTangentCLM_val hγ hγle]
     exact circularConstraintProjection_sub_reference hγ hγ1 Z hfour
   funext i
   unfold circularConstrainedChart

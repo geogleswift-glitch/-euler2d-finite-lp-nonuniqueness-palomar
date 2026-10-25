@@ -37,7 +37,7 @@ def GlobalPlanarEulerParticleSystem.restart {w : R2 → ℝ}
     intro t ht a
     have hd := (S.derivative (s + t) (add_nonneg hs ht) (S.backward s a)).scomp t
       ((hasDerivAt_id t).const_add s)
-    simpa only [one_smul] using hd
+    simpa only [Function.comp_def, one_smul] using hd
   left_inv := by
     intro t ht a
     rw [S.left_inv (s + t) (add_nonneg hs ht), S.right_inv s hs]

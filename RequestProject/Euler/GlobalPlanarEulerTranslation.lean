@@ -50,11 +50,11 @@ def translate (c : R2) : GlobalPlanarEulerParticleSystem (fun x => w (x - c)) wh
   left_inv := fun t ht a => by rw [add_sub_cancel_right, S.left_inv t ht, sub_add_cancel]
   right_inv := fun t ht a => by rw [add_sub_cancel_right, S.right_inv t ht, sub_add_cancel]
   forward_area := fun t ht => by
-    simpa only [Function.comp_apply, sub_eq_add_neg] using
+    simpa only [Function.comp_def, sub_eq_add_neg] using
       (measurePreserving_add_right volume c).comp
         ((S.forward_area t ht).comp (measurePreserving_add_right volume (-c)))
   backward_area := fun t => by
-    simpa only [Function.comp_apply, sub_eq_add_neg] using
+    simpa only [Function.comp_def, sub_eq_add_neg] using
       (measurePreserving_add_right volume c).comp
         ((S.backward_area t).comp (measurePreserving_add_right volume (-c)))
   selfconsistent := fun t x => by
@@ -71,7 +71,7 @@ theorem exists_globalPlanarEulerParticleSystem_of_shifted_box
     Nonempty (GlobalPlanarEulerParticleSystem w) := by
   let wc : R2 → ℝ := fun x => w (x - c)
   have hwc : Integrable wc := by
-    simpa only [wc, sub_eq_add_neg] using
+    simpa only [wc, Function.comp_def, sub_eq_add_neg] using
       (measurePreserving_add_right volume (-c)).integrable_comp_of_integrable hw
   have hbox : planarBoxSource wc = wc := by
     funext x

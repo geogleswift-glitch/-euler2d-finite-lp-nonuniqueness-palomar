@@ -163,7 +163,10 @@ theorem circularConstrainedReturnMap_rotation {γ : ℝ≥0}
       littleCircularReference hγ hγ1 =
       contourRotationFamilyLittleCLM γ b (X (circularConstrainedChart hγ hγ1 v) period - littleCircularReference hγ hγ1) := by
     rw [map_sub, contourRotationFamilyLittleCLM_reference]
-  rw [hs, circularConstraintProjectionToTangentCLM_rotation]
+  rw [hs]
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+  exact circularConstraintProjectionToTangentCLM_rotation hγ hγle b
+    (X (circularConstrainedChart hγ hγ1 v) period - littleCircularReference hγ hγ1)
 
 theorem exists_circularConstrainedReturnMap_rotation_radius {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1) {R : ℝ} (hR : 0 < R)

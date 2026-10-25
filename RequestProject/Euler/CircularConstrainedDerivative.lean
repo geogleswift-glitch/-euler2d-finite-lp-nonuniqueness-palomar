@@ -100,6 +100,11 @@ theorem circularConstrainedReturnMap_derivative_val {γ : ℝ≥0}
     (v : CircularConstrainedTangentSpace γ) :
     (fderiv ℝ (circularConstrainedReturnMap hγ hγ1 (fun W => X W period)) 0 v).val =
       fderiv ℝ (fun W => X W period) (littleCircularReference hγ hγ1) v.val := by
+  letI : IsBoundedSMul ℝ (CircularConstrainedTangentSpace γ) :=
+    @NormedSpace.toIsBoundedSMul ℝ (CircularConstrainedTangentSpace γ) _ _
+      (constrainedDerivTangent_space γ)
+  letI : ContinuousSMul ℝ (CircularConstrainedTangentSpace γ) :=
+    IsBoundedSMul.continuousSMul
   rw [(hasFDerivAt_circularConstrainedReturnMap_zero hγ hγ1 hd).fderiv]
   change circularConstraintProjectionCLM hγ hγ1.le
     (fderiv ℝ (fun W => X W period) (littleCircularReference hγ hγ1) v.val) = _

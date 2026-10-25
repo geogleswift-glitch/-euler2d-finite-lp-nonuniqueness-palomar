@@ -24,8 +24,10 @@ theorem norm_rotating_forced_curve_le (freq : ℝ) {τ F : ℝ → ℂ}
     ‖τ t‖ ≤ ‖τ 0‖ + C * t := by
   let α : ℝ → ℂ := fun s => circularUnitPhase (-freq) s * τ s
   have hα (s : ℝ) : HasDerivAt α (circularUnitPhase (-freq) s * F s) s := by
+    change HasDerivAt (fun r : ℝ => circularUnitPhase (-freq) r * τ r)
+      (circularUnitPhase (-freq) s * F s) s
     have h := (hasDerivAt_circularUnitPhase (-freq) s).mul (hd s)
-    convert h using 1 <;> dsimp only [α] <;> push_cast <;> ring
+    convert h using 1 <;> push_cast <;> ring
   have hn (s : ℝ) : ‖α s‖ = ‖τ s‖ := by
     simp only [α, norm_mul, norm_circularUnitPhase, one_mul]
   have hb := norm_image_sub_le_of_norm_deriv_le_segment'
