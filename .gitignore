@@ -1,0 +1,10 @@
+/.lake/
+/audit/
+/docbuild/.lake/
+*.olean
+*.ilean
+*.olean.private
+*.olean.server
+*.ir
+*.trace
+__pycache__/

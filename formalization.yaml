@@ -1,0 +1,201 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+# Release candidate: actual rc4 build and independent verification are pending.
+version: "v0.4"
+
+project:
+  name: "Finite-Lp vorticity nonuniqueness for two-dimensional Euler"
+  description: >-
+    A Lean 4 formalization of nonuniqueness for the unforced incompressible
+    Euler equations on the two-dimensional square torus. For each finite real
+    exponent p at least one and each positive time interval, the target theorem
+    constructs a common mean-zero, divergence-free initial datum in L2 and
+    W1p, and two distinct weak solutions continuous in time with values in L2.
+    Their distributional vorticities have strongly measurable Lp-valued
+    representatives that are essentially bounded in time. This is the
+    two-dimensional finite-Lp question in the first part of Buckmaster and
+    Vicol's Problem 6. Release verification remains pending.
+  authors:
+    - "Tao Tao"
+    - "Haiqi Zhang"
+  license: "Apache-2.0"
+  responsible_maintainers:
+    - "Tao Tao"
+    - "Haiqi Zhang"
+
+classification:
+  arxiv: ["math.AP"]
+  msc2020: ["35Q31", "76B03"]
+
+sources:
+  - title: "Two-dimensional Euler nonuniqueness with every finite vorticity exponent"
+    authors:
+      - "Tao Tao"
+      - "Haiqi Zhang"
+    type: "original-proof"
+    location: "Unpublished author manuscript, main theorem"
+    relationship: "other"
+    note: >-
+      This entry declares the authors' original result, whose intended first
+      public presentation is this formalization. The underlying informal
+      argument was developed by the human authors with ChatGPT assistance
+      before its Lean formalization. The unpublished manuscript is private;
+      its original TeX is excluded from this repository. This provenance
+      declaration does not certify novelty or priority against all literature.
+  - title: "Convex integration and phenomenologies in turbulence"
+    authors:
+      - "Tristan Buckmaster"
+      - "Vlad Vicol"
+    type: "paper"
+    id: "https://doi.org/10.4171/EMSS/34"
+    location: >-
+      EMS Surveys in Mathematical Sciences 6 (2019), no. 1/2, 173-263,
+      Problem 6; arXiv:1901.09023v2, printed pages 66-67.
+    relationship: "background"
+    note: >-
+      The first, two-dimensional finite-Lp nonuniqueness question supplies
+      the problem context. This survey is not the source of the new proof.
+      The volume year is 2019; the publisher records publication on
+      5 March 2020. Publisher:
+      https://ems.press/journals/emss/articles/16808 .
+      Public author preprint: https://arxiv.org/abs/1901.09023v2 .
+  - title: "Flexibility of Two-Dimensional Euler Flows with Integrable Vorticity"
+    authors: ["Elia Bruè", "Maria Colombo", "Anuj Kumar"]
+    type: "paper"
+    id: "https://arxiv.org/abs/2408.07934"
+    relationship: "background"
+    note: >-
+      Establishes unforced nonuniqueness for some spatial exponent greater
+      than one. It is cited for context, not imported as a formal proof.
+  - title: "Non-uniqueness of Admissible Solutions for the 2D Euler Equation with Lp Vortex Data"
+    authors: ["Francisco Mengual"]
+    type: "paper"
+    id: "https://doi.org/10.1007/s00220-024-05065-9"
+    relationship: "background"
+    note: >-
+      Concerns arbitrary finite-exponent initial vorticity. The positive-time
+      solution conclusion does not preserve that vorticity class.
+  - title: "Non-unique vanishing-viscosity solutions of 2D Euler with vorticity in Lp"
+    type: "paper"
+    id: "https://hexagonmath.org/2610.00314v1"
+    relationship: "background"
+    contributors:
+      - name: "Umberto Pappalettera"
+        role: "deposit contributor"
+      - name: "Massimo Sorella"
+        role: "deposit contributor"
+    note: >-
+      An October 2026 AI-generated manuscript deposit claiming arbitrary
+      finite p greater than two and vanishing-viscosity nonuniqueness on the
+      plane. The deposit explicitly disclaims human understanding of its
+      mathematics. This claim is not checked or imported by this project;
+      the selected formal theorem concerns weak solutions on the torus.
+
+related_formalizations: []
+
+status:
+  scope: >-
+    The intended Comparator declaration is PalomarEuler.main_result, proved
+    in Solution.lean by Euler2D.finiteLp_nonuniqueness in
+    RequestProject/Euler/FiniteLpNonuniqueness.lean. Its only mathematical
+    inputs are a real T with 0 < T and a real finite p with 1 <= p.
+    The initial datum and solutions may depend on T and p; no assertion is
+    made for every prescribed initial datum or for one datum simultaneously
+    satisfying every exponent. On the periodic square [0,2*pi)^2, both
+    solutions satisfy the distributional unforced Euler identity, have the
+    same initial datum, and have positive squared space-time L2 distance.
+    Actual spatial Lp-valued vorticity curves are strongly measurable,
+    belong to Bochner L-infinity on [0,T], and satisfy the distributional curl
+    identity at every time in [0,T]. The p=1 endpoint is obtained by lowering
+    exponents from q=max(p,2). This scope addresses only the first
+    two-dimensional finite-Lp question in Problem 6. Energy conservation,
+    W1-infinity-in-time regularity, the alpha_O/alpha_U threshold question,
+    and three-dimensional variants are not advertised as formalized.
+    Challenge.lean has one deliberate theorem-proof sorry. The substantive
+    source has no textual proof holes; the rc4 port, fresh build, Comparator,
+    and independent kernel checks must finish before release readiness is
+    asserted. No Palomar registration has been requested or obtained.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: ["propext", "Quot.sound", "Classical.choice"]
+  # Project-specific state, accepted as an additional v0.4 field.
+  # Set to complete only after the exact release snapshot passes all checks.
+  verification: "pending"
+
+automation:
+  methods:
+    - method: "copilot"
+      models: []
+      framework: "ChatGPT"
+      tool_setup: >-
+        The human authors developed their original informal proof with
+        ChatGPT assistance. Exact model versions were not recorded.
+    - method: "agent"
+      models: []
+      framework: "Aristotle"
+      tool_setup: >-
+        Aristotle produced the initial Lean formalization attempt from
+        the authors' informal proof. Exact model versions were not recorded.
+    - method: "agent"
+      models: []
+      framework: "Codex"
+      tool_setup: >-
+        Codex continued the authors' Aristotle development, supplied proof
+        repairs and bridges, audited statement scope, and prepared the
+        release candidate and reproducibility checks.
+  spend_usd: "not tracked"
+  notes: >-
+    Human authorship and responsibility remain with Tao Tao and Haiqi Zhang.
+    Aristotle and Codex supplied the Lean formalization based on the human
+    authors' original informal proof. Model versions, complete prompt logs,
+    total wall time, and itemized costs are not reconstructed retrospectively.
+
+fidelity:
+  divergences: >-
+    The source-facing Euler and Sobolev notions are the literal definitions
+    used by the substantive development. The compared statement is intended
+    to add the p=1 endpoint by finite-measure exponent lowering and to supply
+    actual Bochner L-infinity-in-time Lp vorticity curves through proved
+    measurability bridges. The initial datum is existential. No formalization
+    of the manuscript's additional energy or W1-infinity-in-time corollary,
+    nor of the separate alpha threshold question in the survey, is claimed.
+    An unused auxiliary lemma about the L-infinity norm of arbitrary
+    two-interface labels now explicitly assumes measurability of both
+    label domains, as required by the pinned Mathlib norm definition.
+    This does not add a hypothesis to any selected principal result.
+    Two generic Sobolev norm estimates likewise now explicitly require
+    strong measurability almost everywhere. All four internal C1 applications
+    derive it from their existing continuity proofs. The higher-level C1
+    Sobolev statements are unchanged, and the localized estimate retains
+    arbitrary sets without a new set-measurability assumption.
+
+review:
+  status: "agent-reviewed"
+  reviewers: ["Codex"]
+  notes: >-
+    Automated source, statement-scope, and axiom audits have been performed
+    during development. Final review of the exact rc4 release snapshot and
+    its complete reproducibility and independent-kernel reports is pending.
+    No independent human peer review, Palomar acceptance, or registration is
+    claimed by this metadata.
+
+alignment:
+  namespace: "PalomarEuler"
+  statements:
+    - source: "Original main result; two-dimensional finite-Lp part of Problem 6"
+      lean: "PalomarEuler.main_result"
+      module: "Solution.lean"
+      status: "pending release verification"
+      note: >-
+        The Challenge and Solution statements must be identical; Solution
+        applies Euler2D.finiteLp_nonuniqueness without additional hypotheses.
+    - source: "Finite exponent endpoint and Bochner vorticity strengthening"
+      lean: "Euler2D.finiteLp_nonuniqueness"
+      module: "RequestProject/Euler/FiniteLpNonuniqueness.lean"
+      status: "pending rc4 verification"
+      note: >-
+        The target statement quantifies over every real finite p >= 1 and
+        witnesses both the velocity solutions and measurable Lp vorticities.
+
+acknowledgements: >-
+  Lean 4 and Mathlib; ChatGPT for assistance with the human informal proof;
+  Aristotle and Codex for the Lean formalization and its continuation.

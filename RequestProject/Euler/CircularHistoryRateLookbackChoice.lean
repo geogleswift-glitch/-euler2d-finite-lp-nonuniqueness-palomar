@@ -1,0 +1,143 @@
+module
+
+public import RequestProject.Euler.CircularFirstTransferLateChoice
+
+public import RequestProject.Euler.CircularActualFirstNonzeroTransfer
+
+/-! Fix the real past lookback before the later observation time.
+The original nonzero bilateral transform gives an exponentially growing
+seed at every sufficiently late observation, with the same past budgets. -/
+
+@[expose] public section
+
+set_option maxHeartbeats 20000000
+set_option maxRecDepth 7500
+
+noncomputable section
+
+open Complex Set Filter Topology MeasureTheory Metric
+open scoped NNReal ENNReal
+
+namespace Euler2D
+
+attribute [local instance 2000] rigidGaugeLittle_group rigidGaugeLittle_space rigidGaugeFamily_tower
+attribute [local instance 2000] captureBlockTangent_group captureBlockTangent_space
+  captureBlockTangent_continuousAdd captureBlockEndo_monoid captureBlockTangent_complete
+attribute [local instance] LittleContourSpace.complexScalarNormedSpace LittleContourSpace.complexScalarTower
+attribute [local irreducible] circularConstrainedTangentSubmodule circularConstrainedUnstableProjectionCLM
+  circularConstrainedReturnMap circularConstrainedChart circularConstraintProjectionToTangentCLM
+  circularBanachField circularBanachDomain
+
+namespace CircularMaterialTransferProfile
+
+variable {γ : ℝ≥0} {hγ : 0 < γ} {hγ1 : (γ : ℝ) < 1}
+    (P : CircularMaterialTransferProfile hγ hγ1)
+
+theorem exists_uniform_late_response_and_lookback_with_history_rate
+    {b sCanon Chistory ηctrl rate : ℝ} (hb : b ∈ Ioo (0 : ℝ) (1 / 4))
+    (hbilateral : bilateral P.moment ((b : ℂ) * (sigma + 5 / 4 * I)) ≠ 0)
+    (hsCanon : sCanon < 0) (hChistory : 0 ≤ Chistory) (hηctrl : 0 ≤ ηctrl)
+    (hRate : b * sigma < rate) (Lmin : ℝ) :
+    ∃ c > 0, ∃ Lback > 0, Lmin < Lback ∧ ∃ tmin ≥ 0, ∀ tstar ≥ tmin,
+      let κ := ‖retardedSol ((b : ℂ) * lamStar)
+        ((b : ℂ) * (sigma + 5 / 4 * I)) Kstar P.moment tstar‖
+      let d := tstar - sCanon
+      0 < d ∧ c * Real.exp (b * sigma * tstar) ≤ κ ∧
+      ((‖Kstar‖ * Chistory * ηctrl) / (rate - b * sigma) * Real.exp (b * sigma * d)) *
+        Real.exp (-(rate - b * sigma) * Lback) ≤ κ / 8 ∧
+      ∀ ρ : ℝ, 0 ≤ ρ →
+        ‖retardedSol ((b : ℂ) * lamStar) ((b : ℂ) * (sigma + 5 / 4 * I))
+          ((ρ : ℂ) ^ 6 * Kstar) P.moment (sCanon - Lback)‖ *
+            Real.exp (b * sigma * (Lback + d)) ≤ (κ / 8) * ρ ^ 6 := by
+  let a : ℂ := (b : ℂ) * lamStar
+  let z : ℂ := (b : ℂ) * (sigma + 5 / 4 * I)
+  let R := retardedSol a z Kstar P.moment
+  let kInf := ‖Kstar * bilateral P.moment z‖
+  have hkInf : 0 < kInf := norm_pos_iff.mpr (mul_ne_zero Kstar_ne_zero hbilateral)
+  have hz0 : 0 < z.re := by dsimp only [z]; simpa using mul_pos hb.1 sigma_pos
+  have hb1 : b < 1 := hb.2.trans (by norm_num)
+  have hz1 : z.re < sigma := by
+    dsimp only [z]
+    simpa using mul_lt_of_lt_one_left sigma_pos hb1
+  obtain ⟨_, _, hlim⟩ := retardedSol_spec P.laplace.expWindow hz0 hz1 a Kstar
+  have hnorm : ∀ᶠ t : ℝ in atTop, kInf / 2 < ‖Complex.exp (-a * t) * R t‖ :=
+    hlim.norm.eventually (lt_mem_nhds (half_lt_self hkInf))
+  obtain ⟨t₀, ht₀⟩ := eventually_atTop.mp hnorm
+  let c := kInf / 2
+  have hc : 0 < c := half_pos hkInf
+  have ha : a.re = b * sigma := by simp [a, lamStar]
+  have hresponse (t : ℝ) (ht : t₀ ≤ t) : c * Real.exp (b * sigma * t) ≤ ‖R t‖ := by
+    have hn := (ht₀ t ht).le
+    rw [norm_mul, norm_cexp_neg_mul, ha] at hn
+    have hh := mul_le_mul_of_nonneg_right hn (Real.exp_pos (b * sigma * t)).le
+    have he : Real.exp (-(b * sigma) * t) * Real.exp (b * sigma * t) = 1 := by
+      rw [← Real.exp_add, show -(b * sigma) * t + b * sigma * t = 0 by ring, Real.exp_zero]
+    calc
+      _ ≤ (Real.exp (-(b * sigma) * t) * ‖R t‖) * Real.exp (b * sigma * t) := hh
+      _ = (Real.exp (-(b * sigma) * t) * Real.exp (b * sigma * t)) * ‖R t‖ := by ring
+      _ = _ := by rw [he, one_mul]
+  let ζ := c * Real.exp (b * sigma * sCanon) / 8
+  have hζ : 0 < ζ := div_pos (mul_pos hc (Real.exp_pos _)) (by norm_num)
+  have hgap : 0 < rate - b * sigma := sub_pos.mpr hRate
+  let Atail := (‖Kstar‖ * Chistory * ηctrl) / (rate - b * sigma)
+  have harg : Tendsto (fun L : ℝ => (rate - b * sigma) * L) atTop atTop :=
+    (tendsto_const_mul_atTop_of_pos hgap).2 tendsto_id
+  have hlimL : Tendsto (fun L : ℝ => Atail * Real.exp (-(rate - b * sigma) * L)) atTop (𝓝 0) := by
+    simpa only [Function.comp_def, neg_mul, mul_zero] using
+      (Real.tendsto_exp_neg_atTop_nhds_zero.comp harg).const_mul Atail
+  have hsmall : ∀ᶠ L : ℝ in atTop, Atail * Real.exp (-(rate - b * sigma) * L) ≤ ζ :=
+    (hlimL.eventually (gt_mem_nhds hζ)).mono (fun _ h => h.le)
+  have htail := P.eventually_retarded_lookback_tail_uniform_rho hb hζ sCanon 0
+  obtain ⟨Lback, hLback, hLmin, hlead, htailL⟩ :=
+    ((eventually_gt_atTop (0 : ℝ)).and ((eventually_gt_atTop Lmin).and (hsmall.and htail))).exists
+  refine ⟨c, hc, Lback, hLback, hLmin, max t₀ 0, le_max_right _ _, ?_⟩
+  intro tstar htstar
+  dsimp only
+  let κ := ‖R tstar‖
+  let d := tstar - sCanon
+  have ht : t₀ ≤ tstar := (le_max_left _ _).trans htstar
+  have ht0 : 0 ≤ tstar := (le_max_right _ _).trans htstar
+  have hd : 0 < d := by dsimp only [d]; linarith only [ht0, hsCanon]
+  have hresp := hresponse tstar ht
+  have hscale : ζ * Real.exp (b * sigma * d) = (c * Real.exp (b * sigma * tstar)) / 8 := by
+    have he : Real.exp (b * sigma * sCanon) * Real.exp (b * sigma * d) =
+        Real.exp (b * sigma * tstar) := by
+      rw [← Real.exp_add]
+      congr 1
+      dsimp only [d]
+      ring
+    calc
+      _ = (c / 8) * (Real.exp (b * sigma * sCanon) * Real.exp (b * sigma * d)) := by
+        dsimp only [ζ]
+        ring
+      _ = _ := by rw [he]; ring
+  have hscaleLe : ζ * Real.exp (b * sigma * d) ≤ κ / 8 := by
+    rw [hscale]
+    exact div_le_div_of_nonneg_right hresp (by norm_num)
+  refine ⟨hd, hresp, ?_, ?_⟩
+  · calc
+      _ = (Atail * Real.exp (-(rate - b * sigma) * Lback)) * Real.exp (b * sigma * d) := by
+        dsimp only [Atail]
+        ring
+      _ ≤ ζ * Real.exp (b * sigma * d) :=
+        mul_le_mul_of_nonneg_right hlead (Real.exp_pos _).le
+      _ ≤ _ := hscaleLe
+  · intro ρ hρ
+    have hexp : Real.exp (b * sigma * (Lback + d)) =
+        Real.exp (b * sigma * Lback) * Real.exp (b * sigma * d) := by
+      rw [← Real.exp_add]
+      congr 1
+      ring
+    calc
+      _ = (‖retardedSol a z ((ρ : ℂ) ^ 6 * Kstar) P.moment (sCanon - Lback)‖ *
+          Real.exp (b * sigma * Lback)) * Real.exp (b * sigma * d) := by rw [hexp]; ring
+      _ ≤ (ζ * ρ ^ 6) * Real.exp (b * sigma * d) :=
+        mul_le_mul_of_nonneg_right (by simpa only [add_zero] using htailL ρ hρ) (Real.exp_pos _).le
+      _ = (ζ * Real.exp (b * sigma * d)) * ρ ^ 6 := by ring
+      _ ≤ _ := mul_le_mul_of_nonneg_right hscaleLe (pow_nonneg hρ 6)
+
+
+end CircularMaterialTransferProfile
+end Euler2D
+
+end

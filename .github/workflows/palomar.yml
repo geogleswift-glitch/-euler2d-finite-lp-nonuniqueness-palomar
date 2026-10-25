@@ -1,0 +1,82 @@
+name: Palomar checks
+
+on:
+  workflow_run:
+    workflows: [Lean verification]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: palomar-${{ github.event.workflow_run.head_sha || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  comparator:
+    if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_sha == github.sha)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    env:
+      LEAN_NUM_THREADS: "1"
+      EULER_COMPILE_SLOTS: "1"
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          persist-credentials: false
+      - name: Make disk space for independent kernel replay
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          df -h .
+          free -h
+          python3 -c 'import shutil; assert shutil.disk_usage(".").free >= 20 * 1024**3, "At least 20 GiB of free disk is required before dependency retrieval"'
+      - name: Validate source and metadata
+        run: |
+          python3 -m pip install --disable-pip-version-check 'PyYAML==6.0.3'
+          python3 scripts/check_sources.py
+          python3 scripts/validate_metadata.py
+      - name: Install the pinned toolchain and Mathlib cache
+        uses: leanprover/lean-action@f061402b660e0c34644504b324e830f2991d4865
+        with:
+          auto-config: "false"
+          build: "false"
+          test: "false"
+          lint: "false"
+          use-mathlib-cache: "true"
+          use-github-cache: "false"
+      - name: Reuse the Lean verification build
+        id: project-cache
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
+        with:
+          path: .lake/build
+          key: euler-palomar-v2-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ hashFiles('RequestProject/**/*.lean', 'Challenge.lean', 'Solution.lean', 'Verification/**/*.lean') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            euler-lean-v2-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ hashFiles('RequestProject/**/*.lean', 'Challenge.lean', 'Solution.lean', 'Verification/**/*.lean') }}-
+            euler-palomar-v2-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ hashFiles('RequestProject/**/*.lean', 'Challenge.lean', 'Solution.lean', 'Verification/**/*.lean') }}-
+            euler-lean-v2-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-
+            euler-palomar-v2-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-
+      - name: Prepare build artifacts if the cache is incomplete
+        run: timeout --signal=TERM --kill-after=30s 15000 bash scripts/build-bounded.sh
+      - name: Preserve completed compilations for the next check
+        if: always() && steps.project-cache.outputs.cache-primary-key != '' && steps.project-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
+        with:
+          path: .lake/build
+          key: ${{ steps.project-cache.outputs.cache-primary-key }}
+      - name: Enable the official Comparator sandbox
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq bubblewrap
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+      - name: Compare Challenge and Solution and replay independent kernels
+        run: |
+          git rev-parse HEAD
+          free -h
+          python3 -c 'import shutil; assert shutil.disk_usage(".").free >= 8 * 1024**3, "At least 8 GiB of free disk is required for the kernel exports"'
+          bash scripts/verify-comparator.sh
+      - name: Ensure verification did not modify tracked files
+        run: git diff --exit-code
