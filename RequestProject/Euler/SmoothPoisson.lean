@@ -102,7 +102,6 @@ lemma boxFourierCoeff_regularizer {g : R2 → ℝ} (hg : IsScalarTest g) (k : Fi
     Complex.ofReal_intCast]
   ring_nf
   simp [Complex.I_sq]
-  ring
 
 def regularizerIter : ℕ → (R2 → ℝ) → R2 → ℝ
   | 0, g => g

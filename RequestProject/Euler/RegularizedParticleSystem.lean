@@ -95,7 +95,8 @@ theorem exists_smoothRegularizedParticleSystem
       hKL hM hKper hw hη hη0 hv hC1 hT hdiv hODE ht x
   }⟩
   intro t ht x
-  unfold regularizedLabelVelocity
+  change (∫ b, w b • K (x - (b + η t b) + torusCenter) ∂μT) =
+    ∫ b, w b • K (x - boundedParticleForward hv hT t b + torusCenter) ∂μT
   apply integral_congr_ae
   filter_upwards with b
   rw [← regularizedDisplacement_eq_boundedParticleForward hη hη0 hv hT hODE ht b]

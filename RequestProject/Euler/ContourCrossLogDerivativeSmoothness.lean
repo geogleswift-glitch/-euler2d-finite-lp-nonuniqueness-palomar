@@ -122,7 +122,14 @@ theorem contDiffOn_contourCrossLogDerivativeShape (hγ : 0 < (γ : ℝ)) (hγ1 :
     (contourCrossDerivativeNonlinearity γ)
     (continuous_contourCrossDerivativeFeatureCLM hγ hγ1).continuousOn
     continuous_const.continuousOn hψ himage
-  simpa only [contourCrossLogDerivativeShape, ContinuousLinearMap.id_apply, one_smul] using hi
+  apply hi.congr
+  intro p _hp
+  change (∫ t in Icc (-Real.pi) Real.pi,
+      contourCrossDerivativeNonlinearity γ (contourCrossDerivativeFeatureCLM hγ1 t p)) =
+    ∫ t in Icc (-Real.pi) Real.pi, (1 : ℝ) •
+      (ContinuousLinearMap.id ℝ (ContourHolderSpace γ))
+        (contourCrossDerivativeNonlinearity γ (contourCrossDerivativeFeatureCLM hγ1 t p))
+  simp only [ContinuousLinearMap.id_apply, one_smul]
 
 end Euler2D
 
