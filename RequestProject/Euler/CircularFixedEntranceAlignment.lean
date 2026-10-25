@@ -92,7 +92,7 @@ theorem littleCircularMaterialContours_slow_hasDerivAt {γ : ℝ≥0}
       (a • circularBanachField hγ hγ1 (littleCircularMaterialContours hγ hγ1 (a * t))) t := by
   have hh := (littleCircularMaterialContours_hasDerivAt hγ hγ1 (a * t)).scomp t
     ((hasDerivAt_id t).const_mul a)
-  simpa only [mul_one] using hh
+  simpa only [Function.comp_def, circularBanachField, mul_one] using hh
 
 end Euler2D
 

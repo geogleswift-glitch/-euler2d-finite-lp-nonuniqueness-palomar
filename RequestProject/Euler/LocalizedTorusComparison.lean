@@ -23,6 +23,8 @@ theorem measurePreserving_complexTorusPoint :
   have h := (measurePreserving_add_right volume torusCenter).comp
     (MeasurePreserving.symm planeComplexEquiv measurePreserving_planeComplexEquiv)
   convert h using 1
+  funext z
+  simp only [complexTorusPoint, Function.comp_apply, complexPhysicalPlane_eq_planeComplexEquiv_symm]
 
 lemma normalizedComplexCoordinate_one_complexTorusPoint (z : ℂ) :
     normalizedComplexCoordinate 1 (complexTorusPoint z) = z := by

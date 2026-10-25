@@ -55,7 +55,10 @@ theorem norm_littleContourFourierTermCLM_le {γ : ℝ≥0} (hγ : 0 < γ) (hγ1 
       exact mul_le_mul_of_nonneg_left
         (mul_le_mul_of_nonneg_left (norm_littleContourFourierCoefficient_le n H) (norm_nonneg c))
         (contourFourierModeWeight_nonneg γ n)
-    _ = _ := by ring
+    _ = _ := by
+      change contourFourierModeWeight γ n * (‖c‖ * ‖H‖) =
+        (contourFourierModeWeight γ n * ‖c‖) * ‖H‖
+      exact (mul_assoc _ _ _).symm
 
 theorem summable_littleContourFourierTermCLM {γ : ℝ≥0} (hγ : 0 < γ) (hγ1 : γ ≤ 1)
     {c : ℤ → ℂ} (hc : Summable (fun n => contourFourierModeWeight γ n * ‖c n‖)) :

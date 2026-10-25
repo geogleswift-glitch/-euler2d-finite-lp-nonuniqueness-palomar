@@ -70,10 +70,12 @@ theorem continuous_torusKernelVelocity {w : R2 → ℝ}
     simpa only [sub_self] using hc.tendsto a
   have hlim : Tendsto (fun x : R2 => M * torusKernelTranslationError (x - a))
       (𝓝 a) (𝓝 0) := by
-    simpa only [mul_zero] using (tendsto_torusKernelTranslationError_zero.comp hsub).const_mul M
+    simpa only [Function.comp_def, mul_zero] using
+      (tendsto_torusKernelTranslationError_zero.comp hsub).const_mul M
   have hdiff : Tendsto (fun x => torusKernelVelocity w x - torusKernelVelocity w a)
       (𝓝 a) (𝓝 0) :=
     squeeze_zero_norm (fun x => norm_torusKernelVelocity_sub_le hw hM x a) hlim
+  change Tendsto (torusKernelVelocity w) (𝓝 a) (𝓝 (torusKernelVelocity w a))
   simpa only [sub_add_cancel, zero_add] using hdiff.add_const (torusKernelVelocity w a)
 
 theorem exists_logLip_torusKernelVelocity {w : R2 → ℝ}

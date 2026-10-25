@@ -73,7 +73,7 @@ theorem hasDerivAt_shifted_circularNormalModeLittle {γ : ℝ≥0}
       (circularNormalModeMinus (circularContourRadii i) (η' i) (τ' i)) t :=
     (hηc.add (hτc.const_mul I)).const_mul ((circularContourRadii i : ℂ) / 2)
   have hv : HasDerivAt (fun s : ℝ => v i * s) (v i) t := by
-    simpa only [mul_one] using (hasDerivAt_id t).const_mul (v i)
+    simpa only [id_eq, mul_one] using (hasDerivAt_id t).const_mul (v i)
   have hplus := hasDerivAt_shifted_littleContourFourierMode hγ hγ1 ((N + 3 : ℕ) : ℤ) hp hv
   have hminus := hasDerivAt_shifted_littleContourFourierMode hγ hγ1 (-((N + 1 : ℕ) : ℤ)) hm hv
   have hfun : (fun s => contourParameterShiftFamilyCLM γ (fun j => v j * s)

@@ -61,7 +61,7 @@ theorem hasDerivAt_circularReferencePhaseCurve_zero {γ : ℝ≥0}
   apply hasDerivAt_pi.mpr
   intro i
   have hp := (hasDerivAt_id (0 : ℝ)).const_mul (τ i)
-  simpa only [circularReferencePhaseCurve, circularTangentialMeanLittle, Function.comp_def,
+  simpa only [circularReferencePhaseCurve, circularTangentialMeanLittle, Pi.add_def, Function.comp_def,
     id_eq, mul_one, mul_zero, Real.cos_zero, Real.sin_zero, neg_zero, zero_mul, one_mul,
     _root_.zero_smul, zero_add] using
     (((Real.hasDerivAt_cos _).comp 0 hp).smul_const (littleCircularReference hγ hγ1 i)).add

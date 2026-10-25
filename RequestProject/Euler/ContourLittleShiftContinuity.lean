@@ -96,7 +96,8 @@ theorem norm_contourParameterShiftC1_sub_le_of_deriv_bounds {γ : ℝ≥0} (hγ1
     exact ENNReal.ofReal_le_ofReal (contour_dist_le_pi x y)
   have hh := hl.holderWith.of_le (D := Real.toNNReal Real.pi) hdiam hγ1
   have hn := norm_contourC1_le_of_uniform_holder_bounds W
-    ⟨(A : ℝ) * |b - a|, by positivity⟩ ⟨(B : ℝ) * |b - a|, by positivity⟩
+    (NNReal.mk ((A : ℝ) * |b - a|) (by positivity))
+    (NNReal.mk ((B : ℝ) * |b - a|) (by positivity))
     (D * (Real.toNNReal Real.pi) ^ (1 - (γ : ℝ))) hv hdB hh
   convert hn using 1
   simp only [D, NNReal.coe_mk, NNReal.coe_mul, NNReal.coe_rpow,
@@ -120,11 +121,13 @@ theorem lipschitz_contourParameterShiftC1_of_smooth {γ : ℝ≥0} (hγ1 : γ �
     (hp2.isBounded_of_continuous (by positivity) hs2.continuous).exists_pos_norm_le
   obtain ⟨C, hC, hbC⟩ :=
     (hp3.isBounded_of_continuous (by positivity) hs3.continuous).exists_pos_norm_le
-  refine ⟨⟨A + B + C * Real.pi ^ (1 - (γ : ℝ)), by positivity⟩,
+  refine ⟨NNReal.mk (A + B + C * Real.pi ^ (1 - (γ : ℝ))) (by positivity),
     LipschitzWith.of_dist_le_mul (fun b a => ?_)⟩
+  change dist (contourParameterShiftC1 b Z) (contourParameterShiftC1 a Z) ≤
+    (A + B + C * Real.pi ^ (1 - (γ : ℝ))) * dist b a
   simpa only [dist_eq_norm, Real.norm_eq_abs, NNReal.coe_mk] using
     norm_contourParameterShiftC1_sub_le_of_deriv_bounds hγ1 Z hs
-      ⟨A, hA.le⟩ ⟨B, hB.le⟩ ⟨C, hC.le⟩
+      (NNReal.mk A hA.le) (NNReal.mk B hB.le) (NNReal.mk C hC.le)
       (fun θ => hbA _ (Set.mem_range_self θ))
       (fun θ => hbB _ (Set.mem_range_self θ))
       (fun θ => hbC _ (Set.mem_range_self θ)) b a
@@ -178,12 +181,18 @@ attribute [local instance] HolderFunctionSpace.complexScalarNormedSpace
 theorem continuous_contourRotationLittleCLM {γ : ℝ≥0} (hγ1 : γ ≤ 1)
     (Z : LittleContourSpace γ) :
     Continuous (fun b : ℝ => contourRotationLittleCLM γ b Z) := by
+  letI : IsBoundedSMul ℂ (ContourC1Space γ) :=
+    @NormedSpace.toIsBoundedSMul ℂ (ContourC1Space γ) _ _
+      (ContourC1Space.complexScalarNormedSpace γ)
+  letI : ContinuousSMul ℂ (ContourC1Space γ) := IsBoundedSMul.continuousSMul
   have hc : Continuous (fun b : ℝ => contourParameterShiftC1 (-b) Z.val) :=
     (LittleContourSpace.inclusion γ).continuous.comp
       ((continuous_contourParameterShiftLittleCLM hγ1 Z).comp continuous_neg)
   have he : Continuous (fun b : ℝ => Complex.exp ((b : ℂ) * I)) :=
     (Complex.continuous_ofReal.mul continuous_const).cexp
-  have h := he.smul hc
+  have h : Continuous (fun b : ℝ =>
+      Complex.exp ((b : ℂ) * I) • contourParameterShiftC1 (-b) Z.val) := by
+    simpa only [Pi.smul_def'] using he.smul hc
   have hrot (b : ℝ) :
       Complex.exp ((b : ℂ) * I) • contourParameterShiftC1 (-b) Z.val =
         (contourRotationLittleCLM γ b Z).val := by

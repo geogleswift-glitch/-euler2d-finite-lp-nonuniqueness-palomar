@@ -22,6 +22,8 @@ theorem planarMaterialBiotSavart_eq_spatial (w : R2 → ℝ)
       planarKernelVelocity kernelK (fun y => w (X.symm y)) x := by
   have hc := hX.integral_comp X.measurableEmbedding
     (fun y => w (X.symm y) • kernelK (x - y))
+  change (∫ b, w b • kernelK (x - X b)) =
+    ∫ y, w (X.symm y) • kernelK (x - y)
   simpa only [Homeomorph.symm_apply_apply] using hc
 
 theorem norm_planarMaterialBiotSavart_le_sum
