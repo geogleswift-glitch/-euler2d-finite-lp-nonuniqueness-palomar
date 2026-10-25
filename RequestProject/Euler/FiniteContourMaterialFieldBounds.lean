@@ -41,6 +41,8 @@ theorem norm_finiteContourMaterialField_sub_le {γ : ℝ≥0} {ι : Type} [Finty
         max (contourSelfLogShapeConstant (γ : ℝ) c M)
           (2 * contourCrossLogShapeConstant (γ : ℝ) σ M)) * ‖Z.val - W.val‖ := by
   classical
+  letI : NormSMulClass ℝ (LittleContourSpace γ) :=
+    NormedSpace.toNormSMulClass (𝕜 := ℝ) (E := LittleContourSpace γ)
   let C := max (contourSelfLogShapeConstant (γ : ℝ) c M)
     (2 * contourCrossLogShapeConstant (γ : ℝ) σ M)
   have hC : 0 ≤ C := (contourSelfLogShapeConstant_nonneg hγ hγ1 hc hM).trans (le_max_left _ _)

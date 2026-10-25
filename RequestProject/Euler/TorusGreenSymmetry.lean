@@ -61,8 +61,12 @@ lemma torusQuarterTurn_smooth : ContDiff ℝ ∞ torusQuarterTurn :=
   contDiff_const.add (perpJL.contDiff.comp (contDiff_id.sub contDiff_const))
 
 lemma hasFDerivAt_torusQuarterTurn (x : R2) : HasFDerivAt torusQuarterTurn perpJL x := by
-  convert (perpJL.hasFDerivAt (x := x - torusCenter)).comp x
-    ((hasFDerivAt_id x).sub_const torusCenter) |>.const_add torusCenter using 1
+  have hd := ((perpJL.hasFDerivAt (x := x - torusCenter)).comp x
+    ((hasFDerivAt_id x).sub_const torusCenter)).const_add torusCenter
+  have hd' := hd.congr_fderiv (ContinuousLinearMap.comp_id perpJL)
+  exact hd'.congr_of_eventuallyEq (f₁ := torusQuarterTurn)
+    (Eventually.of_forall fun y => by
+      simp only [torusQuarterTurn, Function.comp_def, id_eq, perpJL_apply])
 
 /-- Rotation of the actual two-dimensional integer lattice. -/
 def torusLatticeQuarterTurn : (Fin 2 → ℤ) ≃ (Fin 2 → ℤ) where
@@ -128,7 +132,7 @@ lemma IsTorusPeriodic.comp_torusQuarterTurn {F : Type*} {f : R2 → F}
   · change f (torusQuarterTurn (x + EuclideanSpace.single 1 (2 * π))) = _
     rw [torusQuarterTurn_add_single_one]
     have h := hf (torusQuarterTurn x - EuclideanSpace.single 0 (2 * π)) 0
-    simpa only [sub_add_cancel] using h.symm
+    simpa only [Function.comp_apply, sub_add_cancel] using h.symm
 
 @[simp] lemma perpJL_single_zero :
     perpJL (EuclideanSpace.single 0 1) = EuclideanSpace.single 1 1 := by

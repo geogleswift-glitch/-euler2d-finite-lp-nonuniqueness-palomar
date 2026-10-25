@@ -59,7 +59,8 @@ theorem isPlanarWeaklyDivergenceFree_of_C1_divergence_zero
       ((huc i).continuous.mul hψ.continuous).integrable_of_hasCompactSupport hs.mul_left
     have hh := integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable
       (μ := volume) (f := fun x => u x i) (g := ψ) (v := EuclideanSpace.single i 1)
-      hi (hleft i) hfg ((huc i).differentiable one_ne_zero) (hψ.differentiable one_ne_zero)
+      hi (hleft i) hfg (fun x _ => (huc i).differentiable one_ne_zero x)
+        (fun x _ => hψ.differentiable one_ne_zero x)
     change (∫ x, u x i * pd i ψ x) = -(∫ x, pd i (fun y => u y i) x * ψ x) at hh
     simpa only [hcomp] using hh
   simp only [Fin.sum_univ_two]

@@ -93,8 +93,9 @@ theorem hasDerivAt_contourCircleCharacter_comp (n : ℤ)
     HasDerivAt (fun s => contourCircleCharacter n (b s))
       ((n : ℂ) * I * (b' : ℂ) * contourCircleCharacter n (b t)) t := by
   convert (hasDerivAt_contourCircleCharacter n (b t)).scomp t hb using 1
-  simp only [Complex.real_smul]
-  ring
+  · rfl
+  · simp only [Complex.real_smul]
+    ring
 
 theorem hasDerivAt_shifted_littleContourFourierMode {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : γ ≤ 1) (n : ℤ)

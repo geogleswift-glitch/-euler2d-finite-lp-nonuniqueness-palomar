@@ -29,8 +29,8 @@ theorem norm_contourRotationFamilyLittleCLM {γ : ℝ≥0} {ι : Type} [Fintype 
       ‖contourRotationFamilyLittleCLM γ c Z‖ ≤ ‖Z‖ := by
     apply (pi_norm_le_iff_of_nonneg (norm_nonneg Z)).mpr
     intro i
-    rw [contourRotationFamilyLittleCLM_apply, norm_contourRotationLittleCLM]
-    exact norm_le_pi_norm Z i
+    rw [contourRotationFamilyLittleCLM_apply]
+    exact (norm_contourRotationLittleCLM c (Z i)).trans_le (norm_le_pi_norm Z i)
   apply le_antisymm (hle b W)
   have h := hle (-b) (contourRotationFamilyLittleCLM γ b W)
   have he : contourRotationFamilyLittleCLM γ (-b) (contourRotationFamilyLittleCLM γ b W) = W := by

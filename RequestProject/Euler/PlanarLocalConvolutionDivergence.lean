@@ -36,12 +36,25 @@ theorem divergence_planarLocalConvolution_eq_integral
     (EuclideanSpace.proj 1 : R2 →L[ℝ] ℝ).comp
       (ContinuousLinearMap.apply ℝ R2 (EuclideanSpace.single 1 1))
   change J (fderiv ℝ (planarKernelVelocity u φ) x) = _
-  rw [hd, ← J.integral_comp_comm hI]
+  rw [hd]
+  have hcoord (i : Fin 2) : Integrable (fun y => I y (EuclideanSpace.single i 1) i) := by
+    simpa only [PiLp.proj_apply] using
+      (EuclideanSpace.proj i : R2 →L[ℝ] ℝ).integrable_comp
+        (hI.apply_continuousLinearMap (EuclideanSpace.single i 1))
+  have hcoord_integral (i : Fin 2) :
+      (∫ y, I y) (EuclideanSpace.single i 1) i =
+        ∫ y, I y (EuclideanSpace.single i 1) i := by
+    rw [ContinuousLinearMap.integral_apply hI]
+    simpa only [PiLp.proj_apply] using
+      ((EuclideanSpace.proj i : R2 →L[ℝ] ℝ).integral_comp_comm
+        (hI.apply_continuousLinearMap (EuclideanSpace.single i 1))).symm
+  change (∫ y, I y) (EuclideanSpace.single 0 1) 0 +
+    (∫ y, I y) (EuclideanSpace.single 1 1) 1 = _
+  rw [hcoord_integral 0, hcoord_integral 1, ← integral_add (hcoord 0) (hcoord 1)]
   apply integral_congr_ae
   exact ae_of_all _ (fun y => by
-    change (pd 0 φ y) * u (x - y) 0 + (pd 1 φ y) * u (x - y) 1 = _
-    dsimp only
-    rw [Fin.sum_univ_two])
+    simp only [I, L', ContinuousLinearMap.precompL_apply, L,
+      ContinuousLinearMap.lsmul_apply, PiLp.smul_apply, smul_eq_mul, pd, Fin.sum_univ_two])
 
 theorem divergence_planarLocalConvolution_zero
     {φ : R2 → ℝ} {u : R2 → R2}

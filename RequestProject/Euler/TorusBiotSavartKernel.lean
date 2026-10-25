@@ -39,7 +39,7 @@ lemma integrable_coord_of_integrable {u : R2 → R2} (hu : Integrable u μT)
   apply hu.norm.mono' ((EuclideanSpace.proj i : R2 →L[ℝ] ℝ).continuous.comp_aestronglyMeasurable
     hu.aestronglyMeasurable)
   exact Eventually.of_forall fun x => by
-    simpa only [Real.norm_eq_abs] using abs_coord_le (u x) i
+    simpa only [PiLp.proj_apply, Real.norm_eq_abs] using abs_coord_le (u x) i
 
 lemma integrable_coord_mul_continuous {u : R2 → R2} (hu : Integrable u μT)
     {f : R2 → ℝ} (hf : Continuous f) (i : Fin 2) :

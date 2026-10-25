@@ -75,8 +75,7 @@ theorem circularConstrainedChart_zero {γ : ℝ≥0} (hγ : 0 < γ) (hγ1 : (γ 
     circularConstrainedChart hγ hγ1 0 = littleCircularReference hγ hγ1 := by
   funext i
   change littleAreaChart hγ hγ1.le (circularContourRadii i) 0 = _
-  rw [littleAreaChart_zero]
-  rfl
+  exact littleAreaChart_zero hγ (by exact_mod_cast hγ1.le) (circularContourRadii i)
 
 theorem circularConstrainedChart_fourfold {γ : ℝ≥0} (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1)
     (v : CircularConstrainedTangentSpace γ) (i : Fin 2) :

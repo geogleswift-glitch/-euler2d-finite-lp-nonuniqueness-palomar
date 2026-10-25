@@ -70,7 +70,7 @@ theorem circularNormalMatrix_banachField_zero {γ : ℝ≥0}
     have h := fderiv_finiteContourPhaseFieldTotal_conjugate hγ hγ1
       (circularReferenceC1 hγ hγ1) circularContourRadii hr
       (lift_circularReferenceC1 hγ hγ1) circularContourStrengths Z 0 H
-    simpa only [contourParameterShiftFamilyCLM_zero] using h
+    simpa only [circularBanachField, Z, contourParameterShiftFamilyCLM_zero] using h
   have hread := lift_fderiv_finiteContourMaterialFieldTotal hγ hγ1
     (circularReferenceC1 hγ hγ1) circularContourRadii hr
     (lift_circularReferenceC1 hγ hγ1) circularContourStrengths Z H i 0

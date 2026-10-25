@@ -72,7 +72,8 @@ theorem tendsto_torusTransportL2_scalarTest {p : R2 → ℝ} (hp : IsScalarTest 
     have hpLim := (hp.1.continuous.tendsto (Z x)).comp hlim
     dsimp only [F]
     simp_rw [hx, hz]
-    simpa only [sub_self, norm_zero, zero_pow (by norm_num : (2 : ℕ) ≠ 0)] using
+    simpa only [Function.comp_def, sub_self, norm_zero,
+      zero_pow (by norm_num : (2 : ℕ) ≠ 0)] using
       ((hpLim.sub_const (p (Z x))).norm).pow 2
   have hint := tendsto_integral_of_dominated_convergence (μ := μT) (F := F)
     (f := fun _ => (0 : ℝ)) (fun _ => (2 * (C : ℝ)) ^ 2) hmeas

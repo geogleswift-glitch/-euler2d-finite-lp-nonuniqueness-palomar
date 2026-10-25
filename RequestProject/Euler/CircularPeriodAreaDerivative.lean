@@ -29,7 +29,7 @@ theorem littleContourArea_reference_add {γ : ℝ≥0} (hγ : 0 < γ) (hγ1 : γ
   rw [littleContourEllCLM_eq_ellFun]
   change loopArea (LittleContourSpace.lift γ (littleReferenceCircle hγ hγ1 r + v)) = _
   rw [LittleContourSpace.lift_add, lift_littleReferenceCircle]
-  simpa only [Complex.ofReal_one, one_mul, one_pow] using
+  simpa only [littleContourArea, Pi.add_def, Complex.ofReal_one, one_mul, one_pow] using
     loopArea_affine r 1 (LittleContourSpace.contDiff_lift v) (LittleContourSpace.periodic_lift v)
 
 theorem hasFDerivAt_littleContourArea_reference {γ : ℝ≥0} (hγ : 0 < γ) (hγ1 : γ ≤ 1) (r : ℝ) :
@@ -42,7 +42,7 @@ theorem hasFDerivAt_littleContourArea_reference {γ : ℝ≥0} (hγ : 0 < γ) (h
         (fun v => Real.pi * r ^ 2 + littleContourEllCLM γ r v + littleContourArea γ v) :=
       funext (littleContourArea_reference_add hγ hγ1 r)
     rw [he]
-    simpa only [zero_add, add_zero] using hsum
+    simpa only [Pi.add_def, zero_add, add_zero] using hsum
   have ht : HasFDerivAt (fun Z : LittleContourSpace γ => Z - C)
       (ContinuousLinearMap.id ℝ (LittleContourSpace γ)) C := (hasFDerivAt_id C).sub_const C
   have hd' : HasFDerivAt (fun v => littleContourArea γ (C + v)) (littleContourEllCLM γ r) (C - C) := by
