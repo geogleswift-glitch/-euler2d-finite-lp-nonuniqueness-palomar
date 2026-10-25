@@ -65,7 +65,9 @@ theorem exists_clusterContourLittle_uniform_lipschitz_neighborhood
   have hval {W : LittleContourSpace γ} (hW : W ∈ ball Z R) (x : ContourCircle) :
       ‖ContourC1Space.toBCF γ W.val x - ContourC1Space.toBCF γ Z.val x‖ < d / 4 := by
     exact (ContourC1Space.norm_eval_le (W.val - Z.val) x).trans_lt
-      ((show ‖W.val - Z.val‖ < R by simpa only [dist_eq_norm] using mem_ball.mp hW).trans_le
+      ((show ‖W.val - Z.val‖ < R by
+        change ‖W - Z‖ < R
+        exact mem_ball_iff_norm.mp hW).trans_le
         (min_le_left _ _))
   have htarget {W : LittleContourSpace γ} (hW : W ∈ ball Z R) (x : ContourCircle) :
       d / 2 ≤ ‖ContourC1Space.toBCF γ W.val x‖ := by
@@ -81,7 +83,9 @@ theorem exists_clusterContourLittle_uniform_lipschitz_neighborhood
     linarith
   have hlength {W : LittleContourSpace γ} (hW : W ∈ ball Z R) : ‖W.val‖ ≤ L := by
     have hn := norm_le_norm_sub_add W.val Z.val
-    have he : ‖W.val - Z.val‖ < R := by simpa only [dist_eq_norm] using mem_ball.mp hW
+    have he : ‖W.val - Z.val‖ < R := by
+      change ‖W - Z‖ < R
+      exact mem_ball_iff_norm.mp hW
     have hR1 : R ≤ 1 := min_le_right _ _
     change ‖W.val‖ ≤ ‖Z.val‖ + 1
     linarith

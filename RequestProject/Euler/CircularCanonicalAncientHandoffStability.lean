@@ -55,7 +55,10 @@ theorem exists_canonical_ancient_handoff_stability_constants {s : ℝ} (hs : s <
   have hcd (u : ℝ) (hu : u ∈ Icc (0 : ℝ) (-s)) :
       HasDerivAt c (circularBanachField hγ hγ1 (c u)) u := by
     have hh := (P.ancient_derivative (s + u) (htime u hu)).scomp u ((hasDerivAt_id u).const_add s)
-    simpa only [one_smul] using hh
+    simp only [Function.comp_def, one_smul] at hh
+    change HasDerivAt (fun v : ℝ => P.ancient (s + v))
+      (circularBanachField hγ hγ1 (P.ancient (s + u))) u
+    exact hh
   have hcm (u : ℝ) (hu : u ∈ Icc (0 : ℝ) (-s)) : c u ∈ circularBanachDomain hγ hγ1 :=
     (P.ancient_domain (s + u) (htime u hu)).1
   have hdom : IsOpen (circularBanachDomain hγ hγ1) := by
@@ -76,7 +79,8 @@ theorem exists_canonical_ancient_handoff_stability_constants {s : ℝ} (hs : s <
     have hh := (hyd u hu).scomp u ((hasDerivAt_id u).const_add exit)
     have hshift : HasDerivAt (fun v => y (exit + v))
         (circularBanachField hγ hγ1 (y (exit + u)) + p (exit + u)) u := by
-      simpa only [one_smul] using hh
+      simp only [Function.comp_def, one_smul] at hh
+      exact hh
     exact (hasDerivAt_circularCanonicalHandoffAlignment_forced hγ hγ1 s b exit u (hym u hu) hshift).1
   have hYc : ContinuousOn Y (Icc (0 : ℝ) H) :=
     fun u hu => (hYd u hu).continuousAt.continuousWithinAt

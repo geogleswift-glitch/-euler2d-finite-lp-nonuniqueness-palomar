@@ -134,7 +134,11 @@ theorem integral_abs_physicalComplexSource_le {w : R2 → ℝ}
       rw [hx, Real.norm_eq_abs]
     _ ≤ scalarL2L1Constant * ‖particleCurlL2 f S.backward S.backward_area t‖ :=
       integral_norm_scalarL2_le _
-    _ = _ := by rw [particleCurlL2, Lp.norm_compMeasurePreserving]
+    _ = _ := by
+      have harea : MeasurePreserving (torusWrap ∘ S.backward t) μT μT := S.backward_area t
+      have hnorm : ‖particleCurlL2 f S.backward S.backward_area t‖ = ‖f‖ :=
+        Lp.norm_compMeasurePreserving f harea
+      exact congrArg (fun r : ℝ => scalarL2L1Constant * r) hnorm
 
 theorem tendsto_physicalComplexSource_L1 {w : R2 → ℝ}
     (hwf : w =ᵐ[μT] (f : R2 → ℝ))
@@ -145,7 +149,7 @@ theorem tendsto_physicalComplexSource_L1 {w : R2 → ℝ}
   have hn := tendsto_iff_norm_sub_tendsto_zero.mp hc
   exact squeeze_zero (fun t => integral_nonneg (fun z => abs_nonneg _))
     (fun t => S.physicalComplexSource_L1_sub_le hwf (τ t) s)
-    (by simpa only [mul_zero] using hn.const_mul scalarL2L1Constant)
+    (by simpa only [Function.comp_def, mul_zero] using hn.const_mul scalarL2L1Constant)
 
 theorem physicalComplexSource_support {w : R2 → ℝ} {a t : ℝ}
     (hs : ∀ x ∈ torusBox, a < ‖x - torusCenter‖ → S.transportedScalar w t x = 0) :
