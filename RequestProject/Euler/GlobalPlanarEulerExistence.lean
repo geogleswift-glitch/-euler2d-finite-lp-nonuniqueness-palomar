@@ -48,15 +48,15 @@ theorem particle_integral_eq (hw : Integrable w) (hB : ∀ x, ‖w x‖ ≤ B)
   have hgnlim : ∀ᵐ s ∂volume.restrict (Icc (0 : ℝ) (t : ℝ)),
       Tendsto (fun n => gn n s) atTop (𝓝 (g s)) := by
     filter_upwards [ae_restrict_mem measurableSet_Icc] with s hs
-    have hp := (S.velocity_tendsto_along_positions hw hB ⟨s, hs.1⟩
-      (S.forward_tendsto ⟨s, hs.1⟩ a)).comp (tendsto_add_atTop_nat N)
-    simpa only [Function.comp_apply, gn, g, positiveParticleDerivative,
+    have hp := (S.velocity_tendsto_along_positions hw hB (NNReal.mk s hs.1)
+      (S.forward_tendsto (NNReal.mk s hs.1) a)).comp (tendsto_add_atTop_nat N)
+    simpa only [Function.comp_def, NNReal.coe_mk, gn, g, positiveParticleDerivative,
       Real.toNNReal_of_nonneg hs.1] using hp
   have hXlim (s : ℝ) (hs : s ∈ Icc (0 : ℝ) (t : ℝ)) :
       Tendsto (fun n => (S.system (S.indices (n + N))).particles.forward s a) atTop
         (𝓝 (positivePairForwardAt S.limit.maps s.toNNReal a)) := by
-    simpa only [Function.comp_apply, Real.toNNReal_of_nonneg hs.1] using
-      (S.forward_tendsto ⟨s, hs.1⟩ a).comp (tendsto_add_atTop_nat N)
+    simpa only [Function.comp_def, NNReal.coe_mk, Real.toNNReal_of_nonneg hs.1] using
+      (S.forward_tendsto (NNReal.mk s hs.1) a).comp (tendsto_add_atTop_nat N)
   have heq := particle_integral_eq_of_tendsto
     (Xn := fun n s => (S.system (S.indices (n + N))).particles.forward s a)
     (X := fun s => positivePairForwardAt S.limit.maps s.toNNReal a) (gn := gn) (g := g)

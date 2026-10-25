@@ -176,8 +176,9 @@ theorem norm_circularHighProjectionOne_le {N : ℕ} (hN : 8 ≤ N + 2) (η : Cir
       rw [abs_neg, abs_neg, abs_of_nonneg hc0, abs_of_pos hδ0]
       dsimp only [circularHighGap]
       linarith
-    simpa only [circularHighProjectionOne, circularHighQOne, Pi.smul_apply, smul_eq_mul,
-      Matrix.cons_val_one, Matrix.cons_val_fin_one, Complex.ofReal_neg, sub_eq_add_neg,
+    change ‖(circularHighGap N : ℂ)⁻¹ *
+      (-(circularHighC N : ℂ) * η 0 - (circularHighDelta N : ℂ) * η 1)‖ ≤ 2 * ‖η‖
+    simpa only [Complex.ofReal_neg, sub_eq_add_neg,
       neg_mul] using norm_complex_pair_div_le hg (norm_nonneg η) hxy
         (norm_le_pi_norm η 0) (norm_le_pi_norm η 1)
 
@@ -192,8 +193,9 @@ theorem norm_circularHighProjectionTwo_le {N : ℕ} (hN : 8 ≤ N + 2) (η : Cir
       rw [abs_neg, abs_neg, abs_of_pos hδ0, abs_of_nonneg hb0]
       dsimp only [circularHighGap]
       linarith
-    simpa only [circularHighProjectionTwo, circularHighQTwo, Pi.smul_apply, smul_eq_mul,
-      Matrix.cons_val_zero, Complex.ofReal_neg, sub_eq_add_neg, neg_mul] using
+    change ‖(circularHighGap N : ℂ)⁻¹ *
+      (-(circularHighDelta N : ℂ) * η 0 - (circularHighB N : ℂ) * η 1)‖ ≤ 2 * ‖η‖
+    simpa only [Complex.ofReal_neg, sub_eq_add_neg, neg_mul] using
         norm_complex_pair_div_le hg (norm_nonneg η) hxy (norm_le_pi_norm η 0) (norm_le_pi_norm η 1)
   · have hxy : |circularHighC N| + |circularHighD N - circularHighDelta N| ≤
         2 * circularHighGap N := by
@@ -215,7 +217,9 @@ theorem circularHighNormalCurve_hasDerivAt {N : ℕ} (hN : 8 ≤ N + 2)
     (circularHighProjectionOne N η)
   have h2 := (hasDerivAt_circularUnitPhase (circularHighMuTwo N) t).smul_const
     (circularHighProjectionTwo N η)
-  convert h1.add h2 using 1
+  have hd : HasDerivAt (circularHighNormalCurve N η) _ t :=
+    (h1.add h2).congr_of_eventuallyEq (Eventually.of_forall fun _ => by rfl)
+  apply hd.congr_deriv
   simp only [circularHighNormalCurve, map_add, circularNormalGenerator_complex_smul,
     circularHighProjectionOne_eigen hN, circularHighProjectionTwo_eigen hN, smul_smul]
   congr 1 <;> congr 1 <;> ring

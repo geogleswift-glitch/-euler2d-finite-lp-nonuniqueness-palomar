@@ -96,8 +96,17 @@ theorem norm_circularFourierBlockTermCLM_le {γ : ℝ≥0} (hγ : 0 < γ) (hγ1 
 theorem summable_circularFourierBlockTermCLM {γ : ℝ≥0} (hγ : 0 < γ) (hγ1 : γ ≤ 1)
     {A : ℕ → CircularFourierAmplitudes →L[ℝ] CircularFourierAmplitudes}
     (hA : Summable (fun N => circularFourierModeWeight γ N * ‖A N‖)) :
-    Summable (fun N => circularFourierBlockTermCLM hγ hγ1 N (A N)) :=
-  (hA.mul_right (2 / cellA)).of_norm_bounded
+    Summable (fun N => circularFourierBlockTermCLM hγ hγ1 N (A N)) := by
+  letI : CompleteSpace (LittleContourSpace γ) := littleContourSpace_complete γ
+  letI : CompleteSpace (Fin 2 → LittleContourSpace γ) :=
+    Pi.complete (fun _ : Fin 2 => LittleContourSpace γ)
+  letI : IsBoundedSMul ℝ (Fin 2 → LittleContourSpace γ) :=
+    @NormedSpace.toIsBoundedSMul ℝ (Fin 2 → LittleContourSpace γ) _ _
+      (Pi.normedSpace (𝕜 := ℝ) (E := fun _ : Fin 2 => LittleContourSpace γ))
+  letI : ContinuousSMul ℝ (Fin 2 → LittleContourSpace γ) := IsBoundedSMul.continuousSMul
+  letI : CompleteSpace ((Fin 2 → LittleContourSpace γ) →L[ℝ] (Fin 2 → LittleContourSpace γ)) :=
+    ContinuousLinearMap.instCompleteSpace
+  exact (hA.mul_right (2 / cellA)).of_norm_bounded
     (fun N => norm_circularFourierBlockTermCLM_le hγ hγ1 N (A N))
 
 def circularFourierBlockMultiplierCLM {γ : ℝ≥0} (hγ : 0 < γ) (hγ1 : γ ≤ 1)

@@ -33,7 +33,8 @@ theorem circularAmplitudeCrossGenerator_apply (N : ℕ) (p : CircularFourierAmpl
     norm_num [circularAngularNormalAmplitude, circularAngularTangentialAmplitude,
       circularMaterialTangentialAmplitude, circularDiagonalNormalFrequency,
       circularDiagonalTangentFrequency, circularDiagonalTangentForcing,
-      circularContourAngularVelocities, Bmat, Matrix.mulVec, dotProduct, Fin.sum_univ_two]
+      circularContourAngularVelocities, Bmat, Matrix.mulVec, Matrix.vecHead, Matrix.vecTail,
+      dotProduct, Fin.sum_univ_two]
     <;> push_cast <;> ring <;> simp_all
 
 theorem norm_circularAmplitudeCrossGenerator_le (N : ℕ) :

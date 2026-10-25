@@ -35,6 +35,8 @@ theorem fderiv_circularBanachField_reference_rotation_commute {γ : ℝ≥0}
   let R := contourRotationFamilyLittleCLM (ι := Fin 2) γ b
   have hU : IsOpen (circularBanachDomain hγ hγ1) := isOpen_phaseAdmissibleLittleContourFamilies _ _
   have hcU : c ∈ circularBanachDomain hγ hγ1 := by
+    change IsPhaseAdmissibleLittleContourFamily (circularReferenceC1 hγ hγ1)
+      circularContourRadii (littleCircularReference hγ hγ1)
     simpa only [littleCircularMaterialContours_zero] using phaseAdmissible_littleCircularMaterialContours hγ hγ1 0
   have hf : ContDiffOn ℝ 1 (circularBanachField hγ hγ1) (circularBanachDomain hγ hγ1) :=
     contDiffOn_finiteContourPhaseFieldTotal hγ hγ1 _ _ _ _ _ 1
@@ -66,15 +68,26 @@ theorem circularFieldDerivative_all_mode_coordinates {γ : ℝ≥0}
       (circularMaterialNormalAmplitude N (circularModeNormalCoefficientCLM γ N H)
           (circularModeTangentCoefficientCLM γ N H),
         circularMaterialTangentialAmplitude N (circularModeNormalCoefficientCLM γ N H)) := by
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
   let D := fderiv ℝ (circularBanachField hγ hγ1) (littleCircularReference hγ hγ1)
-  let P := circularAngularModeProjectionCLM hγ hγ1.le ((N + 2 : ℕ) : ℤ)
+  let P := circularAngularModeProjectionCLM hγ hγle ((N + 2 : ℕ) : ℤ)
   have he : D (P H) = P (D H) := congrArg (fun A => A H)
     (fderiv_circularBanachField_reference_angularProjection_commute hγ hγ1 ((N + 2 : ℕ) : ℤ))
   change circularModeAmplitudeCoefficientCLM γ N (D H) = _
-  rw [← circularModeAmplitudeCoefficientCLM_projection hγ hγ1.le N (D H), ← he]
+  rw [← circularModeAmplitudeCoefficientCLM_projection hγ hγle N (D H), ← he]
   dsimp only [D, P]
-  rw [circularAngularModeProjectionCLM_eq_normalMode, fderiv_circularBanachField_mode]
-  exact circularModeAmplitudeCoefficientCLM_normalMode hγ hγ1.le N
+  rw [circularAngularModeProjectionCLM_eq_normalMode hγ hγle N H]
+  have hmode : fderiv ℝ (circularBanachField hγ hγ1) (littleCircularReference hγ hγ1)
+      (circularNormalModeLittle hγ hγle N
+        (circularModeNormalCoefficientCLM γ N H) (circularModeTangentCoefficientCLM γ N H)) =
+    circularNormalModeLittle hγ hγle N
+      (circularMaterialNormalAmplitude N (circularModeNormalCoefficientCLM γ N H)
+        (circularModeTangentCoefficientCLM γ N H))
+      (circularMaterialTangentialAmplitude N (circularModeNormalCoefficientCLM γ N H)) :=
+    fderiv_circularBanachField_mode hγ hγ1 N
+      (circularModeNormalCoefficientCLM γ N H) (circularModeTangentCoefficientCLM γ N H)
+  rw [hmode]
+  exact circularModeAmplitudeCoefficientCLM_normalMode hγ hγle N
     (circularMaterialNormalAmplitude N (circularModeNormalCoefficientCLM γ N H)
       (circularModeTangentCoefficientCLM γ N H),
       circularMaterialTangentialAmplitude N (circularModeNormalCoefficientCLM γ N H))

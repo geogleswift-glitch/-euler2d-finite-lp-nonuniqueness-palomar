@@ -95,18 +95,28 @@ theorem circularPeriod_derivative_unstableCoordinate {γ : ℝ≥0}
     circularUnstableCoordinateCLM γ
         (fderiv ℝ (fun W => X W period) (littleCircularReference hγ hγ1) H) =
       (-lamMult : ℝ) • circularUnstableCoordinateCLM γ H := by
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
   let D := fderiv ℝ (fun W => X W period) (littleCircularReference hγ hγ1)
-  let P := circularFourthModeProjectionCLM hγ hγ1.le
+  let P := circularFourthModeProjectionCLM hγ hγle
   have hc : D (P H) = P (D H) :=
     congrArg (fun A : (Fin 2 → LittleContourSpace γ) →L[ℝ]
       (Fin 2 → LittleContourSpace γ) => A H)
       (circularPeriod_derivative_fourthProjection_commute hγ hγ1 hρ hX hd)
   change circularUnstableCoordinateCLM γ (D H) = _
-  rw [← circularUnstableCoordinate_fourthProjection hγ hγ1.le (D H), ← hc]
+  rw [← circularUnstableCoordinate_fourthProjection hγ hγle (D H), ← hc]
   dsimp only [P, D]
-  rw [circularFourthModeProjectionCLM_eq_normalMode,
-    circularPeriod_derivative_Fourier_block hγ hγ1 hρ hX 2]
-  rw [circularUnstableCoordinate_normalMode, ellPlus_circularNormalLinearFlow_period]
+  rw [circularFourthModeProjectionCLM_eq_normalMode hγ hγle H]
+  have hblock : fderiv ℝ (fun W => X W period) (littleCircularReference hγ hγ1)
+      (circularNormalModeLittle hγ hγle 2
+        (circularFourthNormalCoefficientCLM γ H) (circularFourthTangentCoefficientCLM γ H)) =
+    circularNormalModeLittle hγ hγle 2
+      (circularNormalLinearFlow 2 (circularFourthNormalCoefficientCLM γ H) period)
+      (circularAmplitudeLinearFlow 2
+        (circularFourthNormalCoefficientCLM γ H, circularFourthTangentCoefficientCLM γ H) period).2 :=
+    circularPeriod_derivative_Fourier_block hγ hγ1 hρ hX 2
+      (circularFourthNormalCoefficientCLM γ H) (circularFourthTangentCoefficientCLM γ H)
+  rw [hblock, circularUnstableCoordinate_normalMode hγ hγle,
+    ellPlus_circularNormalLinearFlow_period]
   change (-lamMult : ℝ) • ellPlus (circularFourthNormalCoefficientCLM γ H) =
     (-lamMult : ℝ) • circularEllPlusCLM (circularFourthNormalCoefficientCLM γ H)
   rw [circularEllPlusCLM_apply]
@@ -129,8 +139,11 @@ theorem circularPeriod_derivative_unstableProjection_commute {γ : ℝ≥0}
     (fderiv ℝ (fun W => X W period) (littleCircularReference hγ hγ1) H))
   rw [circularPeriod_derivative_unstableProjection_apply hγ hγ1 hρ hX,
     circularPeriod_derivative_unstableCoordinate hγ hγ1 hρ hX hd]
-  rw [circularUnstableProjectionCLM_apply]
-  exact ((circularUnstableEmbeddingCLM hγ hγ1.le).toLinearMap.map_smul'
+  have hγle : γ ≤ 1 := by exact_mod_cast hγ1.le
+  change (-lamMult : ℝ) • circularUnstableProjectionCLM hγ hγle H =
+    circularUnstableEmbeddingCLM hγ hγle ((-lamMult : ℝ) • circularUnstableCoordinateCLM γ H)
+  rw [circularUnstableProjectionCLM_apply hγ hγle H]
+  exact ((circularUnstableEmbeddingCLM hγ hγle).toLinearMap.map_smul'
     (-lamMult : ℝ) (circularUnstableCoordinateCLM γ H)).symm
 
 theorem circularPeriod_derivative_unstableComplement_invariant {γ : ℝ≥0}

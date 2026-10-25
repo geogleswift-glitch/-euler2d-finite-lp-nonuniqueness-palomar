@@ -58,7 +58,7 @@ def smoothRegularizedParticleSystemOfDisplacement
       hv hC1 hT hdiv hper hw
     label_integral := by
       intro t ht x
-      unfold regularizedLabelVelocity
+      conv_lhs => unfold regularizedLabelVelocity
       apply integral_congr_ae
       filter_upwards with b
       rw [← regularizedDisplacement_eq_boundedParticleForward hη hη0 hv hT hODE ht b]
@@ -153,6 +153,7 @@ theorem exists_smoothRegularizedParticleSystem_fourfold
     rwa [perpJ_neg_perpJ_apply] at hh
   have hforward (t : ℝ) (ht : t ∈ Icc (0 : ℝ) T) (a : R2) :
       S.forward t (torusQuarterTurn a) = torusQuarterTurn (S.forward t a) := by
+    dsimp only [S, smoothRegularizedParticleSystemOfDisplacement]
     change boundedParticleForward hv hT t (torusQuarterTurn a) =
       torusQuarterTurn (boundedParticleForward hv hT t a)
     rw [← regularizedDisplacement_eq_boundedParticleForward hη hη0 hv hT hODE ht (torusQuarterTurn a),
@@ -172,6 +173,7 @@ theorem exists_smoothRegularizedParticleSystem_fourfold
     rw [hsym t ht] at he
     have hh := congrArg perpJ he
     rw [perpJ_neg_perpJ_apply] at hh
+    dsimp only [S, smoothRegularizedParticleSystemOfDisplacement]
     exact hh.symm
 
 theorem exists_fourfoldRegularizedTorusParticleSystem_with_symmetry

@@ -81,7 +81,7 @@ theorem hasFDerivAt_circularConstrainedChart_zero {γ : ℝ≥0}
     ((ContinuousLinearMap.proj i).comp (circularConstrainedTangentSubmodule γ).subtypeL).hasFDerivAt
   have h := (hasFDerivAt_littleAreaChart_zero hγ hγ1.le (circularContourRadii i)).comp
     (0 : CircularConstrainedTangentSpace γ) hi
-  simpa only [Function.comp_def, ContinuousLinearMap.id_comp] using h
+  simpa only [circularConstrainedChart, Function.comp_def, ContinuousLinearMap.id_comp] using h
 
 theorem contDiffAt_circularConstrainedReturnMap {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1) (n : ℕ∞)
@@ -134,6 +134,11 @@ theorem circularConstrainedReturnMap_derivative_unstable_val {γ : ℝ≥0}
     (fderiv ℝ (circularConstrainedReturnMap hγ hγ1 (fun W => X W period)) 0
       (circularConstrainedUnstableEmbeddingCLM hγ hγ1.le c)).val =
         (-lamMult : ℝ) • circularUnstableEmbeddingCLM hγ hγ1.le c := by
+  letI : IsBoundedSMul ℝ (CircularConstrainedTangentSpace γ) :=
+    @NormedSpace.toIsBoundedSMul ℝ (CircularConstrainedTangentSpace γ) _ _
+      (returnCoordTangent_space γ)
+  letI : ContinuousSMul ℝ (CircularConstrainedTangentSpace γ) :=
+    IsBoundedSMul.continuousSMul
   rw [(hasFDerivAt_circularConstrainedReturnMap_zero hγ hγ1 hd).fderiv]
   change circularConstraintProjectionCLM hγ hγ1.le
     (fderiv ℝ (fun W => X W period) (littleCircularReference hγ hγ1)

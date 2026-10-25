@@ -64,7 +64,8 @@ theorem hasDerivAt_littleContourFourierCoefficient_variableShift {γ : ℝ≥0}
   simp_rw [littleContourFourierCoefficient_parameterShift]
   have hcoef := (littleContourFourierCoefficientCLM γ k).hasFDerivAt.comp_hasDerivAt t hH
   have hd := (hasDerivAt_contourCircleCharacter_comp k hb).mul hcoef
-  convert hd using 1 <;> simp only [Function.comp_def, littleContourFourierCoefficientCLM_apply] <;> ring
+  convert hd using 1 <;>
+    simp only [Function.comp_def, Pi.mul_def, littleContourFourierCoefficientCLM_apply] <;> ring
 
 theorem hasDerivAt_shifted_circularModeNormalCoefficient {γ : ℝ≥0} (N : ℕ)
     (v : Fin 2 → ℝ) {H : ℝ → Fin 2 → LittleContourSpace γ} {H' : Fin 2 → LittleContourSpace γ}
@@ -81,7 +82,7 @@ theorem hasDerivAt_shifted_circularModeNormalCoefficient {γ : ℝ≥0} (N : ℕ
   intro i
   have hHi := (ContinuousLinearMap.proj i).hasFDerivAt.comp_hasDerivAt t hH
   have hv : HasDerivAt (fun u : ℝ => v i * u) (v i) t := by
-    simpa only [mul_one] using (hasDerivAt_id t).const_mul (v i)
+    simpa only [id_eq, mul_one] using (hasDerivAt_id t).const_mul (v i)
   have hp := hasDerivAt_littleContourFourierCoefficient_variableShift ((N + 3 : ℕ) : ℤ) hHi hv
   have hm := hasDerivAt_littleContourFourierCoefficient_variableShift (-((N + 1 : ℕ) : ℤ)) hHi hv
   have hmc := Complex.conjCLE.toContinuousLinearMap.hasFDerivAt.comp_hasDerivAt t hm
