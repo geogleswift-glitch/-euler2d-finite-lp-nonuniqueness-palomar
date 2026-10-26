@@ -267,7 +267,7 @@ theorem exists_uniform_actualParent_capture_scale_trajectory {Rflow r₀ : ℝ}
     intro t ht z hz
     refine (hpastParticles t ht z hz).trans ?_
     convert mul_le_mul_of_nonneg_right hCwDuration (mul_nonneg hρ.le hrk.le) using 1
-      <;> dsimp only [ai₀] <;> ring
+      <;> (try dsimp only [ai₀]) <;> ring
   have hpower (n : ℕ) : circularCaptureBlockMultiplier ℓ ^ n =
       Real.exp (sigma * ((n : ℝ) * circularCaptureBlockTime ℓ)) := by
     rw [circularCaptureBlockMultiplier_eq_exp, ← Real.exp_nat_mul]

@@ -148,7 +148,7 @@ theorem exists_actualDeepest_parent_window_setup :
   let M := finiteContourPatchMassBound circularContourStrengths circularContourRadii
   have hmass : Tendsto (fun ξ : ℝ => circularFiniteL1Coefficient b (Real.exp (-ξ))) atTop (𝓝 (m₀ + M)) := by
     have hnum : Tendsto (fun _ξ : ℝ => m₀) atTop (𝓝 m₀) := tendsto_const_nhds
-    simpa only [circularFiniteL1Coefficient, div_one] using
+    simpa only [circularFiniteL1Coefficient, m₀, M, Pi.div_apply, div_one] using
       (hnum.div hmden (by norm_num : (1 : ℝ) ≠ 0)).add_const M
   have hrden : Tendsto (fun ξ : ℝ => 1 - (b : ℝ) * Real.exp (-ξ) ^ 2) atTop (𝓝 1) := by
     simpa only [mul_zero, sub_zero] using hOne.sub (he2.const_mul (b : ℝ))
@@ -158,7 +158,7 @@ theorem exists_actualDeepest_parent_window_setup :
     have hnum : Tendsto (fun _ξ : ℝ => radialLimit) atTop (𝓝 radialLimit) := tendsto_const_nhds
     have hfirst := hnum.div hrden (by norm_num : (1 : ℝ) ≠ 0)
     have hsecond := (hmass.const_mul (Kr * d ^ 4)).mul he8
-    simpa only [finiteEulerUniformRadialCoefficient, div_one, mul_zero, add_zero] using hfirst.add hsecond
+    simpa only [finiteEulerUniformRadialCoefficient, radialLimit, Pi.div_apply, div_one, mul_zero, add_zero] using hfirst.add hsecond
   have hcubic : ∀ᶠ ξ : ℝ in atTop,
       (b : ℝ) * finiteEulerUniformRadialCoefficient Kr b (Real.exp (-ξ)) (Real.exp (-ξ)) core d η *
         Cb ^ 3 * Real.exp (-ξ) ^ 2 * (1 + Dparent) ^ 3 ≤ Cr / 2 := by
