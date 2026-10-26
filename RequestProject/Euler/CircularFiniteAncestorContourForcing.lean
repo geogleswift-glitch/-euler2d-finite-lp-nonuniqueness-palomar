@@ -87,7 +87,8 @@ theorem exists_finiteAncestorResidual_contourLittle_weighted
           ((ampScale A₀ b jj * (radScale R ρ k / radScale R ρ jj) ^ 2) / ampScale A₀ b k) * q j := by ring
     rw [heq, outer_contour_scale_identity (j := (jj : ℕ)) hA hb hR hρ (Nat.le_of_lt j.isLt)] at hn'
     refine ⟨Qj, hQj, ?_⟩
-    simpa only [div_div, mul_comm] using hn'
+    simp only [div_div, mul_comm, jj, finiteAncestorIndex] at hn' ⊢
+    exact hn'
   choose Qj hQj hn using hex
   refine ⟨∑ j, Qj j, ?_, ?_⟩
   · intro θ

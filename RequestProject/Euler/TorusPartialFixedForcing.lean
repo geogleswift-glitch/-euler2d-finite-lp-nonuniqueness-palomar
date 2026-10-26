@@ -78,7 +78,8 @@ theorem exists_finitePhase_fixed_partial_forcing
     have htarget {W : ι → LittleContourSpace γ} (hW : W ∈ Vd) (i : ι) (x : ContourCircle) :
         d i / 2 ≤ ‖ContourC1Space.toBCF γ (W i).val x‖ := by
       have he : ‖(W i).val - (Z i).val‖ < d i / 4 := by
-        simpa only [dist_eq_norm] using mem_ball.mp (hW i)
+        change ‖W i - Z i‖ < d i / 4
+        exact mem_ball_iff_norm.mp (hW i)
       have hev := (ContourC1Space.norm_eval_le ((W i).val - (Z i).val) x).trans_lt he
       change ‖ContourC1Space.toBCF γ (W i).val x - ContourC1Space.toBCF γ (Z i).val x‖ < d i / 4 at hev
       have hn := norm_sub_norm_le (ContourC1Space.toBCF γ (Z i).val x)

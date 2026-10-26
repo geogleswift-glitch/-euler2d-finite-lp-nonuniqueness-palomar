@@ -125,7 +125,7 @@ theorem eventually_budget (p : DeepestCaptureScaleData) (h : p.Admissible) :
   have hdrift : Tendsto (fun ξ : ℝ => 5 / 4 + (p.Cgeo * p.A₀ /
       (1 - deepestCaptureScale ξ / p.b)) * p.T) atTop (𝓝 (5 / 4 + p.Cgeo * p.A₀ * p.T)) := by
     have hnum : Tendsto (fun _ξ : ℝ => p.Cgeo * p.A₀) atTop (𝓝 (p.Cgeo * p.A₀)) := tendsto_const_nhds
-    simpa only [div_one] using
+    simpa only [Pi.div_def, div_one] using
       ((hnum.div hden (by norm_num : (1 : ℝ) ≠ 0)).mul_const p.T).const_add (5 / 4)
   have hmden : Tendsto (fun ξ : ℝ => 1 - deepestCaptureScale ξ ^ 2 / p.b) atTop (𝓝 1) := by
     simpa only [zero_div, sub_zero] using hOne.sub (he2.div_const p.b)
@@ -134,7 +134,7 @@ theorem eventually_budget (p : DeepestCaptureScaleData) (h : p.Admissible) :
   have hmass : Tendsto (fun ξ : ℝ => circularFiniteL1Coefficient p.b (deepestCaptureScale ξ))
       atTop (𝓝 (m₀ + M)) := by
     have hnum : Tendsto (fun _ξ : ℝ => m₀) atTop (𝓝 m₀) := tendsto_const_nhds
-    simpa only [circularFiniteL1Coefficient, div_one] using
+    simpa only [Pi.div_def, circularFiniteL1Coefficient, m₀, M, div_one] using
       (hnum.div hmden (by norm_num : (1 : ℝ) ≠ 0)).add_const M
   have hrden : Tendsto (fun ξ : ℝ => 1 - p.b * deepestCaptureScale ξ ^ 2) atTop (𝓝 1) := by
     simpa only [mul_zero, sub_zero] using hOne.sub (he2.const_mul p.b)
@@ -144,7 +144,7 @@ theorem eventually_budget (p : DeepestCaptureScaleData) (h : p.Admissible) :
     have hnum : Tendsto (fun _ξ : ℝ => radialLimit) atTop (𝓝 radialLimit) := tendsto_const_nhds
     have hfirst := hnum.div hrden (by norm_num : (1 : ℝ) ≠ 0)
     have hsecond := (hmass.const_mul (p.Kr * p.d ^ 4)).mul he8
-    simpa only [finiteEulerUniformRadialCoefficient, div_one, mul_zero, add_zero] using hfirst.add hsecond
+    simpa only [Pi.div_def, finiteEulerUniformRadialCoefficient, radialLimit, div_one, mul_zero, add_zero] using hfirst.add hsecond
   have hcubic : Tendsto (fun ξ : ℝ => p.b * finiteEulerUniformRadialCoefficient p.Kr p.b
       (deepestCaptureScale ξ) (deepestCaptureScale ξ) p.core p.d p.δcur * p.Cb ^ 3 *
       deepestCaptureScale ξ ^ 2 * (1 + p.duration) ^ 3) atTop (𝓝 0) := by

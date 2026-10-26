@@ -235,7 +235,7 @@ theorem eventually_normalizedFiniteAncestorResidual_le
       (tendsto_const_nhds : Tendsto (fun _ξ : ℝ => (1 : ℝ)) atTop (𝓝 1)).sub hzeta
   have hlim : Tendsto (fun ξ : ℝ => M * ((C₀ * Real.exp (-ξ) ^ 8) /
       (1 - C₀ * Real.exp (-ξ) ^ 8))) atTop (𝓝 0) := by
-    simpa only [zero_div, mul_zero] using
+    simpa only [Pi.div_def, zero_div, mul_zero] using
       (hzeta.div hden (by norm_num : (1 : ℝ) ≠ 0)).const_mul M
   have hlin : Tendsto (fun ξ : ℝ => 2 * B * Real.exp (-ξ)) atTop (𝓝 0) := by
     simpa only [mul_zero] using he.const_mul (2 * B)

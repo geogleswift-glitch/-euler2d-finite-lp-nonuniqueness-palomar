@@ -67,7 +67,7 @@ theorem exists_circular_weighted_fixed_window_constants {γ : ℝ≥0}
         ((b : ℝ) ^ (k - (j : ℕ))) t := by
       simpa only [id_eq, mul_one] using
         ((hasDerivAt_id t).const_mul ((b : ℝ) ^ (k - (j : ℕ)))).const_add (u₀ j)
-    simpa only [c, a, NNReal.coe_pow] using
+    simpa only [c, a, NNReal.coe_pow, Function.comp_def, circularBanachField] using
       (littleCircularMaterialContours_hasDerivAt hγ hγ1 (u₀ j + (b : ℝ) ^ (k - (j : ℕ)) * t)).scomp t hparam
   have hdomains (t : ℝ) (ht : t ∈ Icc (0 : ℝ) H) (j : Fin k) : Y j t ∈ U ∧ c j t ∈ U :=
     hdomain hh hh1 hKboot hhr k (fun j => Y j t)

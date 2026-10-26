@@ -89,7 +89,7 @@ theorem integrable_normalized_finiteSinglePlanarLabel
   have hT : 0 ≤ T := ht.1.trans ht.2
   have hback : S.backward 0 = id := by
     funext x
-    simpa only [S.initial] using S.backward_forward 0 ⟨le_rfl, hT⟩ x
+    simpa only [S.initial, id_eq] using S.backward_forward 0 ⟨le_rfl, hT⟩ x
   apply S.integrable_normalizedPlanarLabelSource _ _ (radScale_pos hR hρ j) ⟨le_rfl, hT⟩ ht
     (by rw [hback]; exact MeasurePreserving.id volume) harea
   have he : S.normalizedPlanarLabelSource (P.finiteSinglePlanarInitialLabel s A₀ b R ρ N j)

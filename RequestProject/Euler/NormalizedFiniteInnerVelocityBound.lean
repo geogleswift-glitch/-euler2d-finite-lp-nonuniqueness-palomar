@@ -65,7 +65,7 @@ theorem eventually_normalizedFiniteInnerVelocity_le {b ε : ℝ} (hb : 0 < b) (h
       (tendsto_const_nhds : Tendsto (fun _ξ : ℝ => (1 : ℝ)) atTop (𝓝 1)).sub hratio
   have hsmall : Tendsto (fun ξ : ℝ => C * (Real.exp (-ξ) / b) /
       (1 - Real.exp (-ξ) / b)) atTop (𝓝 0) := by
-    simpa only [zero_div, mul_zero, div_one] using
+    simpa only [Pi.div_def, zero_div, mul_zero, div_one] using
       (hratio.const_mul C).div hden (by norm_num : (1 : ℝ) ≠ 0)
   filter_upwards [he.eventually (eventually_lt_nhds hb),
     he.eventually (eventually_lt_nhds (by norm_num : (0 : ℝ) < 1)),

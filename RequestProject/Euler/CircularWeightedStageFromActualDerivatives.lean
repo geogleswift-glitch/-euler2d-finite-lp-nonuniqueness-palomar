@@ -83,14 +83,16 @@ theorem exists_originalCircular_weighted_stage_closure :
     have hparam : HasDerivAt (fun u : ℝ => u₀ j + (b : ℝ) ^ (k - (j : ℕ)) * u)
         ((b : ℝ) ^ (k - (j : ℕ))) t := by
       simpa only [id_eq, mul_one] using ((hasDerivAt_id t).const_mul ((b : ℝ) ^ (k - (j : ℕ)))).const_add (u₀ j)
-    simpa only [c, a, NNReal.coe_pow] using
+    simpa only [c, a, NNReal.coe_pow, Function.comp_def, circularBanachField] using
       (littleCircularMaterialContours_hasDerivAt hγ hγ1 (u₀ j + (b : ℝ) ^ (k - (j : ℕ)) * t)).scomp t hparam
   have hdomains (t : ℝ) (ht : t ∈ Icc (0 : ℝ) D) (j : Fin k) : Y j t ∈ U ∧ c j t ∈ U :=
     hdomain (by dsimp only [h, ρ]; positivity) hh1 hKboot hhr k (fun j => Y j t)
       (fun j => u₀ j + (b : ℝ) ^ (k - j) * t) (hboot t ht) j
   have hνlo' : ν₀ ≤ ((b * Kself : ℝ≥0) : ℝ) + β + weightedInteractionRowFeedback b 0 0 C₀ ρ := by
+    change ν₀ ≤ ν + weightedInteractionRowFeedback b 0 0 C₀ ρ
     simpa [weightedInteractionRowFeedback] using hνlo
   have hνup' : ((b * Kself : ℝ≥0) : ℝ) + β + weightedInteractionRowFeedback b 0 0 C₀ ρ ≤ νbar := by
+    change ν + weightedInteractionRowFeedback b 0 0 C₀ ρ ≤ νbar
     simpa [weightedInteractionRowFeedback] using hνup
   exact hx hζ hβ hνlo' hνup' hE₀ hD hclock hEmax k a ha Y c p
     (fun t => Cpoly * ρ ^ 6 * (1 + t) ^ 4) (by fun_prop)

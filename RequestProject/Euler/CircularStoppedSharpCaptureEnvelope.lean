@@ -192,7 +192,10 @@ theorem exists_circular_stopped_sharp_capture_envelope {γ : ℝ≥0}
         HasDerivAt (fun t => y ((n : ℝ) * T + t))
           (circularBanachField hγ hγ1 (y ((n : ℝ) * T + s)) + p ((n : ℝ) * T + s)) s := by
       have hh := (hyd _ (hlocaltime s hs)).scomp s ((hasDerivAt_id s).const_add ((n : ℝ) * T))
-      simpa only [one_smul] using hh
+      simp only [Function.comp_def, one_smul] at hh
+      change HasDerivAt (fun t : ℝ => y ((n : ℝ) * T + t))
+        (circularBanachField hγ hγ1 (y ((n : ℝ) * T + s)) + p ((n : ℝ) * T + s)) s
+      exact hh
     have hnear' (s : ℝ) (hs : s ∈ Icc (0 : ℝ) Dn) :
         ‖y ((n : ℝ) * T + s) - littleCircularMaterialContours hγ hγ1 s‖ ≤ rp := by
       have hh := hnear _ (hlocaltime s hs)
