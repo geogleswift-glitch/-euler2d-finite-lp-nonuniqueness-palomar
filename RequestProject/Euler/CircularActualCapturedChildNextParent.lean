@@ -267,7 +267,10 @@ theorem exists_actualCapturedChild_next_parent_warmup_setup :
     field_simp [hAmpParent.ne']
   have hinit : ‖canonicalPrefixStageDeviation hγ hγ1 A₀ b R ρ k entrance Y 0 k‖ ≤ h := by
     rw [← hown0]
-    simpa only [add_zero] using (hpast entrance ⟨hentrance, le_rfl⟩).2.1
+    have hh := (hpast entrance ⟨hentrance, le_rfl⟩).2.1
+    change ‖canonicalPrefixStageDeviation hγ hγ1 A₀ b R ρ k 0 Y
+      (ampScale A₀ b k * entrance) k‖ ≤ h at hh
+    simpa only [add_zero] using hh
   have hweightedGrid (v : ℝ) (hv : v ∈ Icc (0 : ℝ) ((nwarm : ℝ) * circularCaptureBlockTime ℓwarm)) :=
     hweightedY v ⟨hv.1, hv.2.trans_eq hWarm.symm⟩
   have hcurGrid (v : ℝ) (hv : v ∈ Icc (0 : ℝ) ((nwarm : ℝ) * circularCaptureBlockTime ℓwarm)) :=
