@@ -82,8 +82,13 @@ theorem norm_circularConstrainedUnstableProjection_actual_fourfold {γ : ℝ≥0
     (circularConstrainedUnstableCoordinateCLM γ
       (circularConstraintProjectionToTangentCLM hγ hγ1.le
         (Z - littleCircularReference hγ hγ1)))
-  simpa only [circularConstrainedUnstableProjectionCLM, ContinuousLinearMap.comp_apply,
-    hcoord] using hnorm
+  unfold circularConstrainedUnstableProjectionCLM
+  simp only [ContinuousLinearMap.comp_apply]
+  change ‖circularConstrainedUnstableEmbeddingCLM hγ hγ1.le
+    (circularConstrainedUnstableCoordinateCLM γ
+      (circularConstraintProjectionToTangentCLM hγ hγ1.le
+        (Z - littleCircularReference hγ hγ1)))‖ = _
+  simpa only [hcoord] using hnorm
 
 theorem canonicalPrefixMaterialCurrentCell_eq_coRotatedAligned {γ : ℝ≥0}
     {A₀ b : ℝ} (hA : A₀ ≠ 0) (hb : b ≠ 0) (R ρ : ℝ) (k : ℕ)
