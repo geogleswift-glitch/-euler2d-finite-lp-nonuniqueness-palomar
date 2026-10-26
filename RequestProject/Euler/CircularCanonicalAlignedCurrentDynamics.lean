@@ -169,7 +169,9 @@ theorem exists_uniform_actualCanonical_alignedCurrent_dynamics :
     let p₁ := contourParameterShiftFamilyCLM γ
       (circularRetardedMaterialShift 0 (ampScale A₀ b k * entrance)) p₀
     refine ⟨p₁, ?_, ?_, ?_, ?_⟩
-    · simpa only [y, canonicalPrefixAlignedCurrentCell, p₁, one_smul] using hshift.1
+    · change HasDerivAt (fun u => canonicalPrefixAlignedCurrentCell A₀ b R ρ k entrance X u)
+        (circularBanachField hγ hγ1 (y τ) + p₁) τ
+      simpa only [y, canonicalPrefixAlignedCurrentCell, p₁, one_smul] using hshift.1
     · have hpn₁ : ‖p₁‖ = ‖p₀‖ := hshift.2
       rw [hpn₁, norm_canonicalPrefixAlignedCurrentCell_sub_reference hγ hγ1 A₀ b R ρ k entrance τ X]
       simpa only [add_assoc] using hpn

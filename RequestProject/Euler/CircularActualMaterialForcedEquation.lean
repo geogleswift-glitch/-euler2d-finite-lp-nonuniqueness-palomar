@@ -163,7 +163,7 @@ theorem exists_uniform_actualCanonical_material_forced_equation
     dsimp only [C]
     linarith
   have haff : HasDerivAt (fun u : ℝ => σ₀ + b * u) b τ := by
-    simpa only [mul_one, zero_add] using
+    simpa only [Pi.add_def, id_eq, mul_one, zero_add] using
       (hasDerivAt_const τ σ₀).add ((hasDerivAt_id τ).const_mul b)
   have hdchild := hd.scomp τ haff
   have hdchild' : HasDerivAt

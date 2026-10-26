@@ -158,7 +158,8 @@ theorem exists_uniform_actualCanonical_weighted_fixed_window_bound :
       hζ hsepU hsepL hRchart hCtR1 N k j hkN hgeom hchart' hsep' S hS X hX t ht entrance τ rfl le_rfl
       hboot' hcur' (hparticles τ hτ)
     refine ⟨p, ?_, ?_⟩
-    · simpa only [Y, canonicalPrefixAbsoluteFamily, dif_pos j.isLt.le] using hd
+    · simpa only [Y, canonicalPrefixAbsoluteFamily, dif_pos j.isLt.le,
+        Fin.castSucc, Fin.castAdd, Fin.castLE] using hd
     · dsimp only at hp
       rw [← hweighted, ← hclock k le_rfl] at hp
       have hpoly : (1 + τ) ^ 4 ≤ (1 + D) ^ 4 :=

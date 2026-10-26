@@ -164,7 +164,8 @@ theorem exists_uniform_actualCanonical_weighted_stage_closure :
       hζ hsepU hsepL hRchart hCtR1 N k j hkN hgeom hchart' hsep' S hS X hX t ht entrance τ rfl le_rfl
       hboot' hcur' (hparticles τ hτ)
     refine ⟨p, ?_, ?_⟩
-    · simpa only [Y, canonicalPrefixAbsoluteFamily, dif_pos j.isLt.le] using hd
+    · simpa only [Y, canonicalPrefixAbsoluteFamily, dif_pos j.isLt.le, ρ,
+        Fin.castSucc, Fin.castAdd, Fin.castLE] using hd
     · dsimp only at hp
       rw [← hweighted, ← hclock k le_rfl] at hp
       exact hp.trans (mul_le_mul_of_nonneg_left
