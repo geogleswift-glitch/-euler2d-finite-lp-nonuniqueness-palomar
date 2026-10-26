@@ -128,7 +128,7 @@ theorem exists_eventually_actualFirstParent_preCapture_forcing
     have hfirst := (tendsto_const_nhds : Tendsto (fun _ : ℝ => radialLimit) atTop
       (𝓝 radialLimit)).div hdenLim (by norm_num : (1 : ℝ) ≠ 0)
     have hsecond := ((tendsto_circularFiniteL1Coefficient_exp_neg b).const_mul (Kr * d ^ 4)).mul he8
-    simpa only [finiteEulerUniformRadialCoefficient, div_one, mul_zero, add_zero] using hfirst.add hsecond
+    simpa only [finiteEulerUniformRadialCoefficient, radialLimit, Pi.div_apply, div_one, mul_zero, add_zero] using hfirst.add hsecond
   have hcubic : ∀ᶠ ξ : ℝ in atTop,
       b * finiteEulerUniformRadialCoefficient Kr b (Real.exp (-ξ)) (Real.exp (-ξ)) core d δ *
         Cb ^ 3 * Real.exp (-ξ) ^ 2 * (1 + D) ^ 3 ≤ Cr / 2 := by

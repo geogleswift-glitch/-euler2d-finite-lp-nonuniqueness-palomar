@@ -250,7 +250,7 @@ theorem exists_eventually_actualFirstParent_preCapture_complement {Rflow r₀ : 
         HasDerivAt (fun z => y ((n : ℝ) * Tblock + z))
           (circularBanachField hγ hγ1 (y ((n : ℝ) * Tblock + u)) + p ((n : ℝ) * Tblock + u)) u := by
       have hh := (hp _ (hlocalTime u hu)).1.scomp u ((hasDerivAt_id u).const_add ((n : ℝ) * Tblock))
-      simpa only [one_smul] using hh
+      simpa only [Function.comp_def, y, ρ, one_smul] using hh
     have hnearLocal (u : ℝ) (hu : u ∈ Icc (0 : ℝ) Tblock) :
         ‖y ((n : ℝ) * Tblock + u) - littleCircularMaterialContours hγ hγ1 u‖ ≤ r := by
       have hh := (hnear _ (hlocalTime u hu)).trans hnearSmall'
