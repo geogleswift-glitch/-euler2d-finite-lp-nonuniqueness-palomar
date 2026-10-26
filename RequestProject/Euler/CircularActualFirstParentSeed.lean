@@ -73,17 +73,17 @@ theorem norm_circularConstrainedUnstableProjection_actual_fourfold {γ : ℝ≥0
         (Z - littleCircularReference hγ hγ1))‖ =
       ‖circularUnstableCoordinateCLM γ (Z - littleCircularReference hγ hγ1)‖ *
         ‖circularConstrainedUnstableEmbeddingCLM hγ hγ1.le 1‖ := by
-  unfold circularConstrainedUnstableProjectionCLM
-  simp only [ContinuousLinearMap.comp_apply]
-  change ‖circularConstrainedUnstableEmbeddingCLM hγ hγ1.le
+  have hcoord := circularUnstableCoordinate_constraintProjection_of_fourfold hγ hγ1.le
+    (Z - littleCircularReference hγ hγ1) (by
+      intro i
+      exact (fourfoldLittleContourSubmodule γ).sub_mem (hfour i)
+        (littleReferenceCircle_mem_fourfold hγ hγ1.le (circularContourRadii i)))
+  have hnorm := norm_circularConstrainedUnstableEmbeddingCLM hγ hγ1.le
     (circularConstrainedUnstableCoordinateCLM γ
       (circularConstraintProjectionToTangentCLM hγ hγ1.le
-        (Z - littleCircularReference hγ hγ1)))‖ = _
-  rw [norm_circularConstrainedUnstableEmbeddingCLM,
-    circularUnstableCoordinate_constraintProjection_of_fourfold]
-  intro i
-  exact (fourfoldLittleContourSubmodule γ).sub_mem (hfour i)
-    (littleReferenceCircle_mem_fourfold hγ hγ1.le (circularContourRadii i))
+        (Z - littleCircularReference hγ hγ1)))
+  simpa only [circularConstrainedUnstableProjectionCLM, ContinuousLinearMap.comp_apply,
+    hcoord] using hnorm
 
 theorem canonicalPrefixMaterialCurrentCell_eq_coRotatedAligned {γ : ℝ≥0}
     {A₀ b : ℝ} (hA : A₀ ≠ 0) (hb : b ≠ 0) (R ρ : ℝ) (k : ℕ)

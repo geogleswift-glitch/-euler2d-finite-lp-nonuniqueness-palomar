@@ -186,11 +186,15 @@ theorem exists_actualCoupledDeepest_parent_window_setup :
   have houter : (2 * (b : ℝ) * 2 * 2 * (Cl + Ctc * torusRow)) * ρ ^ 2 ≤ 1 := hbudget.outer_source
   have hcubicξ : (b : ℝ) * finiteEulerUniformRadialCoefficient Kr b R ρ core d η *
       Cb ^ 3 * ρ ^ 2 * (1 + Dparent) ^ 3 ≤ Cr / 2 := by
-    simpa only [p, DeepestCaptureScaleData.duration, Nat.cast_one, one_mul] using hbudget.radial
+    simpa only [p, DeepestCaptureScaleData.duration, Nat.cast_one, one_mul,
+      DeepestCaptureScaleData.coupledSupport, DeepestCaptureScaleData.coupledAmplitude,
+      d, A₀, R, ρ, deepestCaptureScale] using hbudget.radial
   have hinnerCore : Cb * ρ * (1 + Dparent) ≤ core / 2 := by
     simpa only [p, DeepestCaptureScaleData.duration, Nat.cast_one, one_mul] using hbudget.particle_core
   have hinnerChart : Cb * ρ * (1 + Dparent) ≤ d := by
-    simpa only [p, DeepestCaptureScaleData.duration, Nat.cast_one, one_mul] using hbudget.particle_outer
+    simpa only [p, DeepestCaptureScaleData.duration, Nat.cast_one, one_mul,
+      DeepestCaptureScaleData.coupledSupport, DeepestCaptureScaleData.coupledAmplitude,
+      d, A₀, ρ, deepestCaptureScale] using hbudget.particle_outer
   have hchart : Cb * ρ * R * (1 + Dparent) ≤ 1 / 16 := by
     simpa only [p, DeepestCaptureScaleData.duration, Nat.cast_one, one_mul] using hbudget.particle_box
   have hsep : 8 * (Cb * ρ * (1 + Dparent)) ≤ core := by

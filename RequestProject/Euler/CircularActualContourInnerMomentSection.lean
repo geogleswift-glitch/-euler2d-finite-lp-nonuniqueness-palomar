@@ -118,7 +118,7 @@ theorem exists_uniform_actualContour_innerMoment_section {Rflow r₀ : ℝ}
   have hMomentEq : circularConstrainedInnerPatchFourthMoment hγ hγ1.le v =
       littlePatchFourthMoment hγ hγ1.le cellA cellA_pos (Z 0) := by
     simpa only [circularConstrainedInnerPatchFourthMoment, circularAreaChartFourthMoment,
-      circularConstrainedChart, circularContourRadii] using
+      circularConstrainedChart, circularContourRadii, Matrix.cons_val_zero] using
       congrArg (fun W : Fin 2 → LittleContourSpace γ =>
         littlePatchFourthMoment hγ hγ1.le cellA cellA_pos (W 0)) hChart
   refine ⟨hChart, ?_⟩
