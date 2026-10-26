@@ -173,7 +173,11 @@ theorem exists_uniform_actualAncestor_response_bound :
           (fun u => rigidRotationGauge (finiteAncestorAngularVelocity A₀ b j / ampScale A₀ b j) 0 u •
             normalizedPhysicalCurve (ampScale A₀ b j) (radScale R ρ j) 0 (z j) u)
             (ampScale A₀ b j * v)) = y j := funext (hphys j)
-        simpa only [heq, hphys, y, a] using hd
+        have haj : (a j : ℝ) = ampScale A₀ b j := by
+          change (NNReal.mk (ampScale A₀ b j) (div_pos hA (pow_pos hb j)).le : ℝ) = _
+          exact NNReal.coe_mk _ _
+        rw [haj, ← heq]
+        exact hd
       · exact hpnorm.trans (finiteRetardedContourResponseBudget_le_baseline_add_feedback
           hCtorus.le hb hsmall houter hL j)
     · exact ⟨0, fun ht' => (ht ht').elim⟩
@@ -184,7 +188,7 @@ theorem exists_uniform_actualAncestor_response_bound :
     funext i
     simp [littleCircularMaterialContours]
   have hsmall' : 2 * ((bspeed : ℝ) * H * Real.exp (((bspeed * Kself : ℝ≥0) : ℝ) * H)) * Feedback ≤ 1 := by
-    simpa only [bspeed, Feedback, NNReal.coe_mul] using hfeedback
+    simpa only [bspeed, Feedback, NNReal.coe_mul, NNReal.coe_mk] using hfeedback
   have hh := delayed_finiteFamily_response_bound hLip a ha hH
     (finiteRetardedSourceBaseline_nonneg hCtorus.le hb hsmall hL he)
     (finiteRetardedAncestorFeedback_nonneg hb houter hB) y c₀ p hzero

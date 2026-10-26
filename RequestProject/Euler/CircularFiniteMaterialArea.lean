@@ -92,7 +92,10 @@ theorem finiteCircularInitial_area {s R ρ : ℝ} (hs : s ≤ 0)
         Real.pi * circularContourRadii p.2 ^ 2 := by
       have ha := loopArea_littleAreaChart hγ hγ1.le (circularContourRadii_bounds p.2).1.ne'
         (0 : LittleContourSpace γ) (by simp) (by rw [littleContourArea_zero]; positivity)
-      simpa only [littleAreaChart_zero] using ha
+      change loopArea (LittleContourSpace.lift γ
+        (littleReferenceCircle hγ hγ1.le (circularContourRadii p.2))) = _
+      exact (congrArg (fun Z : LittleContourSpace γ => loopArea (LittleContourSpace.lift γ Z))
+        (littleAreaChart_zero hγ hγ1.le (circularContourRadii p.2))).symm.trans ha
     change radScale R ρ p.1 ^ 2 * littleContourArea γ (littleCircularReference hγ hγ1 p.2) = _
     rw [hc]
     ring

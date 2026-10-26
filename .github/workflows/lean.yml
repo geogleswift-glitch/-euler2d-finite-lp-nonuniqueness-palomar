@@ -20,6 +20,7 @@ jobs:
     env:
       LEAN_NUM_THREADS: "1"
       EULER_COMPILE_SLOTS: "2"
+      EULER_FRESH_PROJECT: ${{ contains(github.event.head_commit.message || '', '[fresh-project]') }}
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
@@ -47,6 +48,7 @@ jobs:
           use-mathlib-cache: "true"
           use-github-cache: "false"
       - name: Restore project build artifacts
+        if: env.EULER_FRESH_PROJECT != 'true'
         id: project-cache
         uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
         with:
@@ -56,7 +58,18 @@ jobs:
             euler-lean-v2-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ hashFiles('RequestProject/**/*.lean', 'Challenge.lean', 'Solution.lean', 'Verification/**/*.lean') }}-
             euler-lean-v2-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-
       - name: Build all sources with bounded compiler concurrency
-        run: timeout --signal=TERM --kill-after=30s 15000 bash scripts/build-bounded.sh
+        run: |
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          if os.environ.get('EULER_FRESH_PROJECT') == 'true':
+              artifacts = Path('.lake/build')
+              assert not artifacts.exists() or not any(
+                  path.is_file() for path in artifacts.rglob('*')
+              ), 'Fresh verification requires an empty project build directory'
+              print('Fresh project verification: no existing project build artifacts')
+          PY
+          timeout --signal=TERM --kill-after=30s 15000 bash scripts/build-bounded.sh
       - name: Preserve completed compilations for the next check
         if: always() && steps.project-cache.outputs.cache-primary-key != '' && steps.project-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830

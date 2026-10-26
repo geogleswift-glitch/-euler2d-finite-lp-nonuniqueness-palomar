@@ -122,8 +122,8 @@ theorem exists_uniform_actualInner_weighted_tail {b Cw : ℝ}
       abs_inv, abs_of_pos (mul_pos hApos hr)]
     ring
   have hgc : Continuous (fun u : ℝ => rigidRotationGauge Ω 0 (τ₀ + u)) := by unfold rigidRotationGauge; fun_prop
-  have hscale : ContinuousOn (fun u : ℝ => ((A * r)⁻¹ : ℝ) • Q u) (Icc lower upper) :=
-    continuousOn_const.smul hQc
+  have hscale : ContinuousOn (fun u : ℝ => ((A * r)⁻¹ : ℝ) • Q u) (Icc lower upper) := by
+    simpa only [Pi.smul_def] using hQc.const_smul ((A * r)⁻¹ : ℝ)
   letI : ContinuousSMul ℂ (Fin 2 → LittleContourSpace η) := IsBoundedSMul.continuousSMul
   have hpc : ContinuousOn p (Icc lower upper) := hgc.continuousOn.smul hscale
   exact weighted_polynomial_forcing_finite_tail hσ hlower hB p hpc

@@ -30,7 +30,7 @@ theorem tendsto_circularFiniteL1Coefficient_exp_neg (b : ℝ) :
       (tendsto_const_nhds : Tendsto (fun _ξ : ℝ => (1 : ℝ)) atTop (𝓝 1)).sub (he2.div_const b)
   have hnum : Tendsto (fun _ξ : ℝ => (eLpNorm cellW 1 volume).toReal) atTop
       (𝓝 (eLpNorm cellW 1 volume).toReal) := tendsto_const_nhds
-  simpa only [circularFiniteL1Coefficient, div_one] using
+  simpa only [Pi.div_def, circularFiniteL1Coefficient, div_one] using
     (hnum.div hden (by norm_num : (1 : ℝ) ≠ 0)).add_const
       (finiteContourPatchMassBound circularContourStrengths circularContourRadii)
 
@@ -71,7 +71,7 @@ theorem eventually_actualFinite_normalizedCorrectionLabelVelocity_le
   have hdriftLimit : Tendsto (fun ξ : ℝ => 5 / 4 + (Cs * A₀ /
       (1 - Real.exp (-ξ) / b)) * T) atTop (𝓝 (5 / 4 + Cs * A₀ * T)) := by
     have hnum : Tendsto (fun _ξ : ℝ => Cs * A₀) atTop (𝓝 (Cs * A₀)) := tendsto_const_nhds
-    simpa only [div_one] using
+    simpa only [Pi.div_def, div_one] using
       ((hnum.div hden (by norm_num : (1 : ℝ) ≠ 0)).mul_const T).const_add (5 / 4)
   have hradialLimit : Tendsto (fun ξ : ℝ => d * Real.exp (-ξ)) atTop (𝓝 0) := by
     simpa only [mul_zero] using he.const_mul d

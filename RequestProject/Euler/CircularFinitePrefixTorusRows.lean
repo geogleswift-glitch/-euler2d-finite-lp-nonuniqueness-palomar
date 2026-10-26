@@ -76,8 +76,9 @@ theorem exists_uniform_finitePrefix_torus_contourLittle_rows :
       N k j ll hlk S t ht Gl (hq0 l) (hq l) (hradius l) hL hgeom W hW
     refine ⟨Ql, hQl, ?_⟩
     by_cases hjl : j ≤ (l : ℕ)
-    · simpa only [hjl, if_true] using hupper hjl
-    · simpa only [hjl, if_false] using hlower (Nat.le_of_lt (Nat.lt_of_not_ge hjl))
+    · simpa only [hjl, if_true, ll, finitePrefixForcingIndex] using hupper hjl
+    · simpa only [hjl, if_false, ll, finitePrefixForcingIndex] using
+        hlower (Nat.le_of_lt (Nat.lt_of_not_ge hjl))
   choose Ql hQl hn using hex
   refine ⟨∑ l, Ql l, ?_, ?_⟩
   · intro θ

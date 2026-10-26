@@ -162,7 +162,13 @@ bash scripts/verify-comparator.sh
 ```
 
 The bounded build limits compiler concurrency without changing the proof
-checker. The final comparison uses the pinned toolchain's Comparator,
+checker. A push with `[fresh-project]` in its commit message disables
+restoration of project build artifacts. The workflow checks that the project
+build directory is empty before compiling every source; dependency caches
+remain available. This mode supplies the clean project rebuild required for
+release verification.
+
+The final comparison uses the pinned toolchain's Comparator,
 Lean kernel, and NanoDa checker. Its sandboxed invocation requires Linux
 and `bubblewrap`; the GitHub workflow provides this environment. The
 deliberate `sorry` in Challenge records the statement being checked;

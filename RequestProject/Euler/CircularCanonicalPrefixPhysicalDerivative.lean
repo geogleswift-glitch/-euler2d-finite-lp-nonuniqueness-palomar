@@ -46,7 +46,9 @@ theorem actualPrefix_phaseDensity_eq_boxedLabels
     have hh := P.boxed_transported_finitePeriodicLabel_eq_phaseContours
       (A₀ := A₀) (b := b) hs hR hRmax hρ hρ1 N ll S G.contours t ht
       (G.initial_box ll hlk) (G.current_box ll hlk) (G.images ll hlk) z
-    simpa only [hGi] using hh
+    simp only [hGi] at hh
+    simp only [ll, finiteCircularInterfaceStrength] at hh ⊢
+    exact hh
   funext z
   change (∑ p : FiniteCircularIndex k,
     finiteCircularInterfaceStrength A₀ b p * phaseContourPatchVorticity (W p).val z) = _
