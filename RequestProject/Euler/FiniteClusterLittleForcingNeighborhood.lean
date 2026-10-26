@@ -47,7 +47,7 @@ theorem exists_finiteClusterLittle_forcing_neighborhood
   have hU : U ∈ 𝓝 Z := hUopen.mem_nhds (fun i => mem_ball_self (hR i))
   let KB : ℝ≥0 := ∑ i, K i
   have hKB (i : ι) : K i ≤ KB :=
-    Finset.single_le_sum (fun j _ => zero_le (K j)) (Finset.mem_univ i)
+    Finset.single_le_sum (fun j _ => (zero_le : (0 : ℝ≥0) ≤ K j)) (Finset.mem_univ i)
   let EB : ℝ → (ι → LittleContourSpace γ) → ι → LittleContourSpace γ := fun t W i => E i t (W i)
   have hEB (t : ℝ) : LipschitzOnWith KB (EB t) U := by
     apply LipschitzOnWith.of_dist_le_mul

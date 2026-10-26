@@ -103,7 +103,10 @@ theorem exists_circularFixedGraph_existing_capture_step {γ : ℝ≥0}
       HasDerivAt (fun s => y (e + s))
         (circularBanachField hγ hγ1 (y (e + τ)) + p (e + τ)) τ := by
     have hh := (hzd τ hτ).scomp τ ((hasDerivAt_id τ).const_add e)
-    simpa only [one_smul] using hh
+    simp only [Function.comp_def, one_smul] at hh
+    change HasDerivAt (fun s : ℝ => y (e + s))
+      (circularBanachField hγ hγ1 (y (e + τ)) + p (e + τ)) τ
+    exact hh
   have hshift0 : y (e + 0) = circularConstrainedChart hγ hγ1 (α + g α + w) := by
     simpa only [add_zero] using hinit
   have hshiftc : ContinuousOn (fun s => y (e + s)) (Icc (0 : ℝ) T) :=

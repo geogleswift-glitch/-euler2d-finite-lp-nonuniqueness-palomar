@@ -36,7 +36,11 @@ theorem integral_abs_circularPhasePatchPlanarVorticity_le {γ : ℝ≥0}
       finiteContourPatchMassBound circularContourStrengths circularContourRadii := by
   have he : (∫ x : R2, |circularPhasePatchPlanarVorticity Z x|) =
       ∫ z : ℂ, |circularPhasePatchVorticity Z z| := by
-    simpa only [circularPhasePatchPlanarVorticity] using
+    have hcoord (x : R2) : complexPhysicalPlane.symm x = planeComplexEquiv x := by
+      apply complexPhysicalPlane.injective
+      rw [LinearIsometryEquiv.apply_symm_apply, complexPhysicalPlane_eq_planeComplexEquiv_symm,
+        MeasurableEquiv.symm_apply_apply]
+    simpa only [circularPhasePatchPlanarVorticity, hcoord] using
       measurePreserving_planeComplexEquiv.integral_comp' (fun z => |circularPhasePatchVorticity Z z|)
   rw [he]
   exact integral_abs_circularPhasePatchVorticity_le hγ hγ1 hZ

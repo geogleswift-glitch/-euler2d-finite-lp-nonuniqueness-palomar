@@ -20,7 +20,8 @@ theorem real_inner_eq_complex_radial_product (u v : R2) :
     inner ℝ u v = (planeComplexEquiv v * conj (planeComplexEquiv u)).re := by
   have h := complexPhysicalPlane.symm.inner_map_map u v
   rw [real_inner_eq_re_inner, RCLike.inner_apply] at h
-  simpa only [complexPhysicalPlane_symm_eq_planeComplexEquiv] using h.symm
+  simpa only [complexPhysicalPlane_symm_eq_planeComplexEquiv,
+    RCLike.re_eq_complex_re] using h.symm
 
 theorem exists_uniform_actualEuler_realRadial_feedback :
     ∃ K : ℝ, 0 < K ∧ ∀ {f : Lp ℝ 2 μT} {T : ℝ} (S : BoundedEulerParticleSystem f T),

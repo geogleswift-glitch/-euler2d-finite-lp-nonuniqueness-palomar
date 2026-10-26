@@ -49,6 +49,9 @@ theorem norm_finiteCircular_closedPhaseTube_le {γ : ℝ≥0}
     mul_le_of_le_one_right hR.le (pow_le_one₀ hρ.le hρ1)
   have hRef : ‖finiteCircularReferenceLittle hγ hγ1 R ρ p‖ =
       radScale R ρ p.1 * ‖littleCircularReference hγ hγ1 p.2‖ := by
+    letI : NormSMulClass ℝ (LittleContourSpace γ) :=
+      @NormedSpace.toNormSMulClass ℝ (LittleContourSpace γ) _ _
+        (circularEndpointLittle_space γ)
     rw [finiteCircularReferenceLittle, norm_smul, Real.norm_of_nonneg hr]
   calc
     ‖Z p‖ = ‖contourParameterShiftLittleCLM γ (b p) (Z p)‖ :=

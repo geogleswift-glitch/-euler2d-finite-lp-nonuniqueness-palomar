@@ -25,7 +25,9 @@ theorem quarterPhase_target_radius_lower {γ : ℝ≥0} {ι : Type*}
   have hh := (contourC1_norm_sub_ref_le (contourParameterShiftC1 (b i) (Z i).val)
     (Z₀ i) (href i) (θ - b i)).trans (hb i).le
   have hdif : ‖LittleContourSpace.lift γ (Z i) θ - refCircle (r i) (θ - b i)‖ ≤ r i / 4 := by
-    simpa only [lift_contourParameterShiftC1, sub_add_cancel] using hh
+    simp only [lift_contourParameterShiftC1, sub_add_cancel] at hh
+    change ‖ContourC1Space.lift γ (Z i).val θ - refCircle (r i) (θ - b i)‖ ≤ r i / 4
+    exact hh
   have hn := norm_sub_norm_le (refCircle (r i) (θ - b i)) (LittleContourSpace.lift γ (Z i) θ)
   rw [norm_refCircle_actual, abs_of_pos (hr i), norm_sub_rev] at hn
   change r i / 2 ≤ ‖LittleContourSpace.lift γ (Z i) θ‖
