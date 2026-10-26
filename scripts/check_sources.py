@@ -6,6 +6,8 @@ The scan includes unused and untracked files, excluding only .git and .lake.
 It does not replace Lean compilation, transitive axiom audits, Comparator, or
 independent kernel replay. The lexer handles comments and literal strings;
 it is not a Lean parser or an audit of arbitrary metaprogram execution.
+Absolute private paths are checked in raw text, including comments and strings.
+Direct filesystem operations and debugging writes are rejected in Lean code.
 
 Policy: https://github.com/PalomarRegistry/PalomarPolicy/blob/main/CONTRIBUTING.md
 """
@@ -26,6 +28,17 @@ ARTIFACT_SUFFIXES = {
     ".so", ".ir", ".trace", ".exe", ".pyc", ".pyo",
 }
 TEX_SUFFIXES = {".tex", ".ltx", ".sty", ".cls"}
+TEXT_SUFFIXES = {".lean", ".md", ".py", ".sh", ".json", ".toml", ".yaml", ".yml", ".txt"}
+TEXT_NAMES = {"LICENSE", "lean-toolchain", ".gitignore", ".gitattributes"}
+PRIVATE_PATH = re.compile(
+    r"(?<![\w.])[A-Za-z]:[\\/]"
+    r"|(?<![\w.])/(?:home|Users)/[^/\s\"']+"
+    r"|(?<![\w.])/(?:root)(?=[/\\\s\"'`]|$)"
+)
+PROOF_IO = re.compile(
+    r"(?<![\w'])(?:IO\.FS|FS\.[A-Za-z_][A-Za-z_0-9']*|"
+    r"IO\.(?:eprintln|eprint|println|print))(?![\w'])"
+)
 FORBIDDEN = re.compile(
     r"(?<![\w'])(admit|axiom|unsafe|native_decide|sorryAx|ofReduceBool|"
     r"implemented_by|extern|allowUnsafeReducibility)(?![\w'])"
@@ -41,6 +54,14 @@ MAIN_RESULT = "PalomarEuler.main_result"
 def physical_lines(data: bytes) -> int:
     """LF and CRLF delimit lines; a final newline adds no empty line."""
     return data.count(b"\n") + int(bool(data) and not data.endswith(b"\n"))
+
+
+def inspect_private_paths(relative: str, source: str) -> list[str]:
+    """Unlike the proof-token scan, this must also inspect literal strings."""
+    return [
+        f"{relative}:{source.count(chr(10), 0, item.start()) + 1}: private absolute filesystem path"
+        for item in PRIVATE_PATH.finditer(source)
+    ]
 
 
 def mask_lean(source: str) -> tuple[str, list[int]]:
@@ -246,6 +267,13 @@ def main() -> int:
             continue
         if prefix.startswith(b"version https://git-lfs.github.com/spec/v1"):
             errors.append(f"{relative}: Git LFS pointers are forbidden")
+        if suffix in TEXT_SUFFIXES or path.name in TEXT_NAMES:
+            try:
+                raw_source = path.read_text(encoding="utf-8-sig")
+            except (OSError, UnicodeError) as error:
+                errors.append(f"{relative}: cannot read UTF-8 source text: {error}")
+                continue
+            errors.extend(inspect_private_paths(relative, raw_source))
         if suffix != ".lean":
             continue
         lean_count += 1
@@ -268,6 +296,9 @@ def main() -> int:
         for item in FORBIDDEN.finditer(code):
             line = code.count("\n", 0, item.start()) + 1
             errors.append(f"{relative}:{line}: forbidden trust escape/proof placeholder: {item.group()}")
+        for item in PROOF_IO.finditer(code):
+            line = code.count("\n", 0, item.start()) + 1
+            errors.append(f"{relative}:{line}: filesystem/debug I/O is forbidden in proof sources: {item.group()}")
         if re.search(r"\bset_option\s+debug\.skipKernelTC\s+true\b", code):
             errors.append(f"{relative}: disabling kernel type checking is forbidden")
         if re.search(r"\bdecide\s*\+\s*native\b", code):

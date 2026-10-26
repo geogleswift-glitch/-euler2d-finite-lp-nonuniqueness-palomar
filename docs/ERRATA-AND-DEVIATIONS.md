@@ -64,6 +64,23 @@ The source-facing files `RequestProject/Euler/Basic.lean` and
 additional finite-exponent and Bochner bridges prove a stronger final statement
 using the same underlying definitions.
 
+## Build portability cleanup
+
+Eight build-time debug file writes and twenty debug console writes were removed
+from four modules: `CircularCoupledActualRotatingMaterialDynamics.lean`,
+`CircularCoupledDeepestEarlierEntry.lean`,
+`CircularDeepestCaptureScaleTrajectory.lean`, and
+`CircularParentCaptureScaleTrajectory.lean`. One removed command was at module
+scope; the remaining writes were debugging tactics. They did not read data back
+or construct proof terms. Mathematical statements, definitions, proof inputs,
+and the actual data and witnesses remain unchanged.
+
+An earlier source preflight masked literal strings before its proof-token
+checks and did not detect these filesystem paths or side effects. The
+preflight now checks common absolute private paths in raw public text and
+rejects direct filesystem and debug-output calls in Lean proof sources. This
+targeted guard does not claim to audit arbitrary metaprogram execution.
+
 ## Verification state
 
 **Release verification remains pending.** Original-toolchain compilation,

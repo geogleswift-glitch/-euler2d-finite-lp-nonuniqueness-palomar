@@ -117,7 +117,7 @@ theorem exists_circular_capture_offGraph_block_constants {γ : ℝ≥0}
       HasDerivAt (fun z => y ((n : ℝ) * T + z))
         (circularBanachField hγ hγ1 (y ((n : ℝ) * T + s)) + p ((n : ℝ) * T + s)) s := by
     have hh := (hyd _ (hlocaltime s hs)).scomp s ((hasDerivAt_id s).const_add ((n : ℝ) * T))
-    simpa only [one_smul] using hh
+    simpa only [one_smul, Function.comp_def] using hh
   have hnearLocal (s : ℝ) (hs : s ∈ Icc (0 : ℝ) Hn) :
       ‖y ((n : ℝ) * T + s) - littleCircularMaterialContours hγ hγ1 s‖ ≤ rn := by
     have hh := hnear _ (hlocaltime s hs)

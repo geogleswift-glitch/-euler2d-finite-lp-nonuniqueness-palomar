@@ -53,7 +53,7 @@ theorem actualCanonical_alignedCurrent_constraints_of_materialTube
     have hh := congrArg (fun V : Fin 2 → LittleContourSpace γ => (V i).val)
       (canonicalPrefixAbsoluteCell_raw (A₀ := A₀) (b := b) hR hρ k entrance τ X (Fin.last k))
     rw [htime] at hh
-    simpa only [Y, finitePrefixForcingIndex, Fin.val_last, Pi.smul_apply] using
+    simpa only [Y, finitePrefixForcingIndex, finiteCircularPrefixIndex, Fin.val_last, Pi.smul_apply] using
       (hG (Fin.last k, i)).trans hh.symm
   obtain ⟨hfour, harea⟩ := P.finiteOuterMaterialTube_normalized_constraints
     hs hR hρ hη hηa hancient ht G (finitePrefixForcingIndex hkN (Fin.last k))

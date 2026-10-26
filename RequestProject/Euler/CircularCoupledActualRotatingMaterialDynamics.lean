@@ -31,7 +31,6 @@ attribute [local irreducible] finiteBaseCurlL2 finiteBaseLp
   BoundedEulerParticleSystem.rotatingNormalizedRelativeHomeomorph
   planarMaterialLabelVelocity kernelK complexPhysicalPlane
 
-run_cmd do IO.FS.writeFile "F:/internal-final_aristotle/verification/CoupledRotatingDynamics-phase.txt" "imports loaded"
 
 theorem eventually_actualFinite_coupled_rotating_velocity_eq_material_add_residual
     {s cA b q T B : ℝ} [Fact (1 ≤ ENNReal.ofReal q)]
@@ -58,7 +57,6 @@ theorem eventually_actualFinite_coupled_rotating_velocity_eq_material_add_residu
           (S.rotatingNormalizedRelativeHomeomorph (radScale R ρ k) (radScale_pos hR hρ k).ne'
             entrance he t ht θentry θtarget) z +
         P.normalizedFiniteEulerResidual s A₀ b R ρ N k hkN S t θtarget z := by
-  run_tac do IO.FS.writeFile "F:/internal-final_aristotle/verification/CoupledRotatingDynamics-phase.txt" "field: body entered"
   obtain ⟨Cs, hCs, hsupport⟩ := P.exists_uniform_finiteEuler_support_bound
   obtain ⟨Cl, hCl, hlocalize⟩ := P.exists_uniform_actualFinite_boxed_label_eq_singlePlanar
   let dc := 4 * (Cs + Cl) * cA * T
@@ -71,7 +69,6 @@ theorem eventually_actualFinite_coupled_rotating_velocity_eq_material_add_residu
     ring
   have hCoreLimit : Tendsto (fun ξ : ℝ => B * Real.exp (-ξ)) atTop (𝓝 0) := by
     simpa only [mul_zero] using he.const_mul B
-  run_tac do IO.FS.writeFile "F:/internal-final_aristotle/verification/CoupledRotatingDynamics-phase.txt" "field: scale limits ready"
   filter_upwards [he.eventually (eventually_lt_nhds (by norm_num : (0 : ℝ) < 1 / 2)),
     he.eventually (eventually_lt_nhds (half_pos hb)),
     hdRlim.eventually (eventually_lt_nhds (by norm_num : (0 : ℝ) < 1 / 16)),
@@ -112,9 +109,7 @@ theorem eventually_actualFinite_coupled_rotating_velocity_eq_material_add_residu
     have hh := mul_le_mul_of_nonneg_right (hdiv Cl hCl.le) hT
     dsimp only [d]
     nlinarith only [hh, hcatS, hcatL, hB]
-  run_tac do IO.FS.writeFile "F:/internal-final_aristotle/verification/CoupledRotatingDynamics-phase.txt" "field: support budgets ready"
   intro N k hkN S harea entrance t he ht θentry θtarget z hz
-  run_tac do IO.FS.writeFile "F:/internal-final_aristotle/verification/CoupledRotatingDynamics-phase.txt" "field: actual support"
   have hsupp := hsupport (s := s) (A₀ := A₀) (b := b) (R := R) (ρ := ρ) (q := q)
     (T := T) (H := T) (c := d) hs hA.le hb hR hRmax hρ hρ1 hρb hq hqE hT le_rfl
     hDriftSξ hdρ1 N S t ht
@@ -140,7 +135,6 @@ theorem eventually_actualFinite_coupled_rotating_velocity_eq_material_add_residu
       _ ≤ radScale R ρ k * B := mul_le_mul_of_nonneg_left hz hrk
       _ ≤ (ρ * radScale R ρ j) * B := mul_le_mul_of_nonneg_right hrad hB
       _ ≤ _ := by nlinarith only [hsep]
-  run_tac do IO.FS.writeFile "F:/internal-final_aristotle/verification/CoupledRotatingDynamics-phase.txt" "field: final actual equation"
   exact P.actualFinite_rotating_velocity_eq_material_add_residual
     (s := s) (A₀ := A₀) (b := b) (R := R) (ρ := ρ) (q := q) (T := T)
     (entrance := entrance) (t := t) (a := d * R) hs hA hb hR hRmax hρ hρ1 hq hqE
@@ -169,7 +163,6 @@ theorem eventually_actualFinite_coupled_normalizedEulerResidual_le
           (G j).reference (l, i)‖ ≤ radScale R ρ j * ((C₀ * ρ ^ 6) ^ (k - (j : ℕ)) * K)) →
       ∀ θ : ℝ, ∀ z : R2, ‖z‖ ≤ B →
         ‖P.normalizedFiniteEulerResidual s A₀ b R ρ N k hkN S t θ z‖ ≤ ε := by
-  run_tac do IO.FS.writeFile "F:/internal-final_aristotle/verification/CoupledRotatingDynamics-phase.txt" "residual: body entered"
   have hε3 : 0 < ε / 3 := div_pos hε (by norm_num)
   have hancestor := P.eventually_normalizedFiniteAncestorResidual_le hb hb1 hc hC₀ hK hB hε3
   have hinner := P.eventually_normalizedFiniteInnerVelocity_le hb hε3
@@ -233,7 +226,6 @@ theorem eventually_actualFinite_coupled_rotating_material_velocity_error_le
               (ampScale A₀ b k) (radScale R ρ k) θentry entrance)
             (S.rotatingNormalizedRelativeHomeomorph (radScale R ρ k) (radScale_pos hR hρ k).ne'
               entrance he t ht θentry θtarget) z‖ ≤ ε := by
-  run_tac do IO.FS.writeFile "F:/internal-final_aristotle/verification/CoupledRotatingDynamics-phase.txt" "error: body entered"
   have hfield := P.eventually_actualFinite_coupled_rotating_velocity_eq_material_add_residual hs hcA hb hq hqE hT hB
   have herror := P.eventually_actualFinite_coupled_normalizedEulerResidual_le hs hcA hb hb1 hq hqE hT hc hC₀ hK hB hε
   filter_upwards [hfield, herror] with ξ hξ hεξ

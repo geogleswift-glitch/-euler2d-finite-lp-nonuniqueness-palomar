@@ -76,9 +76,12 @@ theorem exists_canonical_ancient_lookback_stability_constants {s L : ℝ}
   have hcd (u : ℝ) (hu : u ∈ Icc (0 : ℝ) L) :
       HasDerivAt c (-circularBanachField hγ hγ1 (c u)) u := by
     have hp : HasDerivAt (fun v : ℝ => s - v) (-1) u := by
-      simpa only [zero_sub] using (hasDerivAt_const u s).sub (hasDerivAt_id u)
+      have hsub := (hasDerivAt_const u s).sub (hasDerivAt_id u)
+      simp only [Pi.sub_def, id_eq, zero_sub] at hsub
+      exact hsub
     have hh := (P.ancient_derivative (s - u) (htime u hu)).scomp u hp
-    simpa only [neg_one_smul] using hh
+    simp only [neg_one_smul, Function.comp_def, c] at hh ⊢
+    exact hh
   have hcm (u : ℝ) (hu : u ∈ Icc (0 : ℝ) L) : c u ∈ circularBanachDomain hγ hγ1 :=
     (P.ancient_domain (s - u) (htime u hu)).1
   have hdom : IsOpen (circularBanachDomain hγ hγ1) := by
@@ -99,10 +102,14 @@ theorem exists_canonical_ancient_lookback_stability_constants {s L : ℝ}
   have hYd (u : ℝ) (hu : u ∈ Icc (0 : ℝ) H) :
       HasDerivAt Y (-circularBanachField hγ hγ1 (Y u) + pY u) u := by
     have hparam : HasDerivAt (fun v : ℝ => exit - v) (-1) u := by
-      simpa only [zero_sub] using (hasDerivAt_const u exit).sub (hasDerivAt_id u)
+      have hsub := (hasDerivAt_const u exit).sub (hasDerivAt_id u)
+      simp only [Pi.sub_def, id_eq, zero_sub] at hsub
+      exact hsub
     have hh := (hasDerivAt_circularCanonicalHandoffAlignment_forced hγ hγ1 s angle exit
       (exit - u) (hym u hu) (hyd u hu)).1
-    simpa only [neg_one_smul, neg_add] using hh.scomp u hparam
+    have hcomp := hh.scomp u hparam
+    simp only [neg_one_smul, neg_add, Function.comp_def, Y, pY, G] at hcomp ⊢
+    exact hcomp
   have hYc : ContinuousOn Y (Icc (0 : ℝ) H) :=
     fun u hu => (hYd u hu).continuousAt.continuousWithinAt
   have hpY (u : ℝ) (hu : u ∈ Icc (0 : ℝ) H) : ‖pY u‖ ≤ ε := by

@@ -63,10 +63,8 @@ theorem exists_eventually_actualCoupledDeepest_earlier_section_match
       ‖circularCoRotationCLM γ (exit - Lback) (y (exit - Lback)) -
         contourRotationFamilyLittleCLM γ angle
           (circularCoRotationCLM γ (sCanon - Lback) (P.ancient (sCanon - Lback)))‖ ≤ Cback * ρ ^ 3 := by
-  run_tac do IO.eprintln "coupled-earlier: entered body"
   obtain ⟨Cgeo, Ct, Cd, δmatch, εforce, hCgeo, hCt, hCd, hδmatch, hεforce, Klook, hlook⟩ :=
     P.exists_uniform_actualCanonical_capture_quantitative_lookback hsCanon hLback
-  run_tac do IO.eprintln "coupled-earlier: selected lookback constants"
   let L := circularCanonicalCellNormBudget hγ hγ1
   let core := cellA / 2
   let torusRow := finiteTorusLabelLittleRowCoefficient (γ : ℝ) L
@@ -96,7 +94,6 @@ theorem exists_eventually_actualCoupledDeepest_earlier_section_match
       simpa only [zero_pow hn, mul_zero] using
         (Real.tendsto_exp_neg_atTop_nhds_zero.pow n).const_mul C
     exact (ht.eventually (gt_mem_nhds hε)).mono (fun _ h => h.le)
-  run_tac do IO.eprintln "coupled-earlier: pure budgets ready"
   refine ⟨Cback, hCback, ?_⟩
   intro s cA q T _ hs hcA hq hqE hT
   let dcoef := 4 * Cgeo * cA * T
@@ -108,7 +105,6 @@ theorem exists_eventually_actualCoupledDeepest_earlier_section_match
     ring
   have hsmallDR := (hdRlim.eventually (gt_mem_nhds
     (by norm_num : (0 : ℝ) < 1 / 4))).mono (fun _ h => h.le)
-  run_tac do IO.eprintln "coupled-earlier: eventual scale bounds ready"
   filter_upwards [hsmall 1 1 (by decide) (1 / 2) (by norm_num),
     hsmall 1 1 (by decide) (b / 2) (half_pos hb),
     hsmall 1 2 (by decide) (b / 2) (half_pos hb),
@@ -134,7 +130,6 @@ theorem exists_eventually_actualCoupledDeepest_earlier_section_match
   have hcat : 0 ≤ Cgeo * A₀ * T := mul_nonneg (mul_nonneg hCgeo.le hA.le) hT
   have hdeq : dsupport ξ = d := by dsimp only [dsupport, dcoef, d, A₀]; ring
   rw [hdeq] at hdR
-  run_tac do IO.eprintln "coupled-earlier: instantiated coupled scale"
   have hρ1 : ρ ≤ 1 := hρhalf.trans (by norm_num)
   have hRρ : R ≤ ρ := by
     simpa only [R, pow_one] using pow_le_pow_of_le_one hρ.le hρ1 (by decide : (1 : ℕ) ≤ 10)
@@ -164,7 +159,6 @@ theorem exists_eventually_actualCoupledDeepest_earlier_section_match
       _ ≤ (Ktor * η) * ρ ^ 6 + (Kpoly * (1 + D) ^ 4) * ρ ^ 6 := add_le_add hh le_rfl
       _ = _ := by dsimp only [Cforce]; ring
   have hbudget : Bforce ≤ εforce := hforce.trans hforceSmall
-  run_tac do IO.eprintln "coupled-earlier: instantiating actual trajectory"
   dsimp only
   intro N S hS X hX hweighted hcur exit angle hexit hmatch
   have hAN : 0 < ampScale A₀ b N := div_pos hA (pow_pos hb N)
@@ -196,7 +190,6 @@ theorem exists_eventually_actualCoupledDeepest_earlier_section_match
     intro u hu z hz
     rw [P.finiteInnerActiveInitialLabels_deepest] at hz
     exact (Set.notMem_empty z hz).elim
-  run_tac do IO.eprintln "coupled-earlier: applying actual lookback"
   have hquant := hlook (s := s) (A₀ := A₀) (b := b) (R := R) (ρ := ρ) (q := q)
     (T := T) (Hglob := T) (a := 1 / 16) (d := d) (c := core) (δ := η)
     (Dphys := D / ampScale A₀ b N) (entrance := 0) (Dcap := D) (offset := 0)
@@ -210,7 +203,6 @@ theorem exists_eventually_actualCoupledDeepest_earlier_section_match
     N N le_rfl (by simpa only [zero_add] using (le_refl (D / ampScale A₀ b N))) hgeomN
     (by norm_num) (by simpa only [zero_mul, mul_zero] using (half_pos cellA_pos).le)
     S hS X hX hweighted hcur hparticles exit angle hexit (hmatch.trans hmatchSmall)
-  run_tac do IO.eprintln "coupled-earlier: actual lookback applied"
   simp only [zero_add, add_zero] at hquant
   have hρ63 : ρ ^ 6 ≤ ρ ^ 3 := pow_le_pow_of_le_one hρ.le hρ1 (by decide)
   have hforce3 : Bforce ≤ Cforce * ρ ^ 3 :=

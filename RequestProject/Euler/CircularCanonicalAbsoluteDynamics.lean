@@ -30,7 +30,17 @@ theorem hasDerivAt_circular_constantValueRotation {γ : ℝ≥0}
     (hd : HasDerivAt y (a • circularBanachField hγ hγ1 (y τ) + p) τ) :
     HasDerivAt (fun u => exp ((φ : ℂ) * I) • y u)
       (a • circularBanachField hγ hγ1 (exp ((φ : ℂ) * I) • y τ) + exp ((φ : ℂ) * I) • p) τ := by
-  have hh := hd.const_smul (exp ((φ : ℂ) * I))
+  have hh : HasDerivAt (fun u => exp ((φ : ℂ) * I) • y u)
+      (exp ((φ : ℂ) * I) • (a • circularBanachField hγ hγ1 (y τ) + p)) τ := by
+    apply hasDerivAt_pi.mpr
+    intro i
+    change HasDerivAt
+      (fun u => LittleContourSpace.complexScale (exp ((φ : ℂ) * I)) (y u i))
+      (LittleContourSpace.complexScale (exp ((φ : ℂ) * I))
+        ((a • circularBanachField hγ hγ1 (y τ) + p) i)) τ
+    simpa only [Function.comp_def, LittleContourSpace.complexValueMulCLM_apply] using
+      (LittleContourSpace.complexValueMulCLM γ (exp ((φ : ℂ) * I))).hasFDerivAt.comp_hasDerivAt τ
+        ((hasDerivAt_pi.mp hd) i)
   have hvalue : exp ((φ : ℂ) * I) • (a • circularBanachField hγ hγ1 (y τ) + p) =
       a • circularBanachField hγ hγ1 (exp ((φ : ℂ) * I) • y τ) + exp ((φ : ℂ) * I) • p := by
     rw [circularBanachField_complexValueRotation hγ hγ1 φ hm, smul_add]

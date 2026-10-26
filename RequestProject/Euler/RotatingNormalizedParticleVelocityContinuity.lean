@@ -53,7 +53,8 @@ theorem continuous_rotatingNormalizedVelocityAt
   have hJ : Continuous (fun p : ℝ × ℝ × R2 => perpJ p.2.2) := by
     simpa only [Function.comp_def, complexPhysicalPlane_mul_I, LinearIsometryEquiv.apply_symm_apply] using
       complexPhysicalPlane.continuous.comp hJc
-  simpa only [rotatingNormalizedVelocityAt] using houter.sub (hJ.const_smul (Ω / A))
+  simpa only [rotatingNormalizedVelocityAt, Pi.sub_def, Pi.smul_def, Pi.neg_def, Function.comp_def,
+    Function.uncurry] using houter.sub (hJ.const_smul (Ω / A))
 
 theorem continuous_rotatingNormalized_curve_velocity
     (A r entrance Ω θentry : ℝ) {M : ℝ} (hM0 : 0 ≤ M) (hM : ∀ᵐ x ∂μT, ‖f x‖ ≤ M) (a : R2) :
@@ -69,7 +70,7 @@ theorem continuous_rotatingNormalized_curve_velocity
       (continuous_id.prodMk continuous_const)
   have hh := (S.continuous_rotatingNormalizedVelocityAt A r Ω hM0 hM).comp
     (htime.prodMk (hangle.prodMk hcurve))
-  simpa only [rotatingNormalizedParticleVelocity_eq_velocityAt] using hh
+  simpa only [rotatingNormalizedParticleVelocity_eq_velocityAt, Function.comp_def] using hh
 
 end BoundedEulerParticleSystem
 

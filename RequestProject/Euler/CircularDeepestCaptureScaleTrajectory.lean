@@ -150,13 +150,11 @@ theorem exists_uniform_actualDeepest_capture_scale_trajectory {Rflow r₀ : ℝ}
         ∀ u ∈ Ico (0 : ℝ) τ,
           ‖Pu (circularConstraintProjectionToTangentCLM hγ hγ1.le
             (y u - littleCircularMaterialContours hγ hγ1 u))‖ < δhit := by
-  run_tac do IO.eprintln "capture-scale: entered body"
   obtain ⟨Ce, hCe, hextend⟩ := P.exists_uniform_actualPrefix_trajectory_or_event
   obtain ⟨Cs, hCs, hsupport⟩ := P.exists_uniform_finiteEuler_support_bound
   have hJoint := P.exists_uniform_actualCanonical_joint_stage_scale_closure (Rflow := Rflow) (r₀ := r₀)
       (Y := Y) (gseq := gseq) hRflow hr₀ hY hd hfix harea hg
   obtain ⟨Kself, hKself, rw, hrw, Ctw, hCtw, hstages⟩ := hJoint
-  run_tac do IO.eprintln "capture-scale: selected joint constants"
   refine ⟨Kself, hKself, rw, hrw, Ctw, hCtw, ?_⟩
   intro b hb hb1
   have hbR : 0 < (b : ℝ) := hb
@@ -177,7 +175,6 @@ theorem exists_uniform_actualDeepest_capture_scale_trajectory {Rflow r₀ : ℝ}
     κ₀, hκ₀, ε₀, hε₀, H, hH, Eg, hEg, Rg, hRg, ?_⟩
   intro qbar hqbar hqbarGap
   obtain ⟨Fbar, hFbar, hstage⟩ := hstageFamily qbar hqbar hqbarGap
-  run_tac do IO.eprintln "capture-scale: selected sharp rate"
   refine ⟨Fbar, hFbar, ?_⟩
   intro core C₀ ν₀ νbar δgeom δcur D₀ Ktarget Kboot hcore hcorei hC₀ hν₀ hνbar
     hKtarget hKtargetBoot hδgeom hδgc hδcura hδcurc hδgeom16 hδgeomgap hmargin
@@ -186,7 +183,6 @@ theorem exists_uniform_actualDeepest_capture_scale_trajectory {Rflow r₀ : ℝ}
   have hξstage := hstage (Lseed := 0) (D₀ := D₀) hcore hcorei hC₀ hν₀ hνbar le_rfl
     hKtarget hKtargetBoot hδgeom hδgc hδcura hδcurc hmargin
   filter_upwards [hξstage] with ξ hξ
-  run_tac do IO.eprintln "capture-scale: selected small-scale stage"
   try dsimp only
   let ρ := Real.exp (-ξ)
   let h := C₀ * ρ ^ 6
@@ -209,7 +205,6 @@ theorem exists_uniform_actualDeepest_capture_scale_trajectory {Rflow r₀ : ℝ}
   let α₀ := circularConstrainedUnstableProjectionCLM hγ hγ1.le v₀
   try dsimp only
   intro ha₀ hterminal hw₀ hsource hcs hW0 hseedLow hwScale δhit hhitStart hhitEnd
-  run_tac do IO.eprintln "capture-scale: introduced initial hypotheses"
   have hρ : 0 < ρ := Real.exp_pos _
   have hρb : ρ < (b : ℝ) := hρhalf.trans_lt (by linarith only [hbR])
   have hden : 0 < 1 - ρ / b := sub_pos.mpr ((div_lt_one hbR).mpr hρb)
@@ -339,7 +334,6 @@ theorem exists_uniform_actualDeepest_capture_scale_trajectory {Rflow r₀ : ℝ}
       (by simpa only [Nat.cast_zero, zero_mul, hy₀] using hseedLow)
       (by simpa only [Nat.cast_zero, zero_mul, hy₀] using hwScale)
     simpa only [Nat.cast_zero, zero_mul, hy₀] using hcap'
-  run_tac do IO.eprintln "capture-scale: proved stopped controls"
   have hexists := hextend (s := s) (A₀ := A₀) (b := (b : ℝ)) (R := R) (ρ := ρ) (q := q)
     (T := T) (Hcap := Hcap) (Hglob := Hglob) (a := a) (ai₀ := 0) (ai := ai) (η := δgeom) (c := d)
     (N := N) (k := N)
@@ -373,7 +367,6 @@ theorem exists_uniform_actualDeepest_capture_scale_trajectory {Rflow r₀ : ℝ}
     · exact hx
     · exact False.elim hf
   have hc := hcontrol Hcap hHcapPos le_rfl X hX
-  run_tac do IO.eprintln "capture-scale: obtained actual path"
   rw [hscale] at hc
   let y := canonicalPrefixAlignedCurrentCell A₀ b R ρ N 0 X
   let v := fun n : ℕ => circularConstraintProjectionToTangentCLM hγ hγ1.le

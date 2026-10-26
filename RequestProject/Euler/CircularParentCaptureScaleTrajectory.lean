@@ -170,7 +170,6 @@ theorem exists_uniform_actualParent_capture_scale_trajectory {Rflow r₀ : ℝ}
         ∀ u ∈ Ico (0 : ℝ) τ,
           ‖Pu (circularConstraintProjectionToTangentCLM hγ hγ1.le
             (circularCoRotationCLM γ u (y u) - littleCircularReference hγ hγ1))‖ < δhit := by
-  run_tac do IO.eprintln "parent-capture: entered body"
   obtain ⟨Cp, hCp, hpastExtend⟩ := P.exists_uniform_actualPrefix_past_future_extension
   obtain ⟨Cs, hCs, hsupport⟩ := P.exists_uniform_finiteEuler_support_bound
   obtain ⟨Kself, hKself, rw, hrw, Ctw, hCtw,
@@ -228,7 +227,6 @@ theorem exists_uniform_actualParent_capture_scale_trajectory {Rflow r₀ : ℝ}
   try dsimp only
   intro hinitZ hinitCur hstart ha₀ hterminal hw₀ hsource hcs hW0 hseedLow hwScale
     δhit hhitStart hhitEnd
-  run_tac do IO.eprintln "parent-capture: introduced true past and seed"
   have hρ : 0 < ρ := Real.exp_pos _
   have hρb : ρ < (b : ℝ) := hρhalf.trans_lt (by linarith only [hbR])
   have hden : 0 < 1 - ρ / b := sub_pos.mpr ((div_lt_one hbR).mpr hρb)
@@ -379,7 +377,6 @@ theorem exists_uniform_actualParent_capture_scale_trajectory {Rflow r₀ : ℝ}
       (by simpa only [Nat.cast_zero, zero_mul, ρ, hy₀] using hseedLow)
       (by simpa only [Nat.cast_zero, zero_mul, ρ, hy₀] using hwScale)
     simpa only [Nat.cast_zero, zero_mul, ρ, hy₀] using hcap'
-  run_tac do IO.eprintln "parent-capture: proved all provisional future controls"
   obtain ⟨X, hX, hXY⟩ := hpastExtend (s := s) (A₀ := A₀) (b := (b : ℝ))
     (R := R) (ρ := ρ) (q := q) (T := T) (Hcap := Hcap) (Hglob := Hglob)
     (a := a) (ai₀ := ai₀) (ai := ai) (η := δgeom) (c := d) (entrance := entrance)
@@ -409,7 +406,6 @@ theorem exists_uniform_actualParent_capture_scale_trajectory {Rflow r₀ : ℝ}
       rw [htime] at hp
       exact hp.trans (mul_le_mul_of_nonneg_left (add_le_add le_rfl hτcap)
         (by positivity : 0 ≤ Cb * ρ * radScale R ρ k)))
-  run_tac do IO.eprintln "parent-capture: extended SAME actual material prefix"
   have hc := hcontrol Hcap heHcap le_rfl X hX hXY
   rw [hscale] at hc
   let y := canonicalPrefixAlignedCurrentCell A₀ b R ρ k entrance X
@@ -438,7 +434,6 @@ theorem exists_uniform_actualParent_capture_scale_trajectory {Rflow r₀ : ℝ}
   have hcoSection : HasFirstCircularCoRotatedCaptureSection hγ hγ1 y Dcap δhit := by
     exact exists_first_circularCoRotated_capture_section hγ hγ1 Ncap ℓ y hDcap.le hyc
       (by simpa only [y, ρ, hy₀] using hhitStart) (hhitEnd.trans (hgrid Ncap le_rfl).1)
-  run_tac do IO.eprintln "parent-capture: obtained original first co-rotated section"
   refine ⟨X, hX, hXY, hgrid, hc.2.1, hc.2.2.1, hc.2.2.2.1, hc.2.2.2.2, hcoSection, ?_⟩
   obtain ⟨τ, hτ, hvalue, hfirst⟩ := hcoSection
   refine ⟨τ, hτ, ?_, hvalue, hfirst⟩
