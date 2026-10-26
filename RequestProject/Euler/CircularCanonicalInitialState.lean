@@ -52,7 +52,7 @@ theorem actualCanonicalPrefix_initial_deepest
     (X : ℝ → FiniteCircularIndex N → LittleContourSpace γ)
     (hX : P.ActualCanonicalPrefixTrajectory s A₀ b R ρ a Hglob hR hρ le_rfl S D X) :
     canonicalPrefixAbsoluteCell A₀ b R ρ N 0 X 0 (Fin.last N) = P.ancient s := by
-  simpa only [Fin.val_last, if_pos rfl] using P.actualCanonicalPrefix_initial_cell hR hρ le_rfl S X hX (Fin.last N)
+  simpa only [Fin.val_last, if_pos rfl, ite_true] using P.actualCanonicalPrefix_initial_cell hR hρ le_rfl S X hX (Fin.last N)
 
 theorem actualCanonicalPrefix_initial_ancestor
     {s A₀ b R ρ a Hglob D : ℝ} (hR : 0 < R) (hρ : 0 < ρ)

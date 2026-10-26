@@ -54,7 +54,8 @@ theorem continuousOn_canonicalPrefixAbsoluteCell {γ : ℝ≥0}
   have hgauge : Continuous (rigidRotationGauge (finiteAncestorAngularVelocity A₀ b j) 0) :=
     continuous_iff_continuousAt.mpr (fun t => (hasDerivAt_rigidRotationGauge _ _ t).continuousAt)
   unfold canonicalPrefixAbsoluteCell normalizedPhysicalCurve
-  exact (hgauge.comp hclock).continuousOn.smul (hcurve.const_smul _)
+  simpa only [Pi.smul_def', Pi.smul_def, Function.comp_def] using
+    (hgauge.comp hclock).continuousOn.smul (hcurve.const_smul ((radScale R ρ j)⁻¹ : ℝ))
 
 theorem continuousOn_canonicalPrefixStageDeviation {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1) (A₀ b R ρ : ℝ) (k : ℕ) (entrance : ℝ)
@@ -68,7 +69,7 @@ theorem continuousOn_canonicalPrefixStageDeviation {γ : ℝ≥0}
   have hreference : Continuous (fun τ : ℝ => littleCircularMaterialContours hγ hγ1
       (ampScale A₀ b j * entrance + b ^ (k - j) * τ)) :=
     (contDiff_littleCircularMaterialContours hγ hγ1).continuous.comp (by fun_prop)
-  simpa only [canonicalPrefixStageDeviation, canonicalPrefixAbsoluteFamily, dif_pos hj] using
+  simpa only [Pi.sub_def, canonicalPrefixStageDeviation, canonicalPrefixAbsoluteFamily, dif_pos hj] using
     hcell.sub hreference.continuousOn
 
 theorem continuousOn_canonicalPrefix_joint_controls {γ : ℝ≥0}
@@ -85,7 +86,11 @@ theorem continuousOn_canonicalPrefix_joint_controls {γ : ℝ≥0}
   apply ContinuousOn.norm
   apply continuousOn_pi.mpr
   intro j
-  exact (continuousOn_canonicalPrefixStageDeviation hγ hγ1 A₀ b R ρ k entrance hX htime j j.isLt.le).const_smul _
+  change ContinuousOn (fun τ : ℝ => ((h ^ (k - (j : ℕ)))⁻¹ : ℝ) •
+    canonicalPrefixStageDeviation hγ hγ1 A₀ b R ρ k entrance X τ (j : ℕ)) (Icc (0 : ℝ) Dcap)
+  simpa only [Pi.smul_def] using
+    (continuousOn_canonicalPrefixStageDeviation hγ hγ1 A₀ b R ρ k entrance hX htime j j.isLt.le).const_smul
+      ((h ^ (k - (j : ℕ)))⁻¹ : ℝ)
 
 end Euler2D
 

@@ -42,7 +42,7 @@ theorem norm_canonicalPrefixAlignedCurrentCell_sub_reference {γ : ℝ≥0}
     (canonicalPrefixAbsoluteCell A₀ b R ρ k entrance X τ (Fin.last k))
   simpa only [canonicalPrefixAlignedCurrentCell, canonicalPrefixStageDeviation,
     canonicalPrefixAbsoluteFamily, dif_pos (le_refl k), Nat.sub_self, pow_zero, one_mul,
-    Complex.ofReal_zero, zero_mul, exp_zero, one_smul] using hh
+    Complex.ofReal_zero, zero_mul, exp_zero, one_smul, Fin.last] using hh
 
 theorem canonicalPrefixAbsoluteCell_mem_circularDomain {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1) {R ρ : ℝ} (hR : 0 < R) (hρ : 0 < ρ)
@@ -104,7 +104,7 @@ theorem exists_uniform_actualCanonical_alignedCurrent_constraintChart_radius :
   have hh := congrArg (fun V : Fin 2 → LittleContourSpace γ => (V i).val)
     (canonicalPrefixAbsoluteCell_raw (A₀ := A₀) (b := b) hR hρ k entrance τ X (Fin.last k))
   rw [htime] at hh
-  simpa only [finitePrefixForcingIndex, Fin.val_last, Pi.smul_apply] using
+  simpa only [finitePrefixForcingIndex, finiteCircularPrefixIndex, Fin.val_last, Pi.smul_apply] using
     (hG (Fin.last k, i)).trans hh.symm
 
 end CircularMaterialTransferProfile

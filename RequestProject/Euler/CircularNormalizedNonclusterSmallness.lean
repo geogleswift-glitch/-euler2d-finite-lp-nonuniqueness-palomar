@@ -67,6 +67,9 @@ theorem exists_uniform_actualCurrent_normalized_noncluster_rhoFourteen
             P.finiteCurrentNonclusterPhysicalField s A₀ b R ρ N k hkN S t
               (radScale R ρ k • (Complex.exp ((θ : ℂ) * I) * LittleContourSpace.lift γ (Z i) u)))) ∧
         ‖Q‖ ≤ C * ρ ^ 14 * (1 + D) ^ 4 := by
+  letI : NormSMulClass ℝ (LittleContourSpace γ) :=
+    @NormedSpace.toNormSMulClass ℝ (LittleContourSpace γ) _ _
+      (normalizedNonclusterLittle_space γ)
   obtain ⟨Ct, Cd, hCt, hCd, hsource⟩ := P.exists_uniform_actualCurrent_noncluster_family_forcing_budget
   let O := finiteOuterLabelLittleRowCoefficient (γ : ℝ) c B L
   let V := Ct * finiteTorusLabelLittleRowCoefficient (γ : ℝ) L
@@ -133,8 +136,12 @@ theorem exists_uniform_actualCurrent_normalized_noncluster_rhoFourteen
   have hnQ : ‖Q‖ ≤ ‖Qraw‖ / (A * r) := by
     apply (pi_norm_le_iff_of_nonneg (div_nonneg (norm_nonneg Qraw) hAr.le)).mpr
     intro i
-    rw [hQnorm, div_eq_mul_inv, mul_comm ‖Qraw‖]
-    exact mul_le_mul_of_nonneg_left (norm_le_pi_norm Qraw i) (inv_pos.mpr hAr).le
+    calc
+      ‖Q i‖ = (A * r)⁻¹ * ‖Qraw i‖ := by
+        simpa only [Q] using hQnorm i
+      _ ≤ (A * r)⁻¹ * ‖Qraw‖ :=
+        mul_le_mul_of_nonneg_left (norm_le_pi_norm Qraw i) (inv_pos.mpr hAr).le
+      _ = ‖Qraw‖ / (A * r) := by rw [div_eq_mul_inv, mul_comm]
   refine ⟨Q, ?_, (hnQ.trans hn).trans ?_⟩
   · intro i u
     change invphase * ((A * r)⁻¹ • LittleContourSpace.lift γ (Qraw i) u) = _

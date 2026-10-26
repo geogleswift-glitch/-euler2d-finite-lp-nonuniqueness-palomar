@@ -83,6 +83,9 @@ theorem exists_uniform_actualCurrent_sameGauge_derivative_budget :
     W hWdom hscale hWmax hWmin hWL hpoint V hV z hz hzt entrance τ htime
   have hr : 0 < radScale R ρ k := radScale_pos hR hρ k
   have hex (i : Fin 2) : ‖radScale R ρ k • W i‖ ≤ radScale R ρ k * L := by
+    letI : NormSMulClass ℝ (LittleContourSpace γ) :=
+      @NormedSpace.toNormSMulClass ℝ (LittleContourSpace γ) _ _
+        (rigidGaugeLittle_space γ)
     rw [norm_smul, Real.norm_of_nonneg hr.le]
     exact mul_le_mul_of_nonneg_left ((norm_le_pi_norm W i).trans hWL) hr.le
   have hmax (i : Fin 2) (v : ContourCircle) :

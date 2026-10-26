@@ -28,7 +28,9 @@ theorem canonicalQuarterPhase_target_radius_upper {γ : ℝ≥0} {ι : Type*}
   have hd := (contourC1_norm_sub_ref_le (contourParameterShiftC1 (β i) (Z i).val)
     (Z₀ i) (href i) (θ - β i)).trans (hβ i).le
   have hdif : ‖LittleContourSpace.lift γ (Z i) θ - refCircle (r i) (θ - β i)‖ ≤ r i / 4 := by
-    simpa only [lift_contourParameterShiftC1, sub_add_cancel] using hd
+    simp only [lift_contourParameterShiftC1, sub_add_cancel] at hd
+    change ‖ContourC1Space.lift γ (Z i).val θ - refCircle (r i) (θ - β i)‖ ≤ r i / 4
+    exact hd
   have hn := norm_sub_norm_le (LittleContourSpace.lift γ (Z i) θ) (refCircle (r i) (θ - β i))
   rw [norm_refCircle_actual, abs_of_pos (hr i)] at hn
   linarith
