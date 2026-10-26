@@ -59,7 +59,8 @@ theorem exists_finiteCircular_phaseField_bound {γ : ℝ≥0}
   have hL : 0 ≤ L := mul_nonneg (mul_nonneg (abs_nonneg _) (Finset.sum_nonneg (fun _ _ => abs_nonneg _))) hC
   have hRefclose (p : FiniteCircularIndex N) : ‖(Ref p).val - Z₀ p‖ ≤ η * radScale R ρ p.1 := by
     change ‖finiteCircularReferenceC1 hγ hγ1 R ρ p - finiteCircularReferenceC1 hγ hγ1 R ρ p‖ ≤ _
-    simpa only [sub_self, norm_zero] using mul_nonneg hη (mul_pos hR (pow_pos hρ p.1)).le
+    simp only [sub_self, norm_zero]
+    exact mul_nonneg hη (radScale_pos hR hρ p.1).le
   have hRefA : IsAdmissibleLittleContourFamily Z₀ r Ref :=
     admissible_scaledCircular_family_of_close hγ hγ1 hR hρ hρ1 hρa hη hηa hηgap Ref hRefclose
   have hRefgeo := finiteCircular_close_uniform_geometry hγ hγ1 hR hρ hρa hη hηa hηgap Ref hRefclose

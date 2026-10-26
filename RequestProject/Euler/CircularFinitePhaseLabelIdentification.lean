@@ -35,7 +35,8 @@ theorem finiteCircularInitial_label_density_eq {s A₀ b R ρ : ℝ}
         (fun i => (finiteCircularInitialContours hγ hγ1 R ρ (P.ancient s) N (j, i)).val) x =
         ampScale A₀ b N * circularPhasePatchVorticity (P.ancient s) ((radScale R ρ N)⁻¹ • x) := by
       simpa only [phaseFiniteContourPatchVorticity, circularPhasePatchVorticity,
-        finiteCircularInterfaceStrength, finiteCircularInitialContours, hj, if_pos rfl] using
+        finiteCircularInterfaceStrength, finiteCircularInitialContours, hj, if_pos rfl,
+        ite_true, Submodule.coe_smul] using
         phaseFiniteContourPatchVorticity_scale circularContourStrengths
           (fun i => (P.ancient s i).val) (ampScale A₀ b N) (hr N).ne' x
     rw [he]
@@ -47,7 +48,8 @@ theorem finiteCircularInitial_label_density_eq {s A₀ b R ρ : ℝ}
         ampScale A₀ b j * circularPhasePatchVorticity (littleCircularReference hγ hγ1)
           ((radScale R ρ j)⁻¹ • x) := by
       simpa only [phaseFiniteContourPatchVorticity, circularPhasePatchVorticity,
-        finiteCircularInterfaceStrength, finiteCircularInitialContours, if_neg hj] using
+        finiteCircularInterfaceStrength, finiteCircularInitialContours, if_neg hj,
+        Submodule.coe_smul, circularReferenceC1] using
         phaseFiniteContourPatchVorticity_scale circularContourStrengths
           (fun i => circularReferenceC1 hγ hγ1 i) (ampScale A₀ b j) (hr j).ne' x
     rw [he, circularPhasePatchVorticity_reference hγ hγ1]

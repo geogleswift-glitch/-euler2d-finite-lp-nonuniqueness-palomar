@@ -98,7 +98,7 @@ theorem exists_finiteClusterLittle_fixed_forcing_on_targets
       simpa only [U, setOf_forall] using isOpen_iInter_of_finite hi
     let KB : ℝ≥0 := ∑ i, K i
     have hKB (i : ι) : K i ≤ KB :=
-      Finset.single_le_sum (fun j _ => zero_le (K j)) (Finset.mem_univ i)
+      Finset.single_le_sum (fun j _ => (zero_le : (0 : ℝ≥0) ≤ K j)) (Finset.mem_univ i)
     refine ⟨KB, U, hUopen.mem_nhds (fun i => mem_ball_self (hR i)), ?_⟩
     intro t
     apply LipschitzOnWith.of_dist_le_mul

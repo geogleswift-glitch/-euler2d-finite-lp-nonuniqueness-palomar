@@ -138,7 +138,10 @@ theorem exists_circular_existing_sharp_finite_capture {γ : ℝ≥0}
         HasDerivAt (fun s => y ((n : ℝ) * T + s))
           (circularBanachField hγ hγ1 (y ((n : ℝ) * T + t)) + p ((n : ℝ) * T + t)) t := by
       have hh := (hyd _ (htime t ht)).scomp t ((hasDerivAt_id t).const_add ((n : ℝ) * T))
-      simpa only [one_smul] using hh
+      simp only [Function.comp_def, one_smul] at hh
+      change HasDerivAt (fun s : ℝ => y ((n : ℝ) * T + s))
+        (circularBanachField hγ hγ1 (y ((n : ℝ) * T + t)) + p ((n : ℝ) * T + t)) t
+      exact hh
     have hnear' (t : ℝ) (ht : t ∈ Icc (0 : ℝ) T) :
         ‖y ((n : ℝ) * T + t) - littleCircularMaterialContours hγ hγ1 t‖ ≤ r := by
       have hh := hnear _ (htime t ht)

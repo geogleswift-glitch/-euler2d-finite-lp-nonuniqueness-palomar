@@ -127,6 +127,10 @@ theorem integral_abs_finiteInnerClusterSource_le {s A₀ b R ρ : ℝ} (hs : s �
       apply integral_mono (P.integrable_finiteInnerClusterSource hs hA hb hR hRmax hρ hρ1 N k S t).abs
         (integrable_finset_sum _ (fun j _ => (hi j).abs))
       intro x
+      change |∑ j ∈ Finset.Ico (k + 1) (N + 1),
+        S.transportedScalar (P.finitePeriodicLabel s A₀ b R ρ N j) t x| ≤
+        ∑ j ∈ Finset.Ico (k + 1) (N + 1),
+          |S.transportedScalar (P.finitePeriodicLabel s A₀ b R ρ N j) t x|
       simpa only [Real.norm_eq_abs] using norm_sum_le (Finset.Ico (k + 1) (N + 1))
         (fun j => S.transportedScalar (P.finitePeriodicLabel s A₀ b R ρ N j) t x)
     _ = ∑ j ∈ Finset.Ico (k + 1) (N + 1), ∫ x in torusBox,

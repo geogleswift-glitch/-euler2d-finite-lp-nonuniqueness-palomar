@@ -92,7 +92,8 @@ theorem exists_finitePhase_continuation_at_limit_local_forcing {γ : ℝ≥0} {�
         lt_self_iff_false, if_false] using And.intro hW (And.intro hWa hWq)
     · have hs : t - D ∈ Icc (0 : ℝ) δ := ⟨by linarith, by linarith [ht.2]⟩
       have hm := hX.mem W hWball (t - D) hs
-      simpa only [Y, concatenateAtEndpoint, if_neg (not_le.mpr hgt)] using
+      simpa only [Y, concatenateAtEndpoint, if_neg (not_le.mpr hgt),
+        Set.mem_ofPred_eq] using
         And.intro hm.1 (And.intro (mem_ball_zero_iff.mp hm.2.2.1) hm.2.2.2)
   refine ⟨δ, hδ, hδH, Y, ?_, ?_, ?_, hYderiv, hYmem, ?_⟩
   · intro t ht

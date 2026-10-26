@@ -63,7 +63,10 @@ theorem norm_finiteCircular_quarter_cell_le {γ : ℝ≥0}
     _ ≤ radScale R ρ j * circularCanonicalCellNormBudget hγ hγ1 := by
       have hh := mul_le_mul_of_nonneg_left (norm_le_pi_norm (littleCircularReference hγ hγ1) i) hr.le
       unfold circularCanonicalCellNormBudget
-      nlinarith only [hh]
+      calc
+        _ ≤ radScale R ρ j + radScale R ρ j * ‖littleCircularReference hγ hγ1‖ :=
+          add_le_add (le_refl (radScale R ρ j)) hh
+        _ = radScale R ρ j * (‖littleCircularReference hγ hγ1‖ + 1) := by ring
 
 theorem finiteCircular_quarter_cell_target_bounds {γ : ℝ≥0}
     (hγ : 0 < γ) (hγ1 : (γ : ℝ) < 1) {R ρ : ℝ} (hR : 0 < R) (hρ : 0 < ρ)
