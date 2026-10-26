@@ -241,7 +241,9 @@ theorem exists_eventually_actualFirstParent_coupled_captureCone_strengthening {R
       have hinitParent : ‖canonicalPrefixStageDeviation hγ hγ1 A₀ b R ρ k entrance Y 0 k‖ ≤ h := by
         rw [← hown 0 k le_rfl]
         have hh := (hpast entrance ⟨hentrance, le_rfl⟩).2.1
-        simpa only [add_zero, Nat.add_sub_cancel, h, A₀, R, ρ] using hh
+        change ‖canonicalPrefixStageDeviation hγ hγ1 A₀ b R ρ k 0 Y
+          (ampScale A₀ b k * entrance) k‖ ≤ h at hh
+        simpa only [add_zero] using hh
       have hstartParent := hparticlesPast entrance ⟨hentrance, le_rfl⟩
       have htimeWarm : entrance + ((nWarm : ℝ) * circularCaptureBlockTime ℓ) / ampScale A₀ b k ≤ Hparent := by
         rw [← hDgrid]
