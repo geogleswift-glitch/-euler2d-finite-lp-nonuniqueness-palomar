@@ -37,8 +37,10 @@ def finiteCircularPrefixExtension {E : Type*} [Zero E] {N k : ℕ}
 theorem finiteCircularPrefixExtension_at {E : Type*} [Zero E] {N k : ℕ}
     (hk : k ≤ N) (Z : FiniteCircularIndex k → E) (p : FiniteCircularIndex k) :
     finiteCircularPrefixExtension Z (finiteCircularPrefixIndex hk p) = Z p := by
-  simp only [finiteCircularPrefixExtension, finiteCircularPrefixIndex,
-    dif_pos (Nat.le_of_lt_succ p.1.isLt)]
+  rcases p with ⟨⟨i, hi⟩, j⟩
+  change (if h : i ≤ k then Z (⟨i, Nat.lt_succ_of_le h⟩, j) else 0) =
+    Z (⟨i, hi⟩, j)
+  rw [dif_pos (Nat.le_of_lt_succ hi)]
 
 namespace CircularMaterialTransferProfile
 
@@ -177,11 +179,12 @@ theorem exists_uniform_actualPrefix_materialTube :
       lift_finiteCircularReferenceC1 hγ hγ1 R ρ (j, i)
   · intro j hj i
     rw [hWa j hj i, hβa j hj i]
-    simpa only [finiteCircularInterfaceRadius, mul_comm] using
+    simpa only [finiteCircularInterfaceRadius, finiteCircularReferenceC1, mul_comm] using
       hquarter (⟨j.val, Nat.lt_succ_of_le hj⟩, i)
   · intro j hj i
     rw [hWa j hj i, hβa j hj i]
-    simpa only [mul_comm] using hsmall (⟨j.val, Nat.lt_succ_of_le hj⟩, i)
+    simpa only [Z, finiteCircularReferenceC1, mul_comm] using
+      hsmall (⟨j.val, Nat.lt_succ_of_le hj⟩, i)
   · intro j hj i θ
     rw [hWa j hj i]
     exact hfour (⟨j.val, Nat.lt_succ_of_le hj⟩, i) θ

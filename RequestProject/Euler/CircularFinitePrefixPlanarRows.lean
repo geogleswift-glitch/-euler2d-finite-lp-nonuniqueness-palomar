@@ -87,16 +87,17 @@ theorem exists_finitePrefix_planar_contourLittle_rows
         N k j ll hlj.le hlk S t ht Gl (hq l) hc hB (hsepL l hlj) W hWmax hL
       refine ⟨Ql, ?_, ?_⟩
       · intro θ; simpa only [hlj, if_true] using hQl θ
-      · simpa only [hlj, if_true] using hn
+      · simpa only [hlj, if_true, ll, finitePrefixForcingIndex, den] using hn
     · by_cases hjl : j < (l : ℕ)
       · obtain ⟨Ql, hQl, hn⟩ := P.exists_finiteInnerLabel_contourLittle_upperRow hη hs hA hb hR hRmax hρ hρ1
           N k j ll hjl.le hlk S t ht Gl (hq0 l) (hq l) he (hsepU l hjl) W hWmin hL
         refine ⟨Ql, ?_, ?_⟩
-        · intro θ; simpa only [hlj, if_false, hjl, if_true] using hQl θ
-        · simpa only [hlj, if_false, hjl, if_true] using hn
+        · intro θ; simpa only [hlj, if_false, hjl, if_true, ll, finitePrefixForcingIndex] using hQl θ
+        · simpa only [hlj, if_false, hjl, if_true, ll, finitePrefixForcingIndex, den] using hn
       · refine ⟨0, ?_, ?_⟩
         · intro θ; simp [hlj, hjl]
-        · simp [hlj, hjl]
+        · have hz : ‖(0 : LittleContourSpace η)‖ = (0 : ℝ) := norm_zero
+          simpa only [if_neg hlj, if_neg hjl, hz, zero_div] using (le_refl (0 : ℝ))
   choose Ql hQl hn using hex
   refine ⟨∑ l, Ql l, ?_, ?_⟩
   · intro θ

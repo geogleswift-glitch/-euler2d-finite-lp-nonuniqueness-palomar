@@ -103,6 +103,9 @@ theorem exists_uniform_actualRetardedPhysical_derivative_budget :
       ‖Qa + Qi + Qt i‖ / (ampScale A₀ b k * radScale R ρ k) ≤ Budget := by
     intro i
     have hW : ‖radScale R ρ k • W i‖ ≤ radScale R ρ k * L := by
+      letI : NormSMulClass ℝ (LittleContourSpace γ) :=
+        @NormedSpace.toNormSMulClass ℝ (LittleContourSpace γ) _ _
+          (rigidGaugeLittle_space γ)
       rw [norm_smul, Real.norm_of_nonneg hr.le]
       exact mul_le_mul_of_nonneg_left ((norm_le_pi_norm W i).trans hWnorm) hr.le
     have hwo (x : ContourCircle) :

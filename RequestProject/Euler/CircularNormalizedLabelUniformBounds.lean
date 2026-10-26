@@ -48,7 +48,7 @@ theorem integral_norm_normalized_finiteSinglePlanarLabel_le
   have hT : 0 ≤ T := ht.1.trans ht.2
   have hback : S.backward 0 = id := by
     funext z
-    simpa only [S.initial] using S.backward_forward 0 ⟨le_rfl, hT⟩ z
+    simpa only [S.initial, id_eq] using S.backward_forward 0 ⟨le_rfl, hT⟩ z
   rw [S.integral_norm_normalizedPlanarLabelSource _ _ (radScale_pos hR hρ j)
     (entrance := 0) ⟨le_rfl, hT⟩ ht (by rw [hback]; exact MeasurePreserving.id volume) harea]
   have he : S.normalizedPlanarLabelSource (P.finiteSinglePlanarInitialLabel s A₀ b R ρ N j)
@@ -59,11 +59,11 @@ theorem integral_norm_normalized_finiteSinglePlanarLabel_le
     split_ifs <;> rfl
   rw [he]
   split_ifs
-  · simpa only [Real.norm_eq_abs] using
-      (integral_abs_circularPhasePatchPlanarVorticity_le hγ hγ1 (P.ancient_domain s hs)).trans
+  · simp only [Real.norm_eq_abs, finiteLabelMassBound]
+    exact (integral_abs_circularPhasePatchPlanarVorticity_le hγ hγ1 (P.ancient_domain s hs)).trans
         (le_max_right _ _)
-  · simpa only [Real.norm_eq_abs] using
-      le_max_left (∫ z : R2, |cellW z|) (finiteContourPatchMassBound circularContourStrengths circularContourRadii)
+  · simp only [Real.norm_eq_abs, finiteLabelMassBound]
+    exact le_max_left (∫ z : R2, |cellW z|) (finiteContourPatchMassBound circularContourStrengths circularContourRadii)
 
 theorem rotatingNormalized_finiteSinglePlanarLabel_uniform_bounds
     {s A₀ b R ρ : ℝ} (hs : s ≤ 0) (hA : 0 < A₀) (hb : 0 < b) (hR : 0 < R) (hρ : 0 < ρ)
