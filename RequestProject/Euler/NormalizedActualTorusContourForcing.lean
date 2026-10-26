@@ -48,6 +48,9 @@ theorem exists_normalized_actualTorusCorrection_LittleField
       ∀ t ∈ Icc (0 : ℝ) P, ∀ Z ∈ ball (0 : LittleContourSpace γ) L,
         ‖q t Z‖ ≤ C * torusCorrectionContourBudget (γ : ℝ) L * R ^ 2 * a ^ 4 *
           (∫ x in torusBox, |f x|) / A := by
+  letI : NormSMulClass ℝ (LittleContourSpace γ) :=
+    @NormedSpace.toNormSMulClass ℝ (LittleContourSpace γ) _ _
+      (normalizedActualLittle_space γ)
   obtain ⟨K₀, E, _, hLip, hc, hE⟩ :=
     S.exists_clamped_actualTorusCorrection_LittleField hS hwf hwper hwrot hmean
       hε hεT ha ha16 hsupp hγ1
@@ -59,8 +62,9 @@ theorem exists_normalized_actualTorusCorrection_LittleField
     rw [norm_smul, Real.norm_eq_abs, abs_of_pos hR]
   have hZphys (Z : LittleContourSpace γ) (hZ : Z ∈ ball 0 L) : R • Z ∈ ball 0 (a / 4) := by
     apply mem_ball_zero_iff.mpr
-    rw [hnorm]
-    exact (mul_lt_mul_of_pos_left (mem_ball_zero_iff.mp hZ) hR).trans htarget
+    calc
+      ‖R • Z‖ = R * ‖Z‖ := hnorm Z
+      _ < a / 4 := (mul_lt_mul_of_pos_left (mem_ball_zero_iff.mp hZ) hR).trans htarget
   have htime (t : ℝ) (ht : t ∈ Icc (0 : ℝ) P) : t / A ∈ Icc (0 : ℝ) ε :=
     ⟨div_nonneg ht.1 hA.le, (div_le_div_of_nonneg_right ht.2 hA.le).trans hwindow⟩
   have hqnorm (t : ℝ) (Z : LittleContourSpace γ) :
@@ -74,7 +78,8 @@ theorem exists_normalized_actualTorusCorrection_LittleField
     intro Z hZ W hW
     have hh := (hLip (t / A)).dist_le_mul (R • Z) (hZphys Z hZ) (R • W) (hZphys W hW)
     have hd : dist (R • Z) (R • W) = R * dist Z W := by
-      rw [dist_eq_norm, ← smul_sub, hnorm, dist_eq_norm]
+      rw [dist_eq_norm, ← smul_sub, dist_eq_norm]
+      exact hnorm (Z - W)
     have hqd : dist (q t Z) (q t W) =
         (A * R)⁻¹ * dist (E (t / A) (R • Z)) (E (t / A) (R • W)) := by
       dsimp only [q]
@@ -90,7 +95,9 @@ theorem exists_normalized_actualTorusCorrection_LittleField
         field_simp
         <;> ring
   · intro Z hZ
-    exact continuous_const.smul ((hc (R • Z) (hZphys Z hZ)).comp (continuous_id.div_const A))
+    simpa only [q, Pi.smul_def', Function.comp_def, id_eq] using
+      (continuous_const : Continuous (fun _ : ℝ => (A * R)⁻¹)).smul
+        ((hc (R • Z) (hZphys Z hZ)).comp (continuous_id.div_const A))
   · intro t ht Z hZ θ
     have hh := hE (t / A) (htime t ht) (R • Z)
       (mem_ball_zero_iff.mp (hZphys Z hZ)) θ

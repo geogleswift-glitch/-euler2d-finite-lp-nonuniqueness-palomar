@@ -78,7 +78,7 @@ theorem tendsto_physicalComplexLabelSource_L1 (g : Lp ℝ 2 μT) {w : R2 → ℝ
   have hn := tendsto_iff_norm_sub_tendsto_zero.mp hc
   exact squeeze_zero (fun t => integral_nonneg (fun z => abs_nonneg _))
     (fun t => S.physicalComplexLabelSource_L1_sub_le g hwg (τ t) s)
-    (by simpa only [mul_zero] using hn.const_mul scalarL2L1Constant)
+    (by simpa only [Function.comp_apply, mul_zero] using hn.const_mul scalarL2L1Constant)
 
 theorem tendsto_physicalComplexSource_L1_of_memLp {w : R2 → ℝ}
     (hw : MemLp w 2 μT) {α : Type*} {l : Filter α} {τ : α → ℝ} {s : ℝ}

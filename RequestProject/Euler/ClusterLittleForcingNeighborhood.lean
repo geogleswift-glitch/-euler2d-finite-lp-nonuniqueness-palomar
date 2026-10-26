@@ -57,7 +57,9 @@ theorem exists_clusterLittle_continuous_forcing_neighborhood
   have hsmall : ball Z R ⊆ ball Z R₀ := ball_subset_ball (min_le_left _ _)
   have htarget (W : LittleContourSpace γ) (hW : W ∈ ball Z R) : P W := by
     intro x
-    have he : ‖W.val - Z.val‖ < R := by simpa only [dist_eq_norm] using mem_ball.mp hW
+    have he : ‖W.val - Z.val‖ < R := by
+      change ‖W - Z‖ < R
+      exact mem_ball_iff_norm.mp hW
     have hev := (ContourC1Space.norm_eval_le (W.val - Z.val) x).trans_lt
       (he.trans_le (min_le_right _ _))
     change ‖ContourC1Space.toBCF γ W.val x - ContourC1Space.toBCF γ Z.val x‖ < d / 4 at hev

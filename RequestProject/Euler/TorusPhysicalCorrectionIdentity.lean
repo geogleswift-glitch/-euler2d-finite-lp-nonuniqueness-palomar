@@ -39,7 +39,8 @@ theorem actualTorusCorrectionVelocity_boxedComplexDensity (w : R2 → ℝ) (x : 
   have hh := complexPhysicalPlane.symm.toContinuousLinearEquiv.integral_comp_comm
     (fun y => w y • torusSmoothCorrectionKernel (complexTorusPoint x - y + torusCenter))
     (μ := μT)
-  simpa only [map_smul, complexPhysicalPlane_symm_eq_planeComplexEquiv] using hh
+  simpa only [μT, map_smul, LinearIsometryEquiv.coe_toContinuousLinearEquiv,
+    complexPhysicalPlane_symm_eq_planeComplexEquiv] using hh
 
 namespace BoundedEulerParticleSystem
 

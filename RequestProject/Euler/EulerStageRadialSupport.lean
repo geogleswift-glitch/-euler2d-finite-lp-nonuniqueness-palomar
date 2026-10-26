@@ -44,8 +44,12 @@ theorem forward_radius_le_of_stage_radial_barrier {a H a₀ a₁ B V L F : ℝ}
     exact pow_le_pow_left₀ (norm_nonneg _) (hy.trans ha₀₁) 2
   have hbd (s : ℝ) : HasDerivAt (fun s => (a₁ + F * (s - a)) ^ 2)
       (2 * (a₁ + F * (s - a)) * F) s := by
-    convert ((hasDerivAt_const s a₁).add (((hasDerivAt_id s).sub_const a).const_mul F)).pow 2 using 1
-      <;> dsimp <;> ring
+    have hbarrier := ((hasDerivAt_const s a₁).add (((hasDerivAt_id s).sub_const a).const_mul F)).pow 2
+    simp only [Pi.add_def, Pi.pow_def] at hbarrier
+    convert hbarrier using 1 <;> dsimp <;> try ring
+    all_goals
+      funext u
+      ring
   have hbound := image_le_of_deriv_right_lt_deriv_boundary hc hd hinit hbd (fun s hs he => by
     have hscc : s ∈ Icc a H := ⟨hs.1, hs.2.le⟩
     have hp := htime s hscc

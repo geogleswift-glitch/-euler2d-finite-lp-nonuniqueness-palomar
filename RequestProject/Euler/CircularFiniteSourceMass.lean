@@ -48,7 +48,11 @@ theorem eLpNorm_one_circularPhasePatchPlanarVorticity_le {γ : ℝ≥0}
   rw [hn]
   have he : (∫ x : R2, ‖circularPhasePatchPlanarVorticity Z x‖) =
       ∫ z : ℂ, |circularPhasePatchVorticity Z z| := by
-    simpa only [circularPhasePatchPlanarVorticity, Real.norm_eq_abs] using
+    have hcoord (x : R2) : complexPhysicalPlane.symm x = planeComplexEquiv x := by
+      apply complexPhysicalPlane.injective
+      rw [LinearIsometryEquiv.apply_symm_apply, complexPhysicalPlane_eq_planeComplexEquiv_symm,
+        MeasurableEquiv.symm_apply_apply]
+    simpa only [circularPhasePatchPlanarVorticity, Real.norm_eq_abs, hcoord] using
       measurePreserving_planeComplexEquiv.integral_comp' (fun z => |circularPhasePatchVorticity Z z|)
   rw [he]
   exact integral_abs_circularPhasePatchVorticity_le hγ hγ1 hZ

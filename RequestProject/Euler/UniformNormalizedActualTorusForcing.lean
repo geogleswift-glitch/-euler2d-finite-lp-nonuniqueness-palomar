@@ -50,6 +50,9 @@ theorem exists_uniform_normalized_actualTorusCorrection_fields
           ‖rescaledBanachForcing E A R t Z‖ ≤
             C * torusCorrectionContourBudget (γ : ℝ) L * R ^ 2 * a ^ 4 *
               (∫ x in torusBox, |f x|) / A := by
+  letI : NormSMulClass ℝ (LittleContourSpace γ) :=
+    @NormedSpace.toNormSMulClass ℝ (LittleContourSpace γ) _ _
+      (uniformNormalizedLittle_space γ)
   obtain ⟨C, hC, hbudget⟩ := exists_uniform_actualTorusCorrection_contourLittle_budget
   obtain ⟨K, hfields⟩ := exists_uniform_clamped_actualTorusCorrection_LittleFields hM hγ1
   refine ⟨C, hC, K, ?_⟩
@@ -94,8 +97,10 @@ theorem exists_uniform_normalized_actualTorusCorrection_fields
           (∫ x in torusBox, |f x|) := by
       refine hh.trans ((mul_le_mul_of_nonneg_left hm₄ hfac).trans_eq ?_)
       ring
-    rw [norm_rescaledBanachForcing E hA hR]
-    exact div_le_div_of_nonneg_right hh' hA.le
+    have hrescaled : ‖rescaledBanachForcing E A R t Z‖ =
+        ‖E (t / A) (R • Z)‖ / R / A :=
+      norm_rescaledBanachForcing E hA hR t Z
+    exact hrescaled.trans_le (div_le_div_of_nonneg_right hh' hA.le)
 
 end Euler2D
 
