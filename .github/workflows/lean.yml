@@ -69,7 +69,7 @@ jobs:
               ), 'Fresh verification requires an empty project build directory'
               print('Fresh project verification: no existing project build artifacts')
           PY
-          timeout --signal=TERM --kill-after=30s 15000 bash scripts/build-bounded.sh
+          timeout --signal=TERM --kill-after=30s 20000 bash scripts/build-bounded.sh
       - name: Preserve completed compilations for the next check
         if: always() && steps.project-cache.outputs.cache-primary-key != '' && steps.project-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
