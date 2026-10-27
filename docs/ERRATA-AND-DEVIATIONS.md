@@ -1,4 +1,4 @@
-# Source correspondence and deviations
+# Errata and deviations
 
 Authors: Tao Tao and Haiqi Zhang
 
@@ -7,6 +7,20 @@ This record concerns the authors' private manuscript and the selected theorem
 main mathematical theorem. The manuscript is not distributed here. The source
 snapshot used for comparison has SHA-256
 `9c5dea303cfbd479c84371d97e0aeb0da9860e51f8b027a9b4255caf4459d4d9`.
+
+Counts refer to declared scope or proof-representation entries relative to
+this pinned manuscript, rather than to changed lines or compatibility edits.
+No manuscript erratum affecting `Euler2D.main_nonuniqueness` or
+`PalomarEuler.main_result` is asserted; their permitted axioms are `propext`,
+`Classical.choice`, and `Quot.sound`.
+
+| Formalized source | Errata | Deviations |
+| --- | --- | --- |
+| Author manuscript, main theorem `main` and corollary `intro:refinement`, pinned by the hash above | 0 | 3 |
+
+The survey and other papers cited for background are not formalized proof
+sources and are not assigned errata counts here. Repairs to intermediate
+formal helpers and build portability are described separately below.
 
 ## Mathematical scope
 
@@ -24,6 +38,37 @@ The main theorem accepts only `T > 0` and the finite real exponent bound
 `1 ≤ p`. Its local `Fact (1 ≤ ENNReal.ofReal p)` instance is constructed from
 that numerical inequality inside the proposition and proof. It is not an
 additional caller-supplied analytic assumption.
+
+## Source entries
+
+### Errata
+
+None asserted.
+
+### Deviations
+
+1. **Main theorem `main`: finite-exponent endpoint.** The manuscript states
+   `1 < p < infinity`. The selected declaration additionally includes `p = 1`
+   by applying the original result at `q = max(p,2)` and lowering exponents
+   on the finite-volume torus. See `Euler2D.finiteLp_nonuniqueness` in
+   [FiniteLpNonuniqueness.lean](../RequestProject/Euler/FiniteLpNonuniqueness.lean).
+   This extends the original conclusion without an additional caller premise.
+
+2. **Main theorem `main`: explicit Bochner realization.** The formal interface
+   supplies actual strongly measurable spatial `Lp`-valued vorticity paths
+   and their Bochner `L-infinity` membership, in addition to the every-time
+   distributional curl bounds. This is an explicit representation and proof
+   supplement to the source's vorticity conclusion, not an asserted defect
+   in that conclusion. See `Euler2D.exists_bochner_vorticity_of_weakEuler`
+   and its exponent-lowering version in
+   [BochnerVorticity.lean](../RequestProject/Euler/BochnerVorticity.lean).
+
+3. **Corollary `intro:refinement`: scope.** The development proves an
+   uncountable delayed family, `Euler2D.refinement_uncountable` in
+   [Theorems.lean](../RequestProject/Euler/Theorems.lean), but does not
+   formalize that corollary's additional energy-conservation and
+   `W1-infinity`-in-time assertions. Those assertions are excluded from the
+   selected declaration. The manuscript's main theorem remains fully in scope.
 
 ## Lean-version compatibility
 
@@ -83,11 +128,11 @@ targeted guard does not claim to audit arbitrary metaprogram execution.
 
 ## Verification state
 
-**Release verification remains pending.** Original-toolchain compilation,
-explicit statement applications, and standard-axiom audits have passed locally.
-The full pinned-toolchain build, fresh Linux workflows, sandboxed Comparator
-comparison, and independent kernel replay must finish before release readiness
-is asserted. Workflow badges and logs identify the actual checked commit.
+The full Lean 4.35.0-rc4 default build from an empty project artifact
+directory, separate complete statement applications and standard-three axiom
+audits, official sandboxed Comparator, and Lean, NanoDa, and con-ron checks
+have passed for the unchanged mathematical development. Workflow badges and
+logs identify the actual checked commit.
 
 The sole deliberate proof hole is the statement placeholder in `Challenge.lean`.
 `Solution.lean` and its entire proof dependency closure do not import Challenge

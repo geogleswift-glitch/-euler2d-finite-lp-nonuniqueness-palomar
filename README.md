@@ -9,15 +9,17 @@ This repository develops a Lean proof of nonuniqueness for the unforced,
 incompressible two-dimensional Euler equations on
 `T² = R² / (2π Z)²`, with vorticity bounded in time in any prescribed finite
 spatial `Lp` class. The selected declaration is
-[`PalomarEuler.main_result`](Challenge.lean).
+[`PalomarEuler.main_result`](Solution.lean).
 
-**Release verification is in progress.** The original Lean 4.28 proof and
-the added Bochner-vorticity and endpoint bridges have passed local checks.
-The pinned Lean 4.35.0-rc4 port, final Comparator comparison, independent
-kernel replay, and repository workflows must pass before this snapshot is
-described as ready for submission. This is preparation for a future Palomar
-submission; no Palomar registration or external mathematical endorsement is
-claimed.
+The development has passed the full Lean 4.35.0-rc4 build, a clean
+project rebuild, complete statement and axiom audits, and the official
+sandboxed Comparator. Lean, NanoDa, and con-ron independently accept the
+selected theorem and its exported proof dependencies. The theorem uses
+only `propext`, `Quot.sound`, and `Classical.choice`.
+
+This repository is prepared for a future Palomar submission. Registration
+and making the repository public are separate steps; no Palomar registration
+or external mathematical endorsement is claimed.
 
 ## Mathematical statement
 
@@ -118,6 +120,19 @@ vorticity itself. The uniform curl estimate gives genuine Bochner
 `L∞` membership. These steps strengthen the final statement without
 asking the caller to supply any of the construction's analytic inputs.
 
+## Errata and deviations
+
+The [source-correspondence record](docs/ERRATA-AND-DEVIATIONS.md) lists
+**0 manuscript errata and 3 scope or proof-representation deviations** for
+the pinned author manuscript. These entries cover the `p = 1` extension,
+the explicit Bochner-vorticity realization, and the exclusion of the
+additional energy and time-regularity claims from the separate corollary.
+
+The record also documents three generic formal-helper measurability repairs,
+three reselected internal bounds or dominating functions, and removal of
+build-time debug output. All needed measurability premises are proved inside
+the development; these compatibility changes add no input to the main theorem.
+
 ## Authorship and development
 
 The original informal mathematical proof was developed by **Tao Tao and
@@ -168,8 +183,8 @@ build directory is empty before compiling every source; dependency caches
 remain available. This mode supplies the clean project rebuild required for
 release verification.
 
-The final comparison uses the pinned toolchain's Comparator,
-Lean kernel, and NanoDa checker. Its sandboxed invocation requires Linux
+The final comparison uses the pinned toolchain's Comparator and the
+Lean, NanoDa, and con-ron checkers. Its sandboxed invocation requires Linux
 and `bubblewrap`; the GitHub workflow provides this environment. The
 deliberate `sorry` in Challenge records the statement being checked;
 the proof development and Solution must have none and must not depend
