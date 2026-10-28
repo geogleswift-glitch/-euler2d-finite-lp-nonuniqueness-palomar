@@ -4,6 +4,7 @@
 
 [![Lean verification](https://github.com/geogleswift-glitch/-euler2d-finite-lp-nonuniqueness-palomar/actions/workflows/lean.yml/badge.svg)](https://github.com/geogleswift-glitch/-euler2d-finite-lp-nonuniqueness-palomar/actions/workflows/lean.yml)
 [![Palomar checks](https://github.com/geogleswift-glitch/-euler2d-finite-lp-nonuniqueness-palomar/actions/workflows/palomar.yml/badge.svg)](https://github.com/geogleswift-glitch/-euler2d-finite-lp-nonuniqueness-palomar/actions/workflows/palomar.yml)
+[![Palomar registered](https://img.shields.io/badge/Palomar-registered-blue)](https://palomar-registry.org/entry?id=PALOMAR-2026-10-28-000008&version=1)
 
 This repository develops a Lean proof of nonuniqueness for the unforced,
 incompressible two-dimensional Euler equations on
@@ -17,9 +18,18 @@ sandboxed Comparator. Lean, NanoDa, and con-ron independently accept the
 selected theorem and its exported proof dependencies. The theorem uses
 only `propext`, `Quot.sound`, and `Classical.choice`.
 
-This repository is prepared for a future Palomar submission. Registration
-and making the repository public are separate steps; no Palomar registration
-or external mathematical endorsement is claimed.
+Registered in Palomar on **28 October 2026** as
+**[PALOMAR-2026-10-28-000008, version 1](https://palomar-registry.org/entry?id=PALOMAR-2026-10-28-000008&version=1)**.
+The registration pins the
+[verified source snapshot](https://github.com/geogleswift-glitch/-euler2d-finite-lp-nonuniqueness-palomar/tree/ad7deb36ea565f34bdb784e9153073c5a220d46a),
+commit `ad7deb36ea565f34bdb784e9153073c5a220d46a`.
+Later documentation updates on `main` do not change that registered snapshot.
+
+Palomar's [verification run](https://github.com/PalomarRegistry/PalomarSubmission/actions/runs/40527737182)
+and [machine-readable record](https://data.palomar-registry.org/entries/PALOMAR-2026-10-28-000008-v1.json)
+are public. The record reports an automated editorial outcome of `neutral`,
+with no recorded warnings. Registration is not independent human peer review
+or a certificate of novelty or priority.
 
 ## Mathematical statement
 
@@ -197,6 +207,18 @@ instructions are maintained in the
 Release preparation also consulted
 [LeanAutoformalizationSkills](https://github.com/scottnarmstrong/LeanAutoformalizationSkills)
 and the [Pólya formalization example](https://github.com/QuanyuTang/polya-dirichlet-simply-connected-formalization-Palomar-version).
-Registration will require a public repository and a separately selected
-exact commit; this preparation does not authorize either publication or
-submission.
+
+## Citation
+
+Cite the immutable registered version, rather than the moving `main` branch:
+
+```bibtex
+@misc{tao_zhang_2026_finite_lp_euler,
+  author = {Tao, Tao and Zhang, Haiqi},
+  title = {Finite-{Lp} vorticity nonuniqueness for two-dimensional {Euler}},
+  year = {2026},
+  howpublished = {Palomar registry, PALOMAR-2026-10-28-000008, version 1},
+  url = {https://palomar-registry.org/entry?id=PALOMAR-2026-10-28-000008&version=1},
+  note = {Registered 2026-10-28; source commit ad7deb36ea565f34bdb784e9153073c5a220d46a}
+}
+```

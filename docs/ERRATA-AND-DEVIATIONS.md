@@ -72,7 +72,7 @@ None asserted.
 
 ## Lean-version compatibility
 
-The project was originally checked with Lean 4.28. The submission candidate
+The project was originally checked with Lean 4.28. The registered version
 uses the canonical Mathlib revision and Lean toolchain pinned in the repository.
 Compatibility changes explicitly unfold pointwise function operations, expose
 existing derivative equalities, adapt library argument order, and obtain
@@ -139,5 +139,13 @@ The sole deliberate proof hole is the statement placeholder in `Challenge.lean`.
 and may not contain proof holes or depend on `sorryAx`. Only `propext`,
 `Classical.choice`, and `Quot.sound` are permitted.
 
-Automated source and statement reviews are not independent human mathematical
-peer review. No Palomar acceptance or registration is claimed.
+The proof snapshot was registered in Palomar on **28 October 2026** as
+[PALOMAR-2026-10-28-000008, version 1](https://palomar-registry.org/entry?id=PALOMAR-2026-10-28-000008&version=1),
+at commit
+[`ad7deb36ea565f34bdb784e9153073c5a220d46a`](https://github.com/geogleswift-glitch/-euler2d-finite-lp-nonuniqueness-palomar/tree/ad7deb36ea565f34bdb784e9153073c5a220d46a).
+The [registry record](https://data.palomar-registry.org/entries/PALOMAR-2026-10-28-000008-v1.json)
+reports an automated editorial outcome of `neutral`, with no recorded warnings.
+Automated source, statement, and editorial reviews are not independent human
+mathematical peer review or certification of novelty or priority. Later
+documentation updates do not change the registered snapshot, the mathematical
+scope, or the source-deviation counts above.

@@ -35,8 +35,8 @@ sources:
     location: "Unpublished author manuscript, main theorem"
     relationship: "other"
     note: >-
-      This entry declares the authors' original result, whose intended first
-      public presentation is this formalization. The underlying informal
+      This entry declares the authors' original result, first publicly
+      presented by this formalization. The underlying informal
       argument was developed by the human authors with ChatGPT assistance
       before its Lean formalization. The unpublished manuscript is private;
       its original TeX is excluded from this repository. This provenance
@@ -92,6 +92,19 @@ sources:
 
 related_formalizations: []
 
+# Project-specific registry metadata for the immutable registered snapshot.
+# Later documentation commits do not replace the registered source commit.
+registry:
+  name: "Palomar"
+  id: "PALOMAR-2026-10-28-000008"
+  version: 1
+  url: "https://palomar-registry.org/entry?id=PALOMAR-2026-10-28-000008&version=1"
+  record_url: "https://data.palomar-registry.org/entries/PALOMAR-2026-10-28-000008-v1.json"
+  registered_at: "2026-10-28T04:48:55Z"
+  source_commit: "ad7deb36ea565f34bdb784e9153073c5a220d46a"
+  verification_url: "https://github.com/PalomarRegistry/PalomarSubmission/actions/runs/40527737182"
+  editorial_outcome: "neutral"
+
 status:
   scope: >-
     The selected Comparator declaration is PalomarEuler.main_result, proved
@@ -114,8 +127,9 @@ status:
     source has no proof holes. The full pinned rc4 build, clean project
     rebuild, complete statement and axiom audits, and official sandboxed
     Comparator have passed. Lean, NanoDa, and con-ron accept the selected
-    theorem and its exported dependencies. No Palomar registration has been
-    requested or obtained.
+    theorem and its exported dependencies. Palomar registered version 1 on
+    2026-10-28 at commit ad7deb36ea565f34bdb784e9153073c5a220d46a;
+    see the registry block for the immutable record and verification links.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: ["propext", "Quot.sound", "Classical.choice"]
@@ -184,8 +198,10 @@ review:
     pinned rc4 build, clean project rebuild, official sandboxed Comparator,
     and Lean, NanoDa, and con-ron checks have passed. Release verification
     records bind these checks to the unchanged mathematical development.
-    No independent human peer review, Palomar acceptance, or registration is
-    claimed by this metadata.
+    Palomar version 1 is registered and records an automated editorial
+    outcome of neutral, with no recorded warnings. The repository's own
+    review status remains agent-reviewed. No independent human peer review
+    or certification of novelty or priority is claimed.
 
 alignment:
   namespace: "PalomarEuler"
