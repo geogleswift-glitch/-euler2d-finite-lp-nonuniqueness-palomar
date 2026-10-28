@@ -28,7 +28,9 @@ ARTIFACT_SUFFIXES = {
     ".so", ".ir", ".trace", ".exe", ".pyc", ".pyo",
 }
 TEX_SUFFIXES = {".tex", ".ltx", ".sty", ".cls"}
-TEXT_SUFFIXES = {".lean", ".md", ".py", ".sh", ".json", ".toml", ".yaml", ".yml", ".txt"}
+# The authors explicitly authorized this revised manuscript for publication.
+AUTHORIZED_TEX = {"paper/main.tex"}
+TEXT_SUFFIXES = {".lean", ".md", ".py", ".sh", ".json", ".toml", ".yaml", ".yml", ".txt", ".tex"}
 TEXT_NAMES = {"LICENSE", "lean-toolchain", ".gitignore", ".gitattributes"}
 PRIVATE_PATH = re.compile(
     r"(?<![\w.])[A-Za-z]:[\\/]"
@@ -255,8 +257,8 @@ def main() -> int:
         suffix = path.suffix.lower()
         if suffix in ARTIFACT_SUFFIXES or ".olean." in path.name.lower() or ".ilean." in path.name.lower():
             errors.append(f"{relative}: compiled/build artifacts are forbidden outside .lake")
-        if any(part.lower() in TEX_SUFFIXES for part in path.suffixes):
-            errors.append(f"{relative}: original TeX/material excluded by the release contract")
+        if any(part.lower() in TEX_SUFFIXES for part in path.suffixes) and relative not in AUTHORIZED_TEX:
+            errors.append(f"{relative}: TeX/material outside the authorized manuscript path")
         if path.name == ".gitmodules":
             errors.append(f"{relative}: submitted Git submodules are forbidden")
         try:

@@ -2,11 +2,17 @@
 
 Authors: Tao Tao and Haiqi Zhang
 
-This record concerns the authors' private manuscript and the selected theorem
+This record concerns the original author manuscript and the selected theorem
 `PalomarEuler.main_result`. It does not assert a correction to the manuscript's
-main mathematical theorem. The manuscript is not distributed here. The source
-snapshot used for comparison has SHA-256
+main mathematical theorem. The original source snapshot used for comparison
+has SHA-256
 `9c5dea303cfbd479c84371d97e0aeb0da9860e51f8b027a9b4255caf4459d4d9`.
+
+A revised author manuscript is now available at [paper/main.tex](../paper/main.tex),
+with the authors' permission, affiliations, and email addresses. It was added
+after Palomar version 1. The hash above continues to identify the original
+comparison source, rather than this later revised exposition. Its publication
+does not extend the formalized scope to every assertion in the manuscript.
 
 Counts refer to declared scope or proof-representation entries relative to
 this pinned manuscript, rather than to changed lines or compatibility edits.

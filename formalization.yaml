@@ -32,15 +32,18 @@ sources:
       - "Tao Tao"
       - "Haiqi Zhang"
     type: "original-proof"
-    location: "Unpublished author manuscript, main theorem"
+    location: "Original author manuscript, main theorem; revised exposition at paper/main.tex"
     relationship: "other"
     note: >-
       This entry declares the authors' original result, first publicly
       presented by this formalization. The underlying informal
       argument was developed by the human authors with ChatGPT assistance
-      before its Lean formalization. The unpublished manuscript is private;
-      its original TeX is excluded from this repository. This provenance
-      declaration does not certify novelty or priority against all literature.
+      before its Lean formalization. The original source snapshot used for
+      comparison is pinned in docs/ERRATA-AND-DEVIATIONS.md. With the authors'
+      permission, a revised TeX exposition is now provided at paper/main.tex;
+      it was added after Palomar version 1 and is not asserted to be byte-identical
+      to that original source snapshot. This provenance declaration does not
+      certify novelty or priority against all literature.
   - title: "Convex integration and phenomenologies in turbulence"
     authors:
       - "Tristan Buckmaster"
