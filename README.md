@@ -6,6 +6,16 @@
 [![Palomar checks](https://github.com/geogleswift-glitch/-euler2d-finite-lp-nonuniqueness-palomar/actions/workflows/palomar.yml/badge.svg)](https://github.com/geogleswift-glitch/-euler2d-finite-lp-nonuniqueness-palomar/actions/workflows/palomar.yml)
 [![Palomar registered](https://img.shields.io/badge/Palomar-registered-blue)](https://palomar-registry.org/entry?id=PALOMAR-2026-10-28-000008&version=1)
 
+**A note from the authors.** We had obtained a proof of this result by late
+September 2026, and we are still working to understand the proof and the
+mathematical ideas underlying it. We have also been in contact with
+**Umberto Pappalettera and Massimo Sorella**, contributors to the related
+[Hexagon preprint](https://hexagonmath.org/2610.00314v1).
+
+We believe that critically examining new ideas, including ideas generated
+by AI, and providing clear, high-quality explanations are especially
+meaningful and valuable contributions at this time.
+
 This repository develops a Lean proof of nonuniqueness for the unforced,
 incompressible two-dimensional Euler equations on
 `T² = R² / (2π Z)²`, with vorticity bounded in time in any prescribed finite
